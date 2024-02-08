@@ -7,13 +7,13 @@ export interface TokenJwt {
 }
 
 const useTokenJwt = create<TokenJwt>()((set) => ({
-    tokenJwt: localStorage.getItem("festival-token") || "",
+    tokenJwt: localStorage.getItem("token") || "",
     setTokenJwt: (token) => set(function (_) {
-        localStorage.setItem("festival-token", token);
+        localStorage.setItem("token", token);
         return ({tokenJwt: token});
     }),
     reset: () => set(function (_) {
-        localStorage.setItem("festival-token", "");
+        localStorage.setItem("token", "");
         return ({tokenJwt: ""});
     })
 }));

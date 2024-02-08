@@ -1,6 +1,6 @@
 import {jwtDecode} from "jwt-decode";
 
-import useTokenJwt from "../store/useTokenJwt";
+import useTokenJwt from "../store/token-jwt";
 import {Token} from "../models/token.model";
 import {TokenJwtUtils} from "../models/token-jwt-utils.model";
 
