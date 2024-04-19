@@ -6,4 +6,6 @@ export interface TokenJwtUtils {
     canUserAdminister: () => boolean;
     canUserOrder: () => boolean;
     getToken: () => Token | null;
+    reset: () => void;
+    setTokenJwt: (token: string) => void;
 }

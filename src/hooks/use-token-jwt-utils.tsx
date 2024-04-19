@@ -5,7 +5,7 @@ import {Token} from "../models/token.model";
 import {TokenJwtUtils} from "../models/token-jwt-utils.model";
 
 const useTokenJwtUtils = () => {
-    const {tokenJwt} = useTokenJwt();
+    const {tokenJwt, reset, setTokenJwt } = useTokenJwt();
 
     const isTokenExpired = () => {
         if (tokenJwt === '')
@@ -24,6 +24,8 @@ const useTokenJwtUtils = () => {
         canUserAdminister,
         canUserOrder,
         getToken,
+        reset,
+        setTokenJwt
     } as TokenJwtUtils;
 };
 

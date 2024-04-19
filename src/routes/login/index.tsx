@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 
+import useAuthApi from "../../api/auth";
 import ErrorMessage from "../../components/error-message";
 
 type LoginFormProps = {
@@ -24,6 +25,7 @@ function LoginForm({ username, password, handleUsernameChange, handlePasswordCha
                     placeholder="Input your username"
                     value={username}
                     onChange={handleUsernameChange}
+                    required
                 />
             </div>
             <div className="mb-3">
@@ -37,6 +39,7 @@ function LoginForm({ username, password, handleUsernameChange, handlePasswordCha
                     placeholder="Input your password"
                     value={password}
                     onChange={handlePasswordChange}
+                    required
                 />
             </div>
             <button type="submit" className="btn btn-primary">
@@ -51,6 +54,8 @@ export default function RouteLogin() {
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
 
+    const authApi = useAuthApi();
+
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
     };
@@ -62,7 +67,10 @@ export default function RouteLogin() {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        // TODO: to finish
+        const resp = await authApi.login(username, password);
+
+        if (resp.error)
+            return setMessage(resp.message);
     };
 
     return (
