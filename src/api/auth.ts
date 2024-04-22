@@ -25,7 +25,7 @@ const useAuthApi = () => {
         token.setTokenJwt(r.access_token!);
         navigate("/");
 
-        return response.data;
+        return r;
     };
 
     return { login };

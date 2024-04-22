@@ -14,6 +14,7 @@ const useHttpClient = (url: string) => {
         baseURL: url,
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token.getTokenString()}`,
         },
     });
 

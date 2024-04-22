@@ -10,7 +10,7 @@ const errorInterceptor = (token: TokenJwtUtils, navigate: NavigateFunction) => {
             if (
                 error.response.status === 401 &&
                 responseData.error &&
-                responseData.message === 'Invalid JWT token'
+                token.isTokenExpired()
             ) {
                 token.reset();
                 navigate('/login');

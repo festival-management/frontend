@@ -4,6 +4,9 @@ const API = {
     get AUTH() {
         return new URL("/auth", this.BASE_URL);
     },
+    get ROLES() {
+        return new URL("/roles", this.BASE_URL);
+    },
 };
 
 export default API;

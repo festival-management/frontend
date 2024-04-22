@@ -17,6 +17,7 @@ const useTokenJwtUtils = () => {
     const canUserAdminister = () => isLoggedIn() && (jwtDecode(tokenJwt) as Token).permissions["can_administer"];
     const canUserOrder = () => isLoggedIn() && (jwtDecode(tokenJwt) as Token).permissions["can_order"];
     const getToken = () => isLoggedIn() ? (jwtDecode(tokenJwt) as Token) : null;
+    const getTokenString = () => isLoggedIn() ? tokenJwt : null;
 
     return {
         isTokenExpired,
@@ -24,6 +25,7 @@ const useTokenJwtUtils = () => {
         canUserAdminister,
         canUserOrder,
         getToken,
+        getTokenString,
         reset,
         setTokenJwt
     } as TokenJwtUtils;
