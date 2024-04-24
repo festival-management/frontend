@@ -3,15 +3,13 @@ import {Link} from "react-router-dom";
 
 import {LINKS} from "../env/links";
 import LinkModel from "../models/link.model";
-import useTokenJwt from "../store/token-jwt";
 import useTokenJwtUtils from "../hooks/use-token-jwt-utils";
 
 function NavLinkList() {
-    const token = useTokenJwt();
     const tokenService = useTokenJwtUtils();
 
     let links = [...LINKS];
-    links.push(new LinkModel(Link, "/", "nav-link", "Logout", (t) => t.isLoggedIn(), () => token.reset()));
+    links.push(new LinkModel(Link, "/", "nav-link", "Logout", (t) => t.isLoggedIn(), () => tokenService.reset()));
 
     const filteredLinks = links.filter((link) => link.check(tokenService));
 

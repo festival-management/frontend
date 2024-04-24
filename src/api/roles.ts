@@ -2,10 +2,20 @@ import {AxiosResponse} from "axios";
 
 import API from "../env/api";
 import useHttpClient from "./utils";
-import {GetRolesResponse} from "../models/roles.model";
+import BaseResponse from "../models/base.model";
+import {GetRolesResponse, GetRoleResponse} from "../models/roles.model";
 
 const useRolesApi = () => {
     const {http} = useHttpClient(API.ROLES.toString());
+
+    const addRole = async (name: string) => {
+        const response: AxiosResponse<BaseResponse> = await http.post(
+            "/",
+            {name}
+        );
+
+        return response.data;
+    };
 
     const getRoles = async (page: number) => {
         const limit = process.env.REACT_APP_DEFAULT_LIMIT_VALUE;
@@ -17,7 +27,15 @@ const useRolesApi = () => {
         return response.data;
     };
 
-    return {getRoles};
+    const getRolesById = async (id: number) => {
+        const response: AxiosResponse<GetRoleResponse> = await http.get(
+            `/${id}`,
+        );
+
+        return response.data;
+    };
+
+    return {addRole, getRoles, getRolesById};
 };
 
 export default useRolesApi;

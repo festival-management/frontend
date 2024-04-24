@@ -12,6 +12,9 @@ export default function RolesTable({data}: RolesTableProps) {
             <th scope="row">{v.id}</th>
             <td>{v.name}</td>
             <td>
+                <a className="btn btn-primary" href={`/roles/edit/${v.id}`} role="button">
+                    <i className="bi bi-pen"/>
+                </a>
                 <button
                     type="button"
                     className="btn btn-danger"
@@ -23,17 +26,20 @@ export default function RolesTable({data}: RolesTableProps) {
     ));
 
     return (
-        <table className="table table-bordered">
-            <thead>
-            <tr>
+        <>
+            <h6>Roles</h6>
+            <table className="table table-bordered">
+                <thead>
+                <tr>
                 <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {roles}
-            </tbody>
-        </table>
+                    <th scope="col">Name</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {roles}
+                </tbody>
+            </table>
+        </>
     );
 }

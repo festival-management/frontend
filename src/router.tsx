@@ -4,6 +4,7 @@ import {createBrowserRouter} from "react-router-dom";
 import RouteHome from "./routes/home";
 import RouteLogin from "./routes/login";
 import RouteRoles from "./routes/roles";
+import RouteRoleEdit from "./routes/roles/edit";
 
 const routers = createBrowserRouter(
     [
@@ -18,6 +19,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/roles",
                     element: <RouteRoles/>
+                },
+                {
+                    path: "/roles/edit/:id",
+                    element: <RouteRoleEdit/>
                 }
             ]
         }
