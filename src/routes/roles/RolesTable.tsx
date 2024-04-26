@@ -4,9 +4,10 @@ import {Role} from "../../models/roles.model";
 
 interface RolesTableProps {
     data: Role[];
+    handlerDeleteRole: (id: number) => void;
 }
 
-export default function RolesTable({data}: RolesTableProps) {
+export default function RolesTable({data, handlerDeleteRole}: RolesTableProps) {
     const roles: React.JSX.Element[] = data.map(v => (
         <tr key={v.id}>
             <th scope="row">{v.id}</th>
@@ -18,6 +19,7 @@ export default function RolesTable({data}: RolesTableProps) {
                 <button
                     type="button"
                     className="btn btn-danger"
+                    onClick={() => handlerDeleteRole(v.id)}
                 >
                     <i className="bi bi-trash"/>
                 </button>

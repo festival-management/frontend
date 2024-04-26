@@ -4,7 +4,7 @@ import API from "../env/api";
 import useHttpClient from "./utils";
 import {Permission} from "../enums/permission";
 import BaseResponse from "../models/base.model";
-import {GetRolesResponse, GetRoleResponse} from "../models/roles.model";
+import {GetRoleResponse, GetRolesResponse} from "../models/roles.model";
 
 const useRolesApi = () => {
     const {http} = useHttpClient(API.ROLES.toString());
@@ -13,6 +13,14 @@ const useRolesApi = () => {
         const response: AxiosResponse<BaseResponse> = await http.post(
             "/",
             {name}
+        );
+
+        return response.data;
+    };
+
+    const deleteRole = async (id: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.delete(
+            `/${id}`,
         );
 
         return response.data;
@@ -63,7 +71,7 @@ const useRolesApi = () => {
         return response.data;
     };
 
-    return {addRole, getRoles, getRolesById, updateRoleName, updateRolePermissions, updateRolePaperSize};
+    return {addRole, deleteRole, getRoles, getRolesById, updateRoleName, updateRolePermissions, updateRolePaperSize};
 };
 
 export default useRolesApi;

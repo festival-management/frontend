@@ -56,6 +56,17 @@ export default function RouteRoles() {
         await fetchData();
     }
 
+    const handleDeleteRole = async (id: number) => {
+        const resp = await rolesApi.deleteRole(id);
+
+        if (resp.error) {
+            setHasError(true);
+            return setErrorMessage(resp.message);
+        }
+
+        await fetchData();
+    };
+
     useEffect(() => {
         fetchData();
     }, [fetchData]);
@@ -67,7 +78,7 @@ export default function RouteRoles() {
                 <div className="card-body">
                     <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
                     <CreateRoleForm name={newRoleName} handleNameChange={handleNewRoleNameChange} handleSubmit={handleSubmitAddRole}/>
-                    <RolesTable data={roles}/>
+                    <RolesTable data={roles} handlerDeleteRole={handleDeleteRole}/>
                     <PaginationControls page={page} setPage={setPage} totalCount={totalCount}/>
                 </div>
             </div>
