@@ -2,6 +2,7 @@ import {AxiosResponse} from "axios";
 
 import API from "../env/api";
 import useHttpClient from "./utils";
+import BaseResponse from "../models/base.model";
 import {LoginResponse} from "../models/auth.model";
 
 const useAuthApi = () => {
@@ -28,7 +29,16 @@ const useAuthApi = () => {
         return r;
     };
 
-    return {login};
+    const register = async (username: string, password: string, roleId: string) => {
+        const response: AxiosResponse<BaseResponse> = await http.post(
+            "/register",
+            {username, password, role_id: roleId}
+        );
+
+        return response.data;
+    };
+
+    return {login, register};
 };
 
 export default useAuthApi;

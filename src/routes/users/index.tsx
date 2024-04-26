@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 
 import UsersTable from "./UsersTable";
+import useAuthApi from "../../api/auth";
 import useUsersApi from "../../api/users";
 import useRolesApi from "../../api/roles";
 import {RoleName} from "../../models/roles.model";
@@ -20,6 +21,7 @@ export default function RouteUsers() {
     const [newUserPassword, setNewUserPassword] = useState("");
     const [newUserRoleId, setNewUserRoleId] = useState("-1");
 
+    const authApi = useAuthApi();
     const rolesApi = useRolesApi();
     const usersApi = useUsersApi();
 
@@ -65,9 +67,30 @@ export default function RouteUsers() {
 
     const handleSubmitAddUser = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        const resp = await authApi.register(newUserName, newUserPassword, newUserRoleId);
+
+        if (resp.error) {
+            setHasError(true);
+            return setErrorMessage(resp.message);
+        }
+
+        setNewUserName("");
+        setNewUserPassword("");
+        setNewUserRoleId("-1");
+
+        await fetchData();
     };
 
     const handleDeleteUser = async (id: number) => {
+        const resp = await usersApi.deleteUser(id);
+
+        if (resp.error) {
+            setHasError(true);
+            return setErrorMessage(resp.message);
+        }
+
+        await fetchData();
     };
 
     useEffect(() => {
