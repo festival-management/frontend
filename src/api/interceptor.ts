@@ -1,6 +1,6 @@
-import { NavigateFunction } from 'react-router-dom';
+import {NavigateFunction} from 'react-router-dom';
 
-import { TokenJwtUtils } from "../models/token-jwt-utils.model";
+import {TokenJwtUtils} from "../models/token-jwt-utils.model";
 
 const errorInterceptor = (token: TokenJwtUtils, navigate: NavigateFunction) => {
     return (error: any) => {

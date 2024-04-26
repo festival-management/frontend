@@ -14,4 +14,5 @@ export interface GetRolesResponse extends BaseResponse {
     roles?: Role[];
 }
 
-export interface GetRoleResponse extends BaseResponse, Partial<Role> {}
+export interface GetRoleResponse extends BaseResponse, Partial<Role> {
+}

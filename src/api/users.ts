@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import {AxiosResponse} from "axios";
 
 import API from "../env/api";
 import useHttpClient from "./utils";

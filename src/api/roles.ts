@@ -53,7 +53,7 @@ const useRolesApi = () => {
         return response.data;
     };
 
-    const updateRolePermissions = async (id: number, permissions: {[permission in Permission]: boolean}) => {
+    const updateRolePermissions = async (id: number, permissions: { [permission in Permission]: boolean }) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/permissions`,
             {permissions}

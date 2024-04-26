@@ -6,7 +6,11 @@ type ProfileEditPasswordFormProps = {
     handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
-export default function ProfileEditPasswordForm({password, handlePasswordChange, handleSubmit}: ProfileEditPasswordFormProps) {
+export default function ProfileEditPasswordForm({
+                                                    password,
+                                                    handlePasswordChange,
+                                                    handleSubmit
+                                                }: ProfileEditPasswordFormProps) {
     return (
         <>
             <h6>Change password</h6>

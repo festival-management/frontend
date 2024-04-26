@@ -8,4 +8,5 @@ export interface User {
     created_at: string;
 }
 
-export interface GetUserResponse extends BaseResponse, Partial<User> {}
+export interface GetUserResponse extends BaseResponse, Partial<User> {
+}

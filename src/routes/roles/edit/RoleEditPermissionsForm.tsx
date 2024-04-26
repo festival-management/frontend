@@ -9,10 +9,10 @@ type RoleEditPermissionsFormProps = {
 }
 
 export default function RoleEditPermissionsForm({
-                                         selectedPermissions,
-                                         handlePermissionToggle,
-                                         handleSubmit
-                                     }: RoleEditPermissionsFormProps) {
+                                                    selectedPermissions,
+                                                    handlePermissionToggle,
+                                                    handleSubmit
+                                                }: RoleEditPermissionsFormProps) {
     return (
         <>
             <h6>Change permissions</h6>

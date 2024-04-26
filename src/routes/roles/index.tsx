@@ -77,7 +77,8 @@ export default function RouteRoles() {
             <div className="card">
                 <div className="card-body">
                     <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
-                    <CreateRoleForm name={newRoleName} handleNameChange={handleNewRoleNameChange} handleSubmit={handleSubmitAddRole}/>
+                    <CreateRoleForm name={newRoleName} handleNameChange={handleNewRoleNameChange}
+                                    handleSubmit={handleSubmitAddRole}/>
                     <RolesTable data={roles} handlerDeleteRole={handleDeleteRole}/>
                     <PaginationControls page={page} setPage={setPage} totalCount={totalCount}/>
                 </div>

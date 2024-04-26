@@ -6,7 +6,7 @@ type SuccessMessageProps = {
     afterTimeout: () => void;
 }
 
-export default function SuccessMessage({ message, visible, afterTimeout }: SuccessMessageProps) {
+export default function SuccessMessage({message, visible, afterTimeout}: SuccessMessageProps) {
     const [localVisible, setLocalVisible] = useState(false);
 
     useEffect(() => {

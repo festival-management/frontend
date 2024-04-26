@@ -16,7 +16,8 @@ export default function RoleEditPaperSizeForm({
         <>
             <h6>Change paper size</h6>
             <form onSubmit={handleSubmit}>
-                <select className="form-select mb-3" aria-label="Default select example" value={paperSize} onChange={handlePaperSizeChange}>
+                <select className="form-select mb-3" aria-label="Default select example" value={paperSize}
+                        onChange={handlePaperSizeChange}>
                     {Object.values(PaperSize).map(paperSize => (
                         <option key={paperSize} value={paperSize}>{paperSize}</option>
                     ))}
@@ -26,5 +27,5 @@ export default function RoleEditPaperSizeForm({
                 </button>
             </form>
         </>
-);
+    );
 }
