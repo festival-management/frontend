@@ -9,7 +9,8 @@ import PaginationControls from "../../components/pagination-controls";
 
 
 export default function RouteRoles() {
-    const [message, setMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [hasError, setHasError] = useState(false);
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const [roles, setRoles] = useState<Role[]>([]);
@@ -21,13 +22,18 @@ export default function RouteRoles() {
         setNewRoleName(event.target.value);
     };
 
+    const handleAfterTimeoutError = () => {
+        setHasError(false);
+        setErrorMessage("");
+    }
+
     const fetchData = useCallback(async () => {
         const data = await rolesApi.getRoles(page);
 
-        setMessage("");
-
-        if (data.error)
-            return setMessage(data.message);
+        if (data.error) {
+            setHasError(true);
+            return setErrorMessage(data.message);
+        }
 
         setRoles(data.roles!);
         setTotalCount(data.total_count!);
@@ -40,8 +46,10 @@ export default function RouteRoles() {
 
         const resp = await rolesApi.addRole(newRoleName);
 
-        if (resp.error)
-            return setMessage(resp.message);
+        if (resp.error) {
+            setHasError(true);
+            return setErrorMessage(resp.message);
+        }
 
         setNewRoleName("");
 
@@ -57,7 +65,7 @@ export default function RouteRoles() {
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <ErrorMessage message={message}/>
+                    <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
                     <CreateRoleForm name={newRoleName} handleNameChange={handleNewRoleNameChange} handleSubmit={handleSubmitAddRole}/>
                     <RolesTable data={roles}/>
                     <PaginationControls page={page} setPage={setPage} totalCount={totalCount}/>

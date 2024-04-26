@@ -33,6 +33,7 @@ export default function RoleEditPermissionsForm({
                     Change
                 </button>
             </form>
+            <hr/>
         </>
     );
 }

@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState} from "react";
 
-type ErrorMessageProps = {
+type SuccessMessageProps = {
     message: string;
     visible: boolean;
     afterTimeout: () => void;
-};
+}
 
-function ErrorMessage({message, visible, afterTimeout}: ErrorMessageProps) {
+export default function SuccessMessage({ message, visible, afterTimeout }: SuccessMessageProps) {
     const [localVisible, setLocalVisible] = useState(false);
 
     useEffect(() => {
@@ -23,12 +23,10 @@ function ErrorMessage({message, visible, afterTimeout}: ErrorMessageProps) {
     return (
         <div>
             {localVisible && (
-                <div className="alert alert-danger" role="alert">
+                <div className="alert alert-success" role="alert">
                     {message}
                 </div>
             )}
         </div>
     );
 }
-
-export default ErrorMessage;

@@ -5,9 +5,10 @@ import useAuthApi from "../../api/auth";
 import ErrorMessage from "../../components/error-message";
 
 export default function RouteLogin() {
+    const [errorMessage, setErrorMessage] = useState("");
+    const [hasError, setHasError] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [message, setMessage] = useState("");
 
     const authApi = useAuthApi();
 
@@ -19,18 +20,25 @@ export default function RouteLogin() {
         setPassword(event.target.value);
     };
 
+    const handleAfterTimeoutError = () => {
+        setHasError(false);
+        setErrorMessage("");
+    }
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         const resp = await authApi.login(username, password);
 
-        if (resp.error)
-            return setMessage(resp.message);
+        if (resp.error) {
+            setHasError(true);
+            return setErrorMessage(resp.message);
+        }
     };
 
     return (
         <div className="container mt-3">
-            <ErrorMessage message={message}/>
+            <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
             <LoginForm
                 username={username}
                 password={password}

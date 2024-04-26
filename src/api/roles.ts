@@ -2,6 +2,7 @@ import {AxiosResponse} from "axios";
 
 import API from "../env/api";
 import useHttpClient from "./utils";
+import {Permission} from "../enums/permission";
 import BaseResponse from "../models/base.model";
 import {GetRolesResponse, GetRoleResponse} from "../models/roles.model";
 
@@ -35,7 +36,34 @@ const useRolesApi = () => {
         return response.data;
     };
 
-    return {addRole, getRoles, getRolesById};
+    const updateRoleName = async (id: number, name: string) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/name`,
+            {name}
+        );
+
+        return response.data;
+    };
+
+    const updateRolePermissions = async (id: number, permissions: {[permission in Permission]: boolean}) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/permissions`,
+            {permissions}
+        );
+
+        return response.data;
+    };
+
+    const updateRolePaperSize = async (id: number, paperSize: string) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/paper_size`,
+            {paper_size: paperSize}
+        );
+
+        return response.data;
+    };
+
+    return {addRole, getRoles, getRolesById, updateRoleName, updateRolePermissions, updateRolePaperSize};
 };
 
 export default useRolesApi;

@@ -1,4 +1,5 @@
 import BaseResponse from "./base.model";
+import {PaperSize} from "../enums/paper-size";
 import {Permission} from "../enums/permission";
 
 export interface Role {
@@ -15,4 +16,5 @@ export interface GetRoleResponse extends BaseResponse {
     id?: number;
     name?: string;
     permissions?: { [permission in Permission]: boolean };
+    paper_size?: PaperSize;
 }
