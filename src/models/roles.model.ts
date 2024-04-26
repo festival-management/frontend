@@ -5,6 +5,8 @@ import {Permission} from "../enums/permission";
 export interface Role {
     id: number;
     name: string;
+    permissions: { [permission in Permission]: boolean };
+    paper_size?: PaperSize;
 }
 
 export interface GetRolesResponse extends BaseResponse {
@@ -12,9 +14,4 @@ export interface GetRolesResponse extends BaseResponse {
     roles?: Role[];
 }
 
-export interface GetRoleResponse extends BaseResponse {
-    id?: number;
-    name?: string;
-    permissions?: { [permission in Permission]: boolean };
-    paper_size?: PaperSize;
-}
+export interface GetRoleResponse extends BaseResponse, Partial<Role> {}

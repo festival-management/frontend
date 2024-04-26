@@ -7,6 +7,9 @@ const API = {
     get ROLES() {
         return new URL("/roles", this.BASE_URL);
     },
+    get USERS() {
+        return new URL("/users", this.BASE_URL);
+    },
 };
 
 export default API;
