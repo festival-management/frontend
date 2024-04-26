@@ -28,7 +28,7 @@ export default function RouteProfile() {
     }
 
     const fetchData = useCallback(async () => {
-        const data = await usersApi.getUser();
+        const data = await usersApi.getUserById();
 
         if (data.error) {
             setHasError(true);

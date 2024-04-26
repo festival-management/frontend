@@ -2,12 +2,22 @@ import {AxiosResponse} from "axios";
 
 import API from "../env/api";
 import useHttpClient from "./utils";
-import {GetUserResponse} from "../models/users.model";
+import {GetUserResponse, GetUsersResponse} from "../models/users.model";
 
 const useUsersApi = () => {
     const {http, token} = useHttpClient(API.USERS.toString());
 
-    const getUser = async () => {
+    const getUsers = async (page: number) => {
+        const limit = process.env.REACT_APP_DEFAULT_LIMIT_VALUE;
+        const response: AxiosResponse<GetUsersResponse> = await http.get(
+            "/",
+            {params: {offset: limit * (page - 1), limit: limit}}
+        );
+
+        return response.data;
+    };
+
+    const getUserById = async () => {
         const id = token.getToken()?.user_id;
         const response: AxiosResponse<GetUserResponse> = await http.get(
             `/${id}`,
@@ -26,7 +36,7 @@ const useUsersApi = () => {
         return response.data;
     };
 
-    return {getUser, updateUserPassword};
+    return {getUsers, getUserById, updateUserPassword};
 }
 
 export default useUsersApi;
