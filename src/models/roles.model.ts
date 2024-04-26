@@ -9,10 +9,20 @@ export interface Role {
     paper_size?: PaperSize;
 }
 
+export interface RoleName {
+    id: number;
+    name: string;
+}
+
 export interface GetRolesResponse extends BaseResponse {
     total_count?: number;
     roles?: Role[];
 }
 
 export interface GetRoleResponse extends BaseResponse, Partial<Role> {
+}
+
+export interface GetRolesNameResponse extends BaseResponse {
+    total_count?: number;
+    roles?: RoleName[];
 }
