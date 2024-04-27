@@ -7,6 +7,7 @@ import RouteRoles from "./routes/roles";
 import RouteUsers from "./routes/users";
 import RouteProfile from "./routes/profile";
 import RouteRoleEdit from "./routes/roles/edit";
+import RouteUserEdit from "./routes/users/edit";
 
 const routers = createBrowserRouter(
     [
@@ -33,6 +34,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/users",
                     element: <RouteUsers/>
+                },
+                {
+                    path: "/users/edit/:id",
+                    element: <RouteUserEdit/>
                 }
             ]
         }
