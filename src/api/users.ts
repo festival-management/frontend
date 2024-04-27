@@ -26,16 +26,10 @@ const useUsersApi = () => {
         return response.data;
     };
 
-    const getUserById = async (id: number) => {
-        const response: AxiosResponse<GetUserResponse> = await http.get(
-            `/${id}`,
-        );
+    const getUserById = async (id?: number) => {
+        if (!id)
+            id = token.getToken()?.user_id;
 
-        return response.data;
-    };
-
-    const getCurrentUser = async () => {
-        const id = token.getToken()?.user_id;
         const response: AxiosResponse<GetUserResponse> = await http.get(
             `/${id}`,
         );
@@ -52,7 +46,10 @@ const useUsersApi = () => {
         return response.data;
     };
 
-    const updateUserPassword = async (id: number, password: string) => {
+    const updateUserPassword = async (password: string, id?: number) => {
+        if (!id)
+            id = token.getToken()?.user_id;
+
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/password`,
             {password}
@@ -61,17 +58,16 @@ const useUsersApi = () => {
         return response.data;
     };
 
-    const updateCurrentUserPassword = async (password: string) => {
-        const id = token.getToken()?.user_id;
+    const updateUserRoleId = async (id: number, roleId: string) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
-            `/${id}/password`,
-            {password}
+            `/${id}/role`,
+            {role_id: roleId}
         );
 
         return response.data;
     };
 
-    return {deleteUser, getUsers, getUserById, getCurrentUser, updateUserName, updateUserPassword, updateCurrentUserPassword};
+    return {deleteUser, getUsers, getUserById, updateUserName, updateUserPassword, updateUserRoleId};
 }
 
 export default useUsersApi;

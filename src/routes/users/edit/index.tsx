@@ -21,8 +21,8 @@ export default function RouteUserEdit() {
     const [newUserPassword, setNewUserPassword] = useState("");
     const [newUserRoleId, setNewUserRoleId] = useState("-1");
 
-    const rolesApi = useRolesApi();
     const usersApi = useUsersApi();
+    const rolesApi = useRolesApi();
 
     const handleNewUserNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewUserName(event.target.value);
@@ -84,7 +84,7 @@ export default function RouteUserEdit() {
     const handleSubmitChangeNewUserPassword = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const data = await usersApi.updateUserPassword(parseInt(id || "-1"), newUserPassword);
+        const data = await usersApi.updateUserPassword(newUserPassword, parseInt(id || "-1"));
 
         if (data.error) {
             setHasError(true);
@@ -96,6 +96,15 @@ export default function RouteUserEdit() {
 
     const handleSubmitChangeNewUserRoleId = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        const data = await usersApi.updateUserRoleId(parseInt(id || "-1"), newUserRoleId);
+
+        if (data.error) {
+            setHasError(true);
+            return setErrorMessage(data.message);
+        }
+
+        setIsSaved(true);
     };
 
     useEffect(() => {

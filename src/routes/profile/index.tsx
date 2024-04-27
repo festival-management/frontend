@@ -28,7 +28,7 @@ export default function RouteProfile() {
     }
 
     const fetchData = useCallback(async () => {
-        const data = await usersApi.getCurrentUser();
+        const data = await usersApi.getUserById();
 
         if (data.error) {
             setHasError(true);
@@ -43,7 +43,7 @@ export default function RouteProfile() {
     const handleSubmitChangePassword = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const data = await usersApi.updateCurrentUserPassword(password);
+        const data = await usersApi.updateUserPassword(password);
 
         if (data.error) {
             setHasError(true);
