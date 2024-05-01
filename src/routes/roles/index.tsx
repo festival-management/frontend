@@ -1,4 +1,5 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {useMutation, useQuery} from "@tanstack/react-query";
 
 import RolesTable from "./RolesTable";
 import useRolesApi from "../../api/roles";
@@ -18,6 +19,38 @@ export default function RouteRoles() {
 
     const rolesApi = useRolesApi();
 
+    const {data, refetch} = useQuery({
+        queryKey: ["roles", page],
+        queryFn: () => rolesApi.getRoles(page),
+        enabled: true,
+        staleTime: 0,
+    });
+    const addRoleMutation = useMutation({
+        mutationFn: rolesApi.addRole,
+        onSuccess: async (data) => {
+            if (data.error) {
+                setHasError(true);
+                setErrorMessage(data.message);
+                return;
+            }
+
+            setNewRoleName("");
+
+            await refetch();
+        }
+    });
+    const deleteRoleMutation = useMutation({
+        mutationFn: rolesApi.deleteRole,
+        onSuccess: async (data) => {
+            if (data.error) {
+                setHasError(true);
+                return setErrorMessage(data.message);
+            }
+
+            await refetch();
+        }
+    });
+
     const handleNewRoleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewRoleName(event.target.value);
     };
@@ -27,49 +60,27 @@ export default function RouteRoles() {
         setErrorMessage("");
     }
 
-    const fetchData = useCallback(async () => {
-        const data = await rolesApi.getRoles(page);
-
-        if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
-        }
-
-        setRoles(data.roles!);
-        setTotalCount(data.total_count!);
-
-        // eslint-disable-next-line
-    }, [page]);
-
     const handleSubmitAddRole = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const resp = await rolesApi.addRole(newRoleName);
-
-        if (resp.error) {
-            setHasError(true);
-            return setErrorMessage(resp.message);
-        }
-
-        setNewRoleName("");
-
-        await fetchData();
+        addRoleMutation.mutate(newRoleName);
     }
 
     const handleDeleteRole = async (id: number) => {
-        const resp = await rolesApi.deleteRole(id);
-
-        if (resp.error) {
-            setHasError(true);
-            return setErrorMessage(resp.message);
-        }
-
-        await fetchData();
+        deleteRoleMutation.mutate(id);
     };
 
     useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+        if (data) {
+            if (data.error) {
+                setHasError(true);
+                return setErrorMessage(data.message);
+            }
+
+            setRoles(data.roles!);
+            setTotalCount(data.total_count!);
+        }
+    }, [data]);
 
 
     return (

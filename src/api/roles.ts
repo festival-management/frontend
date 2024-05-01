@@ -46,7 +46,8 @@ const useRolesApi = () => {
 
     const getRolesName = async () => {
         const response: AxiosResponse<GetRolesNameResponse> = await http.get(
-            "/name",
+            "/",
+            {params: {only_name: true}}
         );
 
         return response.data;
