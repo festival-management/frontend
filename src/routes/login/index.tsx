@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useMutation} from "@tanstack/react-query";
 
 import LoginForm from "./LoginForm";
 import useAuthApi from "../../api/auth";
@@ -11,6 +12,19 @@ export default function RouteLogin() {
     const [password, setPassword] = useState("");
 
     const authApi = useAuthApi();
+
+    const loginMutation = useMutation({
+        mutationFn: (variables: {
+            username: string,
+            password: string
+        }) => authApi.login(variables.username, variables.password),
+        onSuccess: async (data) => {
+            if (data.error) {
+                setHasError(true);
+                return setErrorMessage(data.message);
+            }
+        }
+    });
 
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
@@ -28,12 +42,7 @@ export default function RouteLogin() {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const resp = await authApi.login(username, password);
-
-        if (resp.error) {
-            setHasError(true);
-            return setErrorMessage(resp.message);
-        }
+        loginMutation.mutate({username, password});
     };
 
     return (

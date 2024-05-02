@@ -10,7 +10,7 @@ const useAuthApi = () => {
 
     const login = async (username: string, password: string) => {
         const response: AxiosResponse<LoginResponse> = await http.post(
-            "/token",
+            "/token/",
             {username, password},
             {
                 headers: {
