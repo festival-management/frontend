@@ -1,4 +1,5 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {useMutation, useQuery} from "@tanstack/react-query";
 
 import useUsersApi from "../../api/users";
 import ErrorMessage from "../../components/error-message";
@@ -14,6 +15,24 @@ export default function RouteProfile() {
 
     const usersApi = useUsersApi();
 
+    const {data} = useQuery({
+        queryKey: ["profile"],
+        queryFn: () => usersApi.getUserById(),
+        enabled: true,
+        staleTime: 0,
+    });
+    const updateUserPasswordMutation = useMutation({
+        mutationFn: usersApi.updateUserPassword,
+        onSuccess: async (data) => {
+            if (data.error) {
+                setHasError(true);
+                return setErrorMessage(data.message);
+            }
+
+            setIsSaved(true);
+        }
+    });
+
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
     };
@@ -27,35 +46,22 @@ export default function RouteProfile() {
         setIsSaved(false);
     }
 
-    const fetchData = useCallback(async () => {
-        const data = await usersApi.getUserById();
-
-        if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
-        }
-
-        setUserName(data.username!);
-
-        // eslint-disable-next-line
-    }, []);
-
     const handleSubmitChangePassword = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const data = await usersApi.updateUserPassword(password);
-
-        if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
-        }
-
-        setIsSaved(true);
+        updateUserPasswordMutation.mutate(password);
     }
 
     useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+        if (data) {
+            if (data.error) {
+                setHasError(true);
+                return setErrorMessage(data.message);
+            }
+
+            setUserName(data.username!);
+        }
+    }, [data]);
 
     return (
         <div className="container mt-4">

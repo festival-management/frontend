@@ -30,7 +30,7 @@ export default function RouteRoleEdit() {
     const rolesApi = useRolesApi();
 
     const {data} = useQuery({
-        queryKey: ["roles", id],
+        queryKey: ["roles-edit", id],
         queryFn: () => rolesApi.getRolesById(parseInt(id || "-1")),
         enabled: true,
         staleTime: 0,
