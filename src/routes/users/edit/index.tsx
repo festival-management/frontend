@@ -46,15 +46,21 @@ export default function RouteUserEdit() {
         setIsSaved(true);
     };
     const updateUserNameMutation = useMutation({
-        mutationFn: (variables: {id: number, name: string}) => usersApi.updateUserName(variables.id, variables.name),
+        mutationFn: (variables: { id: number, name: string }) => usersApi.updateUserName(variables.id, variables.name),
         onSuccess: onSuccessMutation
     });
     const updateUserPasswordMutation = useMutation({
-        mutationFn: (variables: {id: number, password: string}) => usersApi.updateUserPassword(variables.password, variables.id),
+        mutationFn: (variables: {
+            id: number,
+            password: string
+        }) => usersApi.updateUserPassword(variables.password, variables.id),
         onSuccess: onSuccessMutation
     });
     const updateUserRoleIdMutation = useMutation({
-        mutationFn: (variables: {id: number, roleId: string}) => usersApi.updateUserRoleId(variables.id, variables.roleId),
+        mutationFn: (variables: {
+            id: number,
+            roleId: string
+        }) => usersApi.updateUserRoleId(variables.id, variables.roleId),
         onSuccess: onSuccessMutation
     });
 
