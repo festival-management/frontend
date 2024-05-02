@@ -1,10 +1,12 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
+import {useMutation, useQuery} from "@tanstack/react-query";
 
 import useRolesApi from "../../../api/roles";
 import RoleEditNameForm from "./RoleEditNameForm";
 import {PaperSize} from "../../../enums/paper-size";
 import {Permission} from "../../../enums/permission";
+import BaseResponse from "../../../models/base.model";
 import RoleEditPaperSizeForm from "./RoleEditPaperSizeForm";
 import ErrorMessage from "../../../components/error-message";
 import RoleEditPermissionsForm from "./RoleEditPermissionsForm";
@@ -26,6 +28,39 @@ export default function RouteRoleEdit() {
     const [rolePaperSize, setRolePaperSize] = useState("");
 
     const rolesApi = useRolesApi();
+
+    const {data} = useQuery({
+        queryKey: ["roles", id],
+        queryFn: () => rolesApi.getRolesById(parseInt(id || "-1")),
+        enabled: true,
+        staleTime: 0,
+    });
+    const onSuccessMutation = async (data: BaseResponse) => {
+        if (data.error) {
+            setHasError(true);
+            return setErrorMessage(data.message);
+        }
+
+        setIsSaved(true);
+    };
+    const updateRoleNameMutation = useMutation({
+        mutationFn: (variables: { id: number, name: string }) => rolesApi.updateRoleName(variables.id, variables.name),
+        onSuccess: onSuccessMutation
+    });
+    const updateRolePermissionsMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            permissions: { [permission in Permission]: boolean }
+        }) => rolesApi.updateRolePermissions(variables.id, variables.permissions),
+        onSuccess: onSuccessMutation
+    });
+    const updateRolePaperSizeMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            paperSize: string
+        }) => rolesApi.updateRolePaperSize(variables.id, variables.paperSize),
+        onSuccess: onSuccessMutation
+    });
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRoleName(event.target.value);
@@ -51,72 +86,44 @@ export default function RouteRoleEdit() {
         setIsSaved(false);
     }
 
-    const fetchData = useCallback(async () => {
-        const data = await rolesApi.getRolesById(parseInt(id || "-1"));
-
-        if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
-        }
-
-        setRoleName(data.name!);
-        setRolePaperSize(data.paper_size || PaperSize.A4);
-
-        for (const key in data.permissions)
-            setRolePermissions(prevState => ({
-                ...prevState,
-                [key]: data.permissions![key as Permission]
-            }));
-
-        // eslint-disable-next-line
-    }, [id]);
-
     const handleSubmitChangeName = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const data = await rolesApi.updateRoleName(parseInt(id || "-1"), roleName);
-
-        if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
-        }
-
-        setIsSaved(true);
+        updateRoleNameMutation.mutate({id: parseInt(id || "-1"), name: roleName});
     };
 
     const handleSubmitChangePermissions = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const data = await rolesApi.updateRolePermissions(parseInt(id || "-1"), rolePermissions);
-
-        if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
-        }
-
-        setIsSaved(true);
+        updateRolePermissionsMutation.mutate({id: parseInt(id || "-1"), permissions: rolePermissions});
     };
 
     const handleSubmitChangePaperSize = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const data = await rolesApi.updateRolePaperSize(parseInt(id || "-1"), rolePaperSize);
-
-        if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
-        }
-
-        setIsSaved(true);
+        updateRolePaperSizeMutation.mutate({id: parseInt(id || "-1"), paperSize: rolePaperSize});
     };
 
     useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+        if (data) {
+            if (data.error) {
+                setHasError(true);
+                return setErrorMessage(data.message);
+            }
+
+            setRoleName(data.name!);
+            setRolePaperSize(data.paper_size || PaperSize.A4);
+
+            for (const key in data.permissions)
+                setRolePermissions(prevState => ({
+                    ...prevState,
+                    [key]: data.permissions![key as Permission]
+                }));
+        }
+    }, [data]);
 
     return (
         <div className="container mt-4">
-
             <div className="card">
                 <div className="card-body">
                     <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
