@@ -1,14 +1,15 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {useMutation, useQuery} from "@tanstack/react-query";
 
 import UsersTable from "./UsersTable";
 import useAuthApi from "../../api/auth";
 import useUsersApi from "../../api/users";
 import useRolesApi from "../../api/roles";
+import CreateUserForm from "./CreateUserForm";
 import {RoleName} from "../../models/roles.model";
 import {User} from "../../models/users.model";
 import ErrorMessage from "../../components/error-message";
 import PaginationControls from "../../components/pagination-controls";
-import CreateUserForm from "./CreateUserForm";
 
 export default function RouteUsers() {
     const [errorMessage, setErrorMessage] = useState("");
@@ -24,6 +25,48 @@ export default function RouteUsers() {
     const authApi = useAuthApi();
     const rolesApi = useRolesApi();
     const usersApi = useUsersApi();
+
+    const {data, refetch} = useQuery({
+        queryKey: ["users", page],
+        queryFn: async () => {
+            const data = await usersApi.getUsers(page);
+            const dataRolesName = await rolesApi.getRolesName();
+
+            return {users: data, rolesName: dataRolesName};
+        },
+        enabled: true,
+        staleTime: 0,
+    });
+    const addUserMutation = useMutation({
+        mutationFn: (variables: {
+            username: string,
+            password: string,
+            roleId: string
+        }) => authApi.register(variables.username, variables.password, variables.roleId),
+        onSuccess: async (data) => {
+            if (data.error) {
+                setHasError(true);
+                return setErrorMessage(data.message);
+            }
+
+            setNewUserName("");
+            setNewUserPassword("");
+            setNewUserRoleId("-1");
+
+            await refetch();
+        }
+    });
+    const deleteUserMutation = useMutation({
+        mutationFn: usersApi.deleteUser,
+        onSuccess: async (data) => {
+            if (data.error) {
+                setHasError(true);
+                return setErrorMessage(data.message);
+            }
+
+            await refetch();
+        }
+    });
 
     const handleNewUserNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewUserName(event.target.value);
@@ -42,60 +85,34 @@ export default function RouteUsers() {
         setErrorMessage("");
     };
 
-    const fetchData = useCallback(async () => {
-        const data = await usersApi.getUsers(page);
-
-        if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
-        }
-
-        setUsers(data.users!);
-        setTotalCount(data.total_count!);
-
-        const dataRolesName = await rolesApi.getRolesName();
-
-        if (dataRolesName.error) {
-            setHasError(true);
-            return setErrorMessage(dataRolesName.message);
-        }
-
-        setRolesName(dataRolesName.roles!);
-
-        // eslint-disable-next-line
-    }, [page]);
-
     const handleSubmitAddUser = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const resp = await authApi.register(newUserName, newUserPassword, newUserRoleId);
-
-        if (resp.error) {
-            setHasError(true);
-            return setErrorMessage(resp.message);
-        }
-
-        setNewUserName("");
-        setNewUserPassword("");
-        setNewUserRoleId("-1");
-
-        await fetchData();
+        addUserMutation.mutate({username: newUserName, password: newUserPassword, roleId: newUserRoleId});
     };
 
     const handleDeleteUser = async (id: number) => {
-        const resp = await usersApi.deleteUser(id);
-
-        if (resp.error) {
-            setHasError(true);
-            return setErrorMessage(resp.message);
-        }
-
-        await fetchData();
+        deleteUserMutation.mutate(id);
     };
 
     useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+        if (data) {
+            if (data.users.error) {
+                setHasError(true);
+                return setErrorMessage(data.users.message);
+            }
+
+            setUsers(data.users.users!);
+            setTotalCount(data.users.total_count!);
+
+            if (data.rolesName.error) {
+                setHasError(true);
+                return setErrorMessage(data.rolesName.message);
+            }
+
+            setRolesName(data.rolesName.roles!);
+        }
+    }, [data]);
 
     return (
         <div className="container mt-4">
