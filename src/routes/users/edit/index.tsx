@@ -1,14 +1,16 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
+import {useMutation, useQuery} from "@tanstack/react-query";
 
 import useRolesApi from "../../../api/roles";
 import useUsersApi from "../../../api/users";
+import UserEditNameForm from "./UserEditNameForm";
 import {RoleName} from "../../../models/roles.model";
+import BaseResponse from "../../../models/base.model";
+import UserEditRoleIdForm from "./UserEditRoleIdForm";
+import UserEditPasswordForm from "./UserEditPasswordForm";
 import ErrorMessage from "../../../components/error-message";
 import SuccessMessage from "../../../components/success-message";
-import UserEditNameForm from "./UserEditNameForm";
-import UserEditPasswordForm from "./UserEditPasswordForm";
-import UserEditRoleIdForm from "./UserEditRoleIdForm";
 
 export default function RouteUserEdit() {
     const {id} = useParams();
@@ -23,6 +25,38 @@ export default function RouteUserEdit() {
 
     const usersApi = useUsersApi();
     const rolesApi = useRolesApi();
+
+    const {data} = useQuery({
+        queryKey: ["users-edit", id],
+        queryFn: async () => {
+            const data = await usersApi.getUserById(parseInt(id || "-1"));
+            const dataRolesName = await rolesApi.getRolesName();
+
+            return {user: data, rolesName: dataRolesName};
+        },
+        enabled: true,
+        staleTime: 0,
+    });
+    const onSuccessMutation = async (data: BaseResponse) => {
+        if (data.error) {
+            setHasError(true);
+            return setErrorMessage(data.message);
+        }
+
+        setIsSaved(true);
+    };
+    const updateUserNameMutation = useMutation({
+        mutationFn: (variables: {id: number, name: string}) => usersApi.updateUserName(variables.id, variables.name),
+        onSuccess: onSuccessMutation
+    });
+    const updateUserPasswordMutation = useMutation({
+        mutationFn: (variables: {id: number, password: string}) => usersApi.updateUserPassword(variables.password, variables.id),
+        onSuccess: onSuccessMutation
+    });
+    const updateUserRoleIdMutation = useMutation({
+        mutationFn: (variables: {id: number, roleId: string}) => usersApi.updateUserRoleId(variables.id, variables.roleId),
+        onSuccess: onSuccessMutation
+    });
 
     const handleNewUserNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewUserName(event.target.value);
@@ -45,71 +79,42 @@ export default function RouteUserEdit() {
         setIsSaved(false);
     }
 
-    const fetchData = useCallback(async () => {
-        const data = await usersApi.getUserById(parseInt(id || "-1"));
-
-        if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
-        }
-
-        setNewUserName(data.username!);
-        setNewUserRoleId(data.role_id!.toString());
-
-        const dataRolesName = await rolesApi.getRolesName();
-
-        if (dataRolesName.error) {
-            setHasError(true);
-            return setErrorMessage(dataRolesName.message);
-        }
-
-        setRolesName(dataRolesName.roles!);
-
-        // eslint-disable-next-line
-    }, []);
-
     const handleSubmitChangeNewUserName = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const data = await usersApi.updateUserName(parseInt(id || "-1"), newUserName);
-
-        if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
-        }
-
-        setIsSaved(true);
+        updateUserNameMutation.mutate({id: parseInt(id || "-1"), name: newUserName});
     };
 
     const handleSubmitChangeNewUserPassword = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const data = await usersApi.updateUserPassword(newUserPassword, parseInt(id || "-1"));
-
-        if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
-        }
-
-        setIsSaved(true);
+        updateUserPasswordMutation.mutate({id: parseInt(id || "-1"), password: newUserPassword});
     };
 
     const handleSubmitChangeNewUserRoleId = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const data = await usersApi.updateUserRoleId(parseInt(id || "-1"), newUserRoleId);
-
-        if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
-        }
-
-        setIsSaved(true);
+        updateUserRoleIdMutation.mutate({id: parseInt(id || "-1"), roleId: newUserRoleId});
     };
 
     useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+        if (data) {
+            if (data.user.error) {
+                setHasError(true);
+                return setErrorMessage(data.user.message);
+            }
+
+            setNewUserName(data.user.username!);
+            setNewUserRoleId(data.user.role_id!.toString());
+
+            if (data.rolesName.error) {
+                setHasError(true);
+                return setErrorMessage(data.rolesName.message);
+            }
+
+            setRolesName(data.rolesName.roles!);
+        }
+    }, [data]);
 
     return (
         <div className="container mt-4">
