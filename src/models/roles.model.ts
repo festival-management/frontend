@@ -14,6 +14,10 @@ export interface RoleName {
     name: string;
 }
 
+export interface CreateRoleResponse extends BaseResponse {
+    role: Role;
+}
+
 export interface GetRolesResponse extends BaseResponse {
     total_count?: number;
     roles?: Role[];

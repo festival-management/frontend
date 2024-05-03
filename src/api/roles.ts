@@ -4,13 +4,13 @@ import API from "../env/api";
 import useHttpClient from "./utils";
 import {Permission} from "../enums/permission";
 import BaseResponse from "../models/base.model";
-import {GetRoleResponse, GetRolesNameResponse, GetRolesResponse} from "../models/roles.model";
+import {CreateRoleResponse, GetRoleResponse, GetRolesNameResponse, GetRolesResponse} from "../models/roles.model";
 
 const useRolesApi = () => {
     const {http} = useHttpClient(API.ROLES.toString());
 
     const addRole = async (name: string) => {
-        const response: AxiosResponse<BaseResponse> = await http.post(
+        const response: AxiosResponse<CreateRoleResponse> = await http.post(
             "/",
             {name}
         );

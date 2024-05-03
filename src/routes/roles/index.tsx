@@ -19,7 +19,7 @@ export default function RouteRoles() {
 
     const rolesApi = useRolesApi();
 
-    const {data, refetch} = useQuery({
+    const {data} = useQuery({
         queryKey: ["roles", page],
         queryFn: () => rolesApi.getRoles(page),
         enabled: true,
@@ -36,18 +36,18 @@ export default function RouteRoles() {
 
             setNewRoleName("");
 
-            await refetch();
+            setRoles((prevState) => [...prevState, data.role]);
         }
     });
     const deleteRoleMutation = useMutation({
         mutationFn: rolesApi.deleteRole,
-        onSuccess: async (data) => {
+        onSuccess: async (data, variables) => {
             if (data.error) {
                 setHasError(true);
                 return setErrorMessage(data.message);
             }
 
-            await refetch();
+            setRoles((prevState) => prevState.filter((role) => role.id !== variables));
         }
     });
 

@@ -26,7 +26,7 @@ export default function RouteUsers() {
     const rolesApi = useRolesApi();
     const usersApi = useUsersApi();
 
-    const {data, refetch} = useQuery({
+    const {data} = useQuery({
         queryKey: ["users", page],
         queryFn: async () => {
             const data = await usersApi.getUsers(page);
@@ -53,18 +53,18 @@ export default function RouteUsers() {
             setNewUserPassword("");
             setNewUserRoleId("-1");
 
-            await refetch();
+            setUsers((prevState) => [...prevState, data.user]);
         }
     });
     const deleteUserMutation = useMutation({
         mutationFn: usersApi.deleteUser,
-        onSuccess: async (data) => {
+        onSuccess: async (data, variables) => {
             if (data.error) {
                 setHasError(true);
                 return setErrorMessage(data.message);
             }
 
-            await refetch();
+            setUsers((prevState) => prevState.filter((user) => user.id !== variables));
         }
     });
 

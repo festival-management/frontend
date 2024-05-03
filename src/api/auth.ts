@@ -2,8 +2,7 @@ import {AxiosResponse} from "axios";
 
 import API from "../env/api";
 import useHttpClient from "./utils";
-import BaseResponse from "../models/base.model";
-import {LoginResponse} from "../models/auth.model";
+import {LoginResponse, RegisterResponse} from "../models/auth.model";
 
 const useAuthApi = () => {
     const {http, token, navigate} = useHttpClient(API.AUTH.toString());
@@ -30,7 +29,7 @@ const useAuthApi = () => {
     };
 
     const register = async (username: string, password: string, roleId: string) => {
-        const response: AxiosResponse<BaseResponse> = await http.post(
+        const response: AxiosResponse<RegisterResponse> = await http.post(
             "/register",
             {username, password, role_id: roleId}
         );
