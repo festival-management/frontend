@@ -58,7 +58,7 @@ const useUsersApi = () => {
         return response.data;
     };
 
-    const updateUserRoleId = async (id: number, roleId: string) => {
+    const updateUserRoleId = async (id: number, roleId: number) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/role`,
             {role_id: roleId}

@@ -19,9 +19,9 @@ export default function RouteUserEdit() {
     const [hasError, setHasError] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [rolesName, setRolesName] = useState<RoleName[]>([]);
-    const [newUserName, setNewUserName] = useState("");
-    const [newUserPassword, setNewUserPassword] = useState("");
-    const [newUserRoleId, setNewUserRoleId] = useState("-1");
+    const [userName, setUserName] = useState("");
+    const [userPassword, setUserPassword] = useState("");
+    const [userRoleId, setUserRoleId] = useState(-1);
 
     const usersApi = useUsersApi();
     const rolesApi = useRolesApi();
@@ -59,21 +59,21 @@ export default function RouteUserEdit() {
     const updateUserRoleIdMutation = useMutation({
         mutationFn: (variables: {
             id: number,
-            roleId: string
+            roleId: number
         }) => usersApi.updateUserRoleId(variables.id, variables.roleId),
         onSuccess: onSuccessMutation
     });
 
-    const handleNewUserNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewUserName(event.target.value);
+    const handleUserNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUserName(event.target.value);
     };
 
-    const handleNewUserPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewUserPassword(event.target.value);
+    const handleUserPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUserPassword(event.target.value);
     };
 
-    const handleNewUserRoleIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setNewUserRoleId(event.target.value);
+    const handleUserRoleIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setUserRoleId(parseInt(event.target.value));
     };
 
     const handleAfterTimeoutError = () => {
@@ -88,19 +88,19 @@ export default function RouteUserEdit() {
     const handleSubmitChangeNewUserName = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        updateUserNameMutation.mutate({id: parseInt(id || "-1"), name: newUserName});
+        updateUserNameMutation.mutate({id: parseInt(id || "-1"), name: userName});
     };
 
     const handleSubmitChangeNewUserPassword = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        updateUserPasswordMutation.mutate({id: parseInt(id || "-1"), password: newUserPassword});
+        updateUserPasswordMutation.mutate({id: parseInt(id || "-1"), password: userPassword});
     };
 
     const handleSubmitChangeNewUserRoleId = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        updateUserRoleIdMutation.mutate({id: parseInt(id || "-1"), roleId: newUserRoleId});
+        updateUserRoleIdMutation.mutate({id: parseInt(id || "-1"), roleId: userRoleId});
     };
 
     useEffect(() => {
@@ -110,8 +110,8 @@ export default function RouteUserEdit() {
                 return setErrorMessage(data.user.message);
             }
 
-            setNewUserName(data.user.username!);
-            setNewUserRoleId(data.user.role_id!.toString());
+            setUserName(data.user.username!);
+            setUserRoleId(data.user.role_id!);
 
             if (data.rolesName.error) {
                 setHasError(true);
@@ -128,12 +128,12 @@ export default function RouteUserEdit() {
                 <div className="card-body">
                     <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
                     <SuccessMessage message="Done" visible={isSaved} afterTimeout={handleAfterTimeoutSaved}/>
-                    <UserEditNameForm name={newUserName} handleNameChange={handleNewUserNameChange}
+                    <UserEditNameForm name={userName} handleNameChange={handleUserNameChange}
                                       handleSubmit={handleSubmitChangeNewUserName}/>
-                    <UserEditPasswordForm password={newUserPassword} handlePasswordChange={handleNewUserPasswordChange}
+                    <UserEditPasswordForm password={userPassword} handlePasswordChange={handleUserPasswordChange}
                                           handleSubmit={handleSubmitChangeNewUserPassword}/>
-                    <UserEditRoleIdForm rolesName={rolesName} roleId={newUserRoleId}
-                                        handleRoleIdChange={handleNewUserRoleIdChange}
+                    <UserEditRoleIdForm rolesName={rolesName} roleId={userRoleId}
+                                        handleRoleIdChange={handleUserRoleIdChange}
                                         handleSubmit={handleSubmitChangeNewUserRoleId}/>
                 </div>
             </div>

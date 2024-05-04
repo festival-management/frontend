@@ -7,7 +7,7 @@ type CreateUserFormProps = {
     handleNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     password: string;
     handlePasswordChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    roleId: string;
+    roleId: number;
     handleRoleIdChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
     rolesName: RoleName[];
     handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;

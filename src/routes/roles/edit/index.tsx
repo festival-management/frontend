@@ -112,7 +112,7 @@ export default function RouteRoleEdit() {
             }
 
             setRoleName(data.name!);
-            setRolePaperSize(data.paper_size || PaperSize.A4);
+            setRolePaperSize(data.paper_size || PaperSize.UNDEFINED);
 
             for (const key in data.permissions)
                 setRolePermissions(prevState => ({

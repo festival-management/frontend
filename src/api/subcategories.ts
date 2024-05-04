@@ -57,7 +57,33 @@ const useSubcategoriesApi = () => {
         return response.data;
     };
 
-    return {addSubcategory, deleteSubcategory, getSubcategories, getSubcategoriesName, getSubcategoryById};
+    const updateSubcategoryName = async (id: number, name: string) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/name`,
+            {name}
+        );
+
+        return response.data;
+    };
+
+    const updateSubcategoryOrder = async (id: number, order: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/order`,
+            {order}
+        );
+
+        return response.data;
+    };
+
+    return {
+        addSubcategory,
+        deleteSubcategory,
+        getSubcategories,
+        getSubcategoriesName,
+        getSubcategoryById,
+        updateSubcategoryName,
+        updateSubcategoryOrder
+    };
 }
 
 export default useSubcategoriesApi;

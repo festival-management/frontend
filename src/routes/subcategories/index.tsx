@@ -20,7 +20,7 @@ export default function RouteSubcategories() {
 
     const {data} = useQuery({
         queryKey: ["subcategories", page],
-        queryFn: () => subcategoriesApi.getSubcategories(page),
+        queryFn: () => subcategoriesApi.getSubcategories(page, "order"),
         enabled: true,
         staleTime: 0,
     });

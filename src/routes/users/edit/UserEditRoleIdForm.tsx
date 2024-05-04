@@ -4,7 +4,7 @@ import {RoleName} from "../../../models/roles.model";
 
 type UserEditRoleIdFormProps = {
     rolesName: RoleName[];
-    roleId: string;
+    roleId: number;
     handleRoleIdChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
     handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }

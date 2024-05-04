@@ -20,7 +20,7 @@ export default function RouteUsers() {
     const [rolesName, setRolesName] = useState<RoleName[]>([]);
     const [newUserName, setNewUserName] = useState("");
     const [newUserPassword, setNewUserPassword] = useState("");
-    const [newUserRoleId, setNewUserRoleId] = useState("-1");
+    const [newUserRoleId, setNewUserRoleId] = useState(-1);
 
     const authApi = useAuthApi();
     const rolesApi = useRolesApi();
@@ -41,7 +41,7 @@ export default function RouteUsers() {
         mutationFn: (variables: {
             username: string,
             password: string,
-            roleId: string
+            roleId: number
         }) => authApi.register(variables.username, variables.password, variables.roleId),
         onSuccess: async (data) => {
             if (data.error) {
@@ -51,7 +51,7 @@ export default function RouteUsers() {
 
             setNewUserName("");
             setNewUserPassword("");
-            setNewUserRoleId("-1");
+            setNewUserRoleId(-1);
 
             setUsers((prevState) => [...prevState, data.user!]);
         }
@@ -77,7 +77,7 @@ export default function RouteUsers() {
     };
 
     const handleNewUserRoleIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setNewUserRoleId(event.target.value);
+        setNewUserRoleId(parseInt(event.target.value));
     };
 
     const handleAfterTimeoutError = () => {

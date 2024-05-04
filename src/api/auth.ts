@@ -28,7 +28,7 @@ const useAuthApi = () => {
         return r;
     };
 
-    const register = async (username: string, password: string, roleId: string) => {
+    const register = async (username: string, password: string, roleId: number) => {
         const response: AxiosResponse<RegisterResponse> = await http.post(
             "/register",
             {username, password, role_id: roleId}

@@ -18,7 +18,8 @@ export default function RoleEditPaperSizeForm({
             <form onSubmit={handleSubmit}>
                 <select className="form-select mb-3" aria-label="Default select example" value={paperSize}
                         onChange={handlePaperSizeChange}>
-                    {Object.values(PaperSize).map(paperSize => (
+                    <option value={PaperSize.UNDEFINED}>Open this select menu</option>
+                    {Object.values(PaperSize).filter((paperSize) => paperSize !== PaperSize.UNDEFINED).map(paperSize => (
                         <option key={paperSize} value={paperSize}>{paperSize}</option>
                     ))}
                 </select>
