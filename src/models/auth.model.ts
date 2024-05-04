@@ -7,5 +7,5 @@ export interface LoginResponse extends BaseResponse {
 }
 
 export interface RegisterResponse extends BaseResponse {
-    user: User;
+    user?: User;
 }

@@ -36,7 +36,7 @@ export default function RouteRoles() {
 
             setNewRoleName("");
 
-            setRoles((prevState) => [...prevState, data.role]);
+            setRoles((prevState) => [...prevState, data.role!]);
         }
     });
     const deleteRoleMutation = useMutation({

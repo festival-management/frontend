@@ -53,7 +53,7 @@ export default function RouteUsers() {
             setNewUserPassword("");
             setNewUserRoleId("-1");
 
-            setUsers((prevState) => [...prevState, data.user]);
+            setUsers((prevState) => [...prevState, data.user!]);
         }
     });
     const deleteUserMutation = useMutation({

@@ -9,6 +9,9 @@ const API = {
     get USERS() {
         return new URL("/users", this.BASE_URL);
     },
+    get SUBCATEGORIES() {
+        return new URL("/subcategories", this.BASE_URL);
+    },
 };
 
 export default API;

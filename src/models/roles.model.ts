@@ -15,7 +15,7 @@ export interface RoleName {
 }
 
 export interface CreateRoleResponse extends BaseResponse {
-    role: Role;
+    role?: Role;
 }
 
 export interface GetRolesResponse extends BaseResponse {
