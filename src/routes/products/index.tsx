@@ -7,6 +7,9 @@ import useSubcategoriesApi from "../../api/subcategories";
 import ErrorMessage from "../../components/error-message";
 import {SubcategoryName} from "../../models/subcategories.model";
 import CreateProductForm from "./CreateProductForm";
+import SelectProductSubcategoryId from "./SelectProductSubcategoryId";
+import PaginationControls from "../../components/pagination-controls";
+import ProductsTable from "./ProductsTable";
 
 export default function RouteProducts() {
     const [errorMessage, setErrorMessage] = useState("");
@@ -49,6 +52,9 @@ export default function RouteProducts() {
             setNewProductPrice(0);
             setNewProductCategory("-1");
 
+            if (totalCount === 0)
+                setTotalCount(1);
+
             setProducts((prevState) => [...prevState, data.product!]);
         }
     });
@@ -76,16 +82,21 @@ export default function RouteProducts() {
                 return setErrorMessage(data.message);
             }
 
+            if (products.length === 1)
+                setTotalCount(0);
+
             setProducts((prevState) => prevState.filter((product) => product.id !== variables));
         }
     });
 
     const handleSelectedSubcategoryIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedSubcategoryId(parseInt(event.target.value));
+        const v = parseInt(event.target.value);
+
+        setSelectedSubcategoryId(v);
 
         getProductBySubcategoryIdMutation.mutate({
             page: page,
-            selectedSubcategoryId: selectedSubcategoryId,
+            selectedSubcategoryId: v,
             orderBy: "name"
         });
     };
@@ -141,6 +152,11 @@ export default function RouteProducts() {
             <div className="card">
                 <div className="card-body">
                     <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
+                    <SelectProductSubcategoryId selectedSubcategoryId={selectedSubcategoryId}
+                                                subcategoriesName={subcategoriesName}
+                                                handleSelectedSubcategoryIdChange={handleSelectedSubcategoryIdChange}/>
+                    <ProductsTable data={products} handlerDeleteProduct={handleDeleteProduct}/>
+                    <PaginationControls page={page} setPage={setPage} totalCount={totalCount}/>
                     <CreateProductForm name={newProductName} handleNameChange={handleNewProductNameChange}
                                        shortName={newProductShortName}
                                        handleShortNameChange={handleNewProductShortNameChange} price={newProductPrice}
