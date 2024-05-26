@@ -22,7 +22,7 @@ export interface CreateProductResponse extends BaseResponse {
     product?: Product;
 }
 
-export interface GetProductResponse extends BaseResponse, Product {
+export interface GetProductResponse extends BaseResponse, Partial<Product> {
 }
 
 export interface GetProductsResponse extends BaseResponse {

@@ -9,6 +9,7 @@ import RouteProfile from "./routes/profile";
 import RouteProducts from "./routes/products";
 import RouteRoleEdit from "./routes/roles/edit";
 import RouteUserEdit from "./routes/users/edit";
+import RouteProductEdit from "./routes/products/edit";
 import RouteSubcategories from "./routes/subcategories";
 import RouteSubcategoryEdit from "./routes/subcategories/edit";
 
@@ -25,6 +26,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/products",
                     element: <RouteProducts/>
+                },
+                {
+                    path: "/products/edit/:id",
+                    element: <RouteProductEdit/>
                 },
                 {
                     path: "/profile",
