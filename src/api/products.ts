@@ -93,6 +93,60 @@ const useProductsApi = () => {
         return response.data;
     };
 
+    const updateProductCategory = async (id: number, category: String) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/category`,
+            {category}
+        );
+
+        return response.data;
+    };
+
+    const updateProductIsPriority = async (id: number, isPriority: boolean) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/priority`,
+            {is_priority: isPriority}
+        );
+
+        return response.data;
+    };
+
+    const updateProductName = async (id: number, name: String) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/name`,
+            {name}
+        );
+
+        return response.data;
+    };
+
+    const updateProductPrice = async (id: number, price: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/price`,
+            {price}
+        );
+
+        return response.data;
+    };
+
+    const updateProductShortName = async (id: number, shortName: String) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/short_name`,
+            {short_name: shortName}
+        );
+
+        return response.data;
+    };
+
+    const updateProductSubcategory = async (id: number, subcategoryId: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/subcategory`,
+            {subcategory_id: subcategoryId}
+        );
+
+        return response.data;
+    };
+
     return {
         addProduct,
         addProductDate,
@@ -102,7 +156,13 @@ const useProductsApi = () => {
         deleteProduct,
         getProductById,
         getProducts,
-        getProductsName
+        getProductsName,
+        updateProductCategory,
+        updateProductIsPriority,
+        updateProductName,
+        updateProductPrice,
+        updateProductShortName,
+        updateProductSubcategory
     };
 }
 

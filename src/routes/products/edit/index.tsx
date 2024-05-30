@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery} from "@tanstack/react-query";
 
+import useProductsApi from "../../../api/products";
+import BaseResponse from "../../../models/base.model";
 import ProductEditNameForm from "./ProductEditNameForm";
 import ProductEditPriceForm from "./ProductEditPriceForm";
 import ErrorMessage from "../../../components/error-message";
@@ -28,13 +30,51 @@ export default function RouteProductEdit() {
     const [productCategory, setProductCategory] = useState("");
     const [productSubcategoryId, setProductSubcategoryId] = useState(-1);
 
+    const productsApi = useProductsApi();
     const subcategoriesApi = useSubcategoriesApi();
 
-    const {data: dataSubcategories} = useQuery({
-        queryKey: ["product-edit-subcategories"],
-        queryFn: () => subcategoriesApi.getSubcategoriesName("order"),
+    const {data} = useQuery({
+        queryKey: ["product-edit", id],
+        queryFn: async () => {
+            const data = await productsApi.getProductById(parseInt(id || "-1"));
+            const dataSubcategoriesName = await subcategoriesApi.getSubcategoriesName("order");
+
+            return {product: data, subcategoriesName: dataSubcategoriesName};
+        },
         enabled: true,
         staleTime: 0,
+    });
+    const onSuccessMutation = async (data: BaseResponse) => {
+        if (data.error) {
+            setHasError(true);
+            return setErrorMessage(data.message);
+        }
+
+        setIsSaved(true);
+    };
+    const updateProductNameMutation = useMutation({
+        mutationFn: (variables: { id: number, name: string }) => productsApi.updateProductName(variables.id, variables.name),
+        onSuccess: onSuccessMutation
+    });
+    const updateProductShortNameMutation = useMutation({
+        mutationFn: (variables: { id: number, shortName: string }) => productsApi.updateProductShortName(variables.id, variables.shortName),
+        onSuccess: onSuccessMutation
+    });
+    const updateProductPriorityMutation = useMutation({
+        mutationFn: (variables: { id: number, priority: boolean }) => productsApi.updateProductIsPriority(variables.id, variables.priority),
+        onSuccess: onSuccessMutation
+    });
+    const updateProductPriceMutation = useMutation({
+        mutationFn: (variables: { id: number, price: number }) => productsApi.updateProductPrice(variables.id, variables.price),
+        onSuccess: onSuccessMutation
+    });
+    const updateProductCategoryMutation = useMutation({
+        mutationFn: (variables: { id: number, category: string }) => productsApi.updateProductCategory(variables.id, variables.category),
+        onSuccess: onSuccessMutation
+    });
+    const updateProductSubcategoryMutation = useMutation({
+        mutationFn: (variables: { id: number, subcategoryId: number }) => productsApi.updateProductSubcategory(variables.id, variables.subcategoryId),
+        onSuccess: onSuccessMutation
     });
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,38 +112,62 @@ export default function RouteProductEdit() {
 
     const handleSubmitChangeName = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        updateProductNameMutation.mutate({id: parseInt(id || "-1"), name: productName});
     };
 
     const handleSubmitChangeShortName = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        updateProductShortNameMutation.mutate({id: parseInt(id || "-1"), shortName: productShortName});
     };
 
     const handleSubmitChangePriority = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        updateProductPriorityMutation.mutate({id: parseInt(id || "-1"), priority: productPriority});
     };
 
     const handleSubmitChangePrice = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        updateProductPriceMutation.mutate({id: parseInt(id || "-1"), price: productPrice});
     };
 
     const handleSubmitChangeCategory = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        updateProductCategoryMutation.mutate({id: parseInt(id || "-1"), category: productCategory});
     };
 
     const handleSubmitChangeSubcategoryId = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        updateProductSubcategoryMutation.mutate({id: parseInt(id || "-1"), subcategoryId: productSubcategoryId});
     };
 
     useEffect(() => {
-        if (dataSubcategories) {
-            if (dataSubcategories.error) {
+        if (data) {
+            if (data.product.error) {
                 setHasError(true);
-                return setErrorMessage(dataSubcategories.message);
+                return setErrorMessage(data.product.message);
             }
 
-            setSubcategoriesName(dataSubcategories.subcategories!);
+            setProductName(data.product.name!);
+            setProductShortName(data.product.short_name!);
+            setProductPriority(data.product.is_priority!);
+            setProductPrice(data.product.price!);
+            setProductCategory(data.product.category!);
+            setProductSubcategoryId(data.product.subcategory_id!);
+
+            if (data.subcategoriesName.error) {
+                setHasError(true);
+                return setErrorMessage(data.subcategoriesName.message);
+            }
+
+            setSubcategoriesName(data.subcategoriesName.subcategories!);
         }
-    }, [dataSubcategories]);
+    }, [data]);
 
     return (
         <div className="container mt-4">
