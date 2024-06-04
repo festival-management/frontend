@@ -8,7 +8,7 @@ type PaginationControlsProps = {
 
 function PaginationControls({page, setPage, totalCount}: PaginationControlsProps) {
     const pages: React.JSX.Element[] = [];
-    const totalPages = Math.ceil(totalCount / process.env.REACT_APP_DEFAULT_LIMIT_VALUE);
+    const totalPages = Math.ceil(totalCount / import.meta.env.VITE_DEFAULT_LIMIT_VALUE);
 
     for (let i = 1; i <= totalPages; i++) {
         pages.push(
