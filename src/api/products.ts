@@ -22,7 +22,7 @@ const useProductsApi = () => {
         return response.data;
     };
 
-    const addProductDate = async (id: number, startDate: Date, endDate: Date) => {
+    const addProductDate = async (id: number, startDate: string, endDate: string) => {
         const response: AxiosResponse<BaseResponse> = await http.post(
             `/${id}/date`,
             {start_date: startDate, end_date: endDate}
@@ -66,9 +66,17 @@ const useProductsApi = () => {
         return response.data;
     };
 
-    const getProductById = async (id: number) => {
+    const getProductById = async (id: number, includeDates: boolean = false, includeIngredients: boolean = false, includeRoles: boolean = false, includeVariants: boolean = false) => {
         const response: AxiosResponse<GetProductResponse> = await http.get(
             `/${id}`,
+            {
+                params: {
+                    include_dates: includeDates,
+                    include_ingredients: includeIngredients,
+                    include_roles: includeRoles,
+                    include_variants: includeVariants
+                }
+            }
         );
 
         return response.data;

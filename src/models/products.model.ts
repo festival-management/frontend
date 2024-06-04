@@ -3,8 +3,8 @@ import {Category} from "../enums/category";
 
 export interface ProductDate {
     id: number;
-    start_date: Date;
-    end_date: Date;
+    start_date: string;
+    end_date: string;
 }
 
 export interface ProductIngredient {

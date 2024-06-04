@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from "@tanstack/react-query";
 
+import ProductEditDates from "./dates";
 import useProductsApi from "../../../api/products";
 import BaseResponse from "../../../models/base.model";
 import ProductEditNameForm from "./ProductEditNameForm";
@@ -41,7 +42,7 @@ export default function RouteProductEdit() {
     const {data} = useQuery({
         queryKey: ["product-edit", id],
         queryFn: async () => {
-            const data = await productsApi.getProductById(parseInt(id || "-1"));
+            const data = await productsApi.getProductById(parseInt(id || "-1"), true, true, true, true);
             const dataSubcategoriesName = await subcategoriesApi.getSubcategoriesName("order");
 
             return {product: data, subcategoriesName: dataSubcategoriesName};
@@ -79,6 +80,10 @@ export default function RouteProductEdit() {
     });
     const updateProductSubcategoryMutation = useMutation({
         mutationFn: (variables: { id: number, subcategoryId: number }) => productsApi.updateProductSubcategory(variables.id, variables.subcategoryId),
+        onSuccess: onSuccessMutation
+    });
+    const updateProductAddDateMutation = useMutation({
+        mutationFn: (variables: { id: number, startDate: string, endDate: string }) => productsApi.addProductDate(variables.id, variables.startDate, variables.endDate),
         onSuccess: onSuccessMutation
     });
 
@@ -151,6 +156,10 @@ export default function RouteProductEdit() {
         updateProductSubcategoryMutation.mutate({id: parseInt(id || "-1"), subcategoryId: productSubcategoryId});
     };
 
+    const handleSubmitAddDate = async (startDate: string, endDate: string) => {
+        updateProductAddDateMutation.mutate({id: parseInt(id || "-1"), startDate, endDate});
+    };
+
     useEffect(() => {
         if (data) {
             if (data.product.error) {
@@ -198,6 +207,7 @@ export default function RouteProductEdit() {
                                                   subcategoriesName={subcategoriesName}
                                                   handleSubcategoryIdChange={handleSubcategoryIdChange}
                                                   handleSubmit={handleSubmitChangeSubcategoryId}/>
+                    <ProductEditDates productDates={productDates} handleSubmit={handleSubmitAddDate}/>
                 </div>
             </div>
         </div>
