@@ -75,7 +75,7 @@ const useProductsApi = () => {
     };
 
     const getProducts = async (page: number, subcategoryId?: number, orderBy?: string) => {
-        const limit = process.env.REACT_APP_DEFAULT_LIMIT_VALUE;
+        const limit = import.meta.env.VITE_DEFAULT_LIMIT_VALUE;
         const response: AxiosResponse<GetProductsResponse> = await http.get(
             "/",
             {params: {offset: limit * (page - 1), limit: limit, order_by: orderBy, subcategory_id: subcategoryId}}
@@ -93,7 +93,7 @@ const useProductsApi = () => {
         return response.data;
     };
 
-    const updateProductCategory = async (id: number, category: String) => {
+    const updateProductCategory = async (id: number, category: string) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/category`,
             {category}
@@ -111,7 +111,7 @@ const useProductsApi = () => {
         return response.data;
     };
 
-    const updateProductName = async (id: number, name: String) => {
+    const updateProductName = async (id: number, name: string) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/name`,
             {name}
@@ -129,7 +129,7 @@ const useProductsApi = () => {
         return response.data;
     };
 
-    const updateProductShortName = async (id: number, shortName: String) => {
+    const updateProductShortName = async (id: number, shortName: string) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/short_name`,
             {short_name: shortName}

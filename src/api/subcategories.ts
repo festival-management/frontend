@@ -31,7 +31,7 @@ const useSubcategoriesApi = () => {
     };
 
     const getSubcategories = async (page: number, orderBy?: string) => {
-        const limit = process.env.REACT_APP_DEFAULT_LIMIT_VALUE;
+        const limit = import.meta.env.VITE_DEFAULT_LIMIT_VALUE;
         const response: AxiosResponse<GetSubcategoriesResponse> = await http.get(
             "/",
             {params: {offset: limit * (page - 1), limit: limit, order_by: orderBy}}

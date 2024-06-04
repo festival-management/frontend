@@ -64,7 +64,7 @@ export default function RouteProducts() {
             selectedSubcategoryId: number,
             orderBy: string
         }) => productsApi.getProducts(variables.page, variables.selectedSubcategoryId, variables.orderBy),
-        onSuccess: async (data, variables) => {
+        onSuccess: async (data) => {
             if (data.error) {
                 setHasError(true);
                 return setErrorMessage(data.message);

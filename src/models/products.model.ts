@@ -1,6 +1,28 @@
 import BaseResponse from "./base.model";
 import {Category} from "../enums/category";
 
+export interface ProductDate {
+    id: number;
+    start_date: Date;
+    end_date: Date;
+}
+
+export interface ProductIngredient {
+    id: number;
+    name: string;
+    price: number;
+}
+
+export interface ProductRole {
+    id: number;
+    role_id: number;
+}
+
+export interface ProductVariant {
+    id: number;
+    name: string;
+    price: number;
+}
 
 export interface Product {
     id: number;
@@ -10,6 +32,10 @@ export interface Product {
     price: number;
     category: Category;
     subcategory_id: number;
+    dates?: ProductDate[];
+    ingredients?: ProductIngredient[];
+    roles?: ProductRole[];
+    variants?: ProductVariant[];
 }
 
 export interface ProductName {

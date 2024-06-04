@@ -14,6 +14,7 @@ import SuccessMessage from "../../../components/success-message";
 import ProductEditShortNameForm from "./ProductEditShortNameForm";
 import {SubcategoryName} from "../../../models/subcategories.model";
 import ProductEditSubcategoryIdForm from "./ProductEditSubcategoryIdForm";
+import {ProductDate, ProductIngredient, ProductRole, ProductVariant} from "../../../models/products.model";
 
 
 export default function RouteProductEdit() {
@@ -29,6 +30,10 @@ export default function RouteProductEdit() {
     const [productPrice, setProductPrice] = useState(0);
     const [productCategory, setProductCategory] = useState("");
     const [productSubcategoryId, setProductSubcategoryId] = useState(-1);
+    const [productDates, setProductDates] = useState<ProductDate[]>([]);
+    const [productIngredients, setProductIngredients] = useState<ProductIngredient[]>([]);
+    const [productRoles, setProductRoles] = useState<ProductRole[]>([]);
+    const [productVariants, setProductVariants] = useState<ProductVariant[]>([]);
 
     const productsApi = useProductsApi();
     const subcategoriesApi = useSubcategoriesApi();
@@ -159,6 +164,10 @@ export default function RouteProductEdit() {
             setProductPrice(data.product.price!);
             setProductCategory(data.product.category!);
             setProductSubcategoryId(data.product.subcategory_id!);
+            setProductDates(data.product.dates || []);
+            setProductIngredients(data.product.ingredients || []);
+            setProductRoles(data.product.roles || []);
+            setProductVariants(data.product.variants || []);
 
             if (data.subcategoriesName.error) {
                 setHasError(true);

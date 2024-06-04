@@ -8,11 +8,11 @@ export interface TokenJwt {
 
 const useTokenJwt = create<TokenJwt>()((set) => ({
     tokenJwt: localStorage.getItem("token") || "",
-    setTokenJwt: (token) => set(function (_) {
+    setTokenJwt: (token) => set(function () {
         localStorage.setItem("token", token);
         return ({tokenJwt: token});
     }),
-    reset: () => set(function (_) {
+    reset: () => set(function () {
         localStorage.setItem("token", "");
         return ({tokenJwt: ""});
     })

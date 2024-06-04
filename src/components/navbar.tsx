@@ -8,7 +8,7 @@ import useTokenJwtUtils from "../hooks/use-token-jwt-utils";
 function NavLinkList() {
     const tokenService = useTokenJwtUtils();
 
-    let links = [...LINKS];
+    const links = [...LINKS];
     links.push(new LinkModel(Link, "/", "nav-link", "Logout", (t) => t.isLoggedIn(), () => tokenService.reset()));
 
     const filteredLinks = links.filter((link) => link.check(tokenService));

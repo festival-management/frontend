@@ -17,7 +17,7 @@ const useUsersApi = () => {
     };
 
     const getUsers = async (page: number) => {
-        const limit = process.env.REACT_APP_DEFAULT_LIMIT_VALUE;
+        const limit = import.meta.env.VITE_DEFAULT_LIMIT_VALUE;
         const response: AxiosResponse<GetUsersResponse> = await http.get(
             "/",
             {params: {offset: limit * (page - 1), limit: limit}}
