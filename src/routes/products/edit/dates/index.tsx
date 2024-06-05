@@ -2,13 +2,15 @@ import React, {useState} from "react";
 
 import {ProductDate} from "../../../../models/products.model.ts";
 import ProductEditDatesAdd from "./ProductEditDatesAdd.tsx";
+import ProductEditDatesTable from "./ProductEditDatesTable.tsx";
 
 type ProductEditDatesProps = {
     productDates: ProductDate[];
+    handleDelete: (productDateId: number) => Promise<void>;
     handleSubmit: (startDate: string, endDate: string) => Promise<void>;
 }
 
-export default function ProductEditDates({productDates, handleSubmit}: ProductEditDatesProps) {
+export default function ProductEditDates({productDates, handleDelete, handleSubmit}: ProductEditDatesProps) {
     const [newProductDateStartDate, setNewProductDateStartDate] = useState("");
     const [newProductDateEndDate, setNewProductDateEndDate] = useState("");
 
@@ -27,10 +29,13 @@ export default function ProductEditDates({productDates, handleSubmit}: ProductEd
     };
 
     return (
-        <ProductEditDatesAdd newProductDateStartDate={newProductDateStartDate}
-                             newProductDateEndDate={newProductDateEndDate}
-                             handleProductDateStartDateChange={handleNewProductDateStartDateChange}
-                             handleProductDateEndDateChange={handleNewProductDateEndDateChange}
-                             handleSubmit={handleSubmitAddDate}/>
+        <>
+            <ProductEditDatesAdd newProductDateStartDate={newProductDateStartDate}
+                                 newProductDateEndDate={newProductDateEndDate}
+                                 handleProductDateStartDateChange={handleNewProductDateStartDateChange}
+                                 handleProductDateEndDateChange={handleNewProductDateEndDateChange}
+                                 handleSubmit={handleSubmitAddDate}/>
+            <ProductEditDatesTable data={productDates} handleDelete={handleDelete}/>
+        </>
     );
 }

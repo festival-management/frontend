@@ -86,6 +86,13 @@ export default function RouteProductEdit() {
         mutationFn: (variables: { id: number, startDate: string, endDate: string }) => productsApi.addProductDate(variables.id, variables.startDate, variables.endDate),
         onSuccess: onSuccessMutation
     });
+    const deleteProductDateMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            productDateId: number
+        }) => productsApi.deleteProductDate(variables.id, variables.productDateId),
+        onSuccess: onSuccessMutation
+    });
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setProductName(event.target.value);
@@ -160,6 +167,10 @@ export default function RouteProductEdit() {
         updateProductAddDateMutation.mutate({id: parseInt(id || "-1"), startDate, endDate});
     };
 
+    const handleDeleteProductDate = async (productDateId: number) => {
+        deleteProductDateMutation.mutate({id: parseInt(id || "-1"), productDateId});
+    };
+
     useEffect(() => {
         if (data) {
             if (data.product.error) {
@@ -207,7 +218,8 @@ export default function RouteProductEdit() {
                                                   subcategoriesName={subcategoriesName}
                                                   handleSubcategoryIdChange={handleSubcategoryIdChange}
                                                   handleSubmit={handleSubmitChangeSubcategoryId}/>
-                    <ProductEditDates productDates={productDates} handleSubmit={handleSubmitAddDate}/>
+                    <ProductEditDates productDates={productDates} handleDelete={handleDeleteProductDate}
+                                      handleSubmit={handleSubmitAddDate}/>
                 </div>
             </div>
         </div>

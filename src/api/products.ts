@@ -66,6 +66,14 @@ const useProductsApi = () => {
         return response.data;
     };
 
+    const deleteProductDate = async (id: number, productDateId: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.delete(
+            `/${id}/date/${productDateId}`,
+        );
+
+        return response.data;
+    };
+
     const getProductById = async (id: number, includeDates: boolean = false, includeIngredients: boolean = false, includeRoles: boolean = false, includeVariants: boolean = false) => {
         const response: AxiosResponse<GetProductResponse> = await http.get(
             `/${id}`,
@@ -162,6 +170,7 @@ const useProductsApi = () => {
         addProductRole,
         addProductVariant,
         deleteProduct,
+        deleteProductDate,
         getProductById,
         getProducts,
         getProductsName,
