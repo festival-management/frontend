@@ -15,7 +15,13 @@ import SuccessMessage from "../../../components/success-message";
 import ProductEditShortNameForm from "./ProductEditShortNameForm";
 import {SubcategoryName} from "../../../models/subcategories.model";
 import ProductEditSubcategoryIdForm from "./ProductEditSubcategoryIdForm";
-import {ProductDate, ProductIngredient, ProductRole, ProductVariant} from "../../../models/products.model";
+import {
+    AddProductDateResponse,
+    ProductDate,
+    ProductIngredient,
+    ProductRole,
+    ProductVariant
+} from "../../../models/products.model";
 
 
 export default function RouteProductEdit() {
@@ -82,16 +88,28 @@ export default function RouteProductEdit() {
         mutationFn: (variables: { id: number, subcategoryId: number }) => productsApi.updateProductSubcategory(variables.id, variables.subcategoryId),
         onSuccess: onSuccessMutation
     });
-    const updateProductAddDateMutation = useMutation({
+    const addProductDateMutation = useMutation({
         mutationFn: (variables: { id: number, startDate: string, endDate: string }) => productsApi.addProductDate(variables.id, variables.startDate, variables.endDate),
-        onSuccess: onSuccessMutation
+        onSuccess: async (data: AddProductDateResponse) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setProductDates((prevState) => [...prevState, data.date!])
+            }
+        }
     });
     const deleteProductDateMutation = useMutation({
         mutationFn: (variables: {
             id: number,
             productDateId: number
         }) => productsApi.deleteProductDate(variables.id, variables.productDateId),
-        onSuccess: onSuccessMutation
+        onSuccess: async (data: AddProductDateResponse, variables) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setProductDates((prevState) => prevState.filter((productDate) => productDate.id !== variables.id));
+            }
+        }
     });
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,7 +182,7 @@ export default function RouteProductEdit() {
     };
 
     const handleSubmitAddDate = async (startDate: string, endDate: string) => {
-        updateProductAddDateMutation.mutate({id: parseInt(id || "-1"), startDate, endDate});
+        addProductDateMutation.mutate({id: parseInt(id || "-1"), startDate, endDate});
     };
 
     const handleDeleteProductDate = async (productDateId: number) => {

@@ -44,6 +44,10 @@ export interface ProductName {
     short_name: string;
 }
 
+export interface AddProductDateResponse extends BaseResponse {
+    date?: ProductDate;
+}
+
 export interface CreateProductResponse extends BaseResponse {
     product?: Product;
 }

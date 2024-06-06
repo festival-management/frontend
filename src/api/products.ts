@@ -4,6 +4,7 @@ import API from "../env/api";
 import useHttpClient from "./utils";
 import BaseResponse from "../models/base.model";
 import {
+    AddProductDateResponse,
     CreateProductResponse,
     GetProductResponse,
     GetProductsNameResponse,
@@ -23,7 +24,7 @@ const useProductsApi = () => {
     };
 
     const addProductDate = async (id: number, startDate: string, endDate: string) => {
-        const response: AxiosResponse<BaseResponse> = await http.post(
+        const response: AxiosResponse<AddProductDateResponse> = await http.post(
             `/${id}/date`,
             {start_date: startDate, end_date: endDate}
         );
