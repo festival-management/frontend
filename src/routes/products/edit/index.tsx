@@ -17,11 +17,13 @@ import {SubcategoryName} from "../../../models/subcategories.model";
 import ProductEditSubcategoryIdForm from "./ProductEditSubcategoryIdForm";
 import {
     AddProductDateResponse,
+    AddProductIngredientResponse,
     ProductDate,
     ProductIngredient,
     ProductRole,
     ProductVariant
 } from "../../../models/products.model";
+import ProductEditIngredients from "./ingredients";
 
 
 export default function RouteProductEdit() {
@@ -103,11 +105,38 @@ export default function RouteProductEdit() {
             id: number,
             productDateId: number
         }) => productsApi.deleteProductDate(variables.id, variables.productDateId),
-        onSuccess: async (data: AddProductDateResponse, variables) => {
+        onSuccess: async (data: BaseResponse, variables) => {
             await onSuccessMutation(data);
 
             if (!data.error) {
-                setProductDates((prevState) => prevState.filter((productDate) => productDate.id !== variables.id));
+                setProductDates((prevState) => prevState.filter((productDate) => productDate.id !== variables.productDateId));
+            }
+        }
+    });
+    const addProductIngredientMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            name: string,
+            price: number
+        }) => productsApi.addProductIngredient(variables.id, variables.name, variables.price),
+        onSuccess: async (data: AddProductIngredientResponse) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setProductIngredients((prevState) => [...prevState, data.ingredient!]);
+            }
+        }
+    });
+    const deleteProductIngredientMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            productIngredientId: number
+        }) => productsApi.deleteProductIngredient(variables.id, variables.productIngredientId),
+        onSuccess: async (data: BaseResponse, variables) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setProductIngredients((prevState) => prevState.filter((productIngredient) => productIngredient.id !== variables.productIngredientId));
             }
         }
     });
@@ -189,6 +218,14 @@ export default function RouteProductEdit() {
         deleteProductDateMutation.mutate({id: parseInt(id || "-1"), productDateId});
     };
 
+    const handleSubmitAddIngredient = async (name: string, price: number) => {
+        addProductIngredientMutation.mutate({id: parseInt(id || "-1"), name, price});
+    };
+
+    const handleDeleteProductIngredient = async (productIngredientId: number) => {
+        deleteProductIngredientMutation.mutate({id: parseInt(id || "-1"), productIngredientId});
+    };
+
     useEffect(() => {
         if (data) {
             if (data.product.error) {
@@ -238,6 +275,8 @@ export default function RouteProductEdit() {
                                                   handleSubmit={handleSubmitChangeSubcategoryId}/>
                     <ProductEditDates productDates={productDates} handleDelete={handleDeleteProductDate}
                                       handleSubmit={handleSubmitAddDate}/>
+                    <ProductEditIngredients productIngredients={productIngredients}
+                                            handleDelete={handleDeleteProductIngredient} handleSubmit={handleSubmitAddIngredient}/>
                 </div>
             </div>
         </div>

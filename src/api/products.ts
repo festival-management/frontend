@@ -5,6 +5,7 @@ import useHttpClient from "./utils";
 import BaseResponse from "../models/base.model";
 import {
     AddProductDateResponse,
+    AddProductIngredientResponse,
     CreateProductResponse,
     GetProductResponse,
     GetProductsNameResponse,
@@ -33,7 +34,7 @@ const useProductsApi = () => {
     };
 
     const addProductIngredient = async (id: number, name: string, price: number) => {
-        const response: AxiosResponse<BaseResponse> = await http.post(
+        const response: AxiosResponse<AddProductIngredientResponse> = await http.post(
             `/${id}/ingredient`,
             {name, price}
         );
@@ -70,6 +71,14 @@ const useProductsApi = () => {
     const deleteProductDate = async (id: number, productDateId: number) => {
         const response: AxiosResponse<BaseResponse> = await http.delete(
             `/${id}/date/${productDateId}`,
+        );
+
+        return response.data;
+    };
+
+    const deleteProductIngredient = async (id: number, productIngredientId: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.delete(
+            `/${id}/ingredient/${productIngredientId}`,
         );
 
         return response.data;
@@ -172,6 +181,7 @@ const useProductsApi = () => {
         addProductVariant,
         deleteProduct,
         deleteProductDate,
+        deleteProductIngredient,
         getProductById,
         getProducts,
         getProductsName,

@@ -48,6 +48,10 @@ export interface AddProductDateResponse extends BaseResponse {
     date?: ProductDate;
 }
 
+export interface AddProductIngredientResponse extends BaseResponse {
+    ingredient: ProductIngredient;
+}
+
 export interface CreateProductResponse extends BaseResponse {
     product?: Product;
 }

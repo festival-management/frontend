@@ -1,18 +1,18 @@
 import React from "react";
 
-import {ProductDate} from "../../../../models/products.model.ts";
+import {ProductIngredient} from "../../../../models/products.model.ts";
 
-type ProductEditDatesTableProps = {
-    data: ProductDate[];
-    handleDelete: (productDateId: number) => Promise<void>;
+type ProductEditIngredientsTableProps = {
+    data: ProductIngredient[];
+    handleDelete: (productIngredientId: number) => Promise<void>;
 }
 
-export default function ProductEditDatesTable({data, handleDelete}: ProductEditDatesTableProps) {
-    const productDates: React.JSX.Element[] = data.map(v => (
+export default function ProductEditIngredientsTable({data, handleDelete}: ProductEditIngredientsTableProps) {
+    const productIngredients: React.JSX.Element[] = data.map(v => (
         <tr key={v.id}>
             <th scope="row">{v.id}</th>
-            <td>{v.start_date}</td>
-            <td>{v.end_date}</td>
+            <td>{v.name}</td>
+            <td>{v.price}</td>
             <td>
                 <button
                     type="button"
@@ -31,13 +31,13 @@ export default function ProductEditDatesTable({data, handleDelete}: ProductEditD
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Start Date</th>
-                    <th scope="col">End Date</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                {productDates}
+                {productIngredients}
                 </tbody>
             </table>
         </>

@@ -26,16 +26,21 @@ export default function ProductEditDates({productDates, handleDelete, handleSubm
         event.preventDefault();
 
         await handleSubmit(newProductDateStartDate, newProductDateEndDate);
+
+        setNewProductDateStartDate("");
+        setNewProductDateEndDate("");
     };
 
     return (
         <>
+            <h6 className="mb-3">Dates</h6>
             <ProductEditDatesAdd newProductDateStartDate={newProductDateStartDate}
                                  newProductDateEndDate={newProductDateEndDate}
                                  handleProductDateStartDateChange={handleNewProductDateStartDateChange}
                                  handleProductDateEndDateChange={handleNewProductDateEndDateChange}
                                  handleSubmit={handleSubmitAddDate}/>
             <ProductEditDatesTable data={productDates} handleDelete={handleDelete}/>
+            <hr/>
         </>
     );
 }

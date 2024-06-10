@@ -17,7 +17,6 @@ export default function ProductEditDatesAdd({
                                             }: ProductEditDatesAddProps) {
     return (
         <form className="mb-3" onSubmit={handleSubmit}>
-            <h6>Create new date</h6>
             <div className="input-group mb-3">
                 <span className="input-group-text">Start date</span>
                 <input type="datetime-local" id="newProductDateStartDate" className="form-control" value={newProductDateStartDate}

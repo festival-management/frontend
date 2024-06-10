@@ -23,8 +23,17 @@ function ErrorMessage({message, visible, afterTimeout}: ErrorMessageProps) {
     return (
         <div>
             {localVisible && (
-                <div className="alert alert-danger" role="alert">
-                    {message}
+                <div className="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="errorToast" className="toast show align-items-center text-bg-danger border-0" role="alert"
+                         aria-live="assertive" aria-atomic="true">
+                        <div className="d-flex">
+                            <div className="toast-body">
+                                {message}
+                            </div>
+                            <button type="button" className="btn-close btn-close-white me-2 m-auto"
+                                    data-bs-dismiss="toast" aria-label="Close" onClick={() => setLocalVisible(false)}></button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
