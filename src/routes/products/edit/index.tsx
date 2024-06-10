@@ -3,18 +3,19 @@ import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from "@tanstack/react-query";
 
 import ProductEditDates from "./dates";
+import ProductEditIngredients from "./ingredients";
 import useProductsApi from "../../../api/products";
 import BaseResponse from "../../../models/base.model";
 import ProductEditNameForm from "./ProductEditNameForm";
 import ProductEditPriceForm from "./ProductEditPriceForm";
-import ErrorMessage from "../../../components/error-message";
 import useSubcategoriesApi from "../../../api/subcategories";
 import ProductEditPriorityForm from "./ProductEditPriorityForm";
 import ProductEditCategoryForm from "./ProductEditCategoryForm";
-import SuccessMessage from "../../../components/success-message";
+import ToastManager from "../../../components/toast-manager.tsx";
 import ProductEditShortNameForm from "./ProductEditShortNameForm";
 import {SubcategoryName} from "../../../models/subcategories.model";
 import ProductEditSubcategoryIdForm from "./ProductEditSubcategoryIdForm";
+import ToastMessage, {ToastType} from "../../../models/toast-message.model.ts";
 import {
     AddProductDateResponse,
     AddProductIngredientResponse,
@@ -23,15 +24,12 @@ import {
     ProductRole,
     ProductVariant
 } from "../../../models/products.model";
-import ProductEditIngredients from "./ingredients";
 
 
 export default function RouteProductEdit() {
     const {id} = useParams();
 
-    const [errorMessage, setErrorMessage] = useState("");
-    const [hasError, setHasError] = useState(false);
-    const [isSaved, setIsSaved] = useState(false);
+    const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [subcategoriesName, setSubcategoriesName] = useState<SubcategoryName[]>([]);
     const [productName, setProductName] = useState("");
     const [productShortName, setProductShortName] = useState("");
@@ -47,6 +45,14 @@ export default function RouteProductEdit() {
     const productsApi = useProductsApi();
     const subcategoriesApi = useSubcategoriesApi();
 
+    const addToast = (message: string, type: ToastType) => {
+        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    };
+
+    const removeToast = (index: number) => {
+        setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
+    };
+
     const {data} = useQuery({
         queryKey: ["product-edit", id],
         queryFn: async () => {
@@ -60,11 +66,10 @@ export default function RouteProductEdit() {
     });
     const onSuccessMutation = async (data: BaseResponse) => {
         if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
+            addToast(data.message, "error");
         }
 
-        setIsSaved(true);
+        addToast("Done", "success");
     };
     const updateProductNameMutation = useMutation({
         mutationFn: (variables: { id: number, name: string }) => productsApi.updateProductName(variables.id, variables.name),
@@ -165,15 +170,6 @@ export default function RouteProductEdit() {
         setProductSubcategoryId(parseInt(event.target.value));
     };
 
-    const handleAfterTimeoutError = () => {
-        setHasError(false);
-        setErrorMessage("");
-    };
-
-    const handleAfterTimeoutSaved = () => {
-        setIsSaved(false);
-    };
-
     const handleSubmitChangeName = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -229,8 +225,7 @@ export default function RouteProductEdit() {
     useEffect(() => {
         if (data) {
             if (data.product.error) {
-                setHasError(true);
-                return setErrorMessage(data.product.message);
+                addToast(data.product.message, "error");
             }
 
             setProductName(data.product.name!);
@@ -245,8 +240,7 @@ export default function RouteProductEdit() {
             setProductVariants(data.product.variants || []);
 
             if (data.subcategoriesName.error) {
-                setHasError(true);
-                return setErrorMessage(data.subcategoriesName.message);
+                addToast(data.subcategoriesName.message, "error");
             }
 
             setSubcategoriesName(data.subcategoriesName.subcategories!);
@@ -257,8 +251,6 @@ export default function RouteProductEdit() {
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
-                    <SuccessMessage message="Done" visible={isSaved} afterTimeout={handleAfterTimeoutSaved}/>
                     <ProductEditNameForm name={productName} handleNameChange={handleNameChange}
                                          handleSubmit={handleSubmitChangeName}/>
                     <ProductEditShortNameForm shortName={productShortName} handleShortNameChange={handleShortNameChange}
@@ -279,6 +271,7 @@ export default function RouteProductEdit() {
                                             handleDelete={handleDeleteProductIngredient} handleSubmit={handleSubmitAddIngredient}/>
                 </div>
             </div>
+            <ToastManager toasts={toasts} removeToast={removeToast}/>
         </div>
     );
 }
