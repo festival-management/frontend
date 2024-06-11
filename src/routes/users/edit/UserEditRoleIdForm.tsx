@@ -20,7 +20,7 @@ export default function UserEditRoleIdForm({
             <h6>Change role</h6>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <select className="form-select" value={roleId} onChange={handleRoleIdChange}>
+                    <select id="formInputUserRole" className="form-select" value={roleId} onChange={handleRoleIdChange}>
                         <option value="-1">Open this select menu</option>
                         {rolesName.map((e) => (
                             <option key={e.id} value={e.id}>{e.name}</option>

@@ -94,14 +94,12 @@ export default function RouteProducts() {
         }
     });
 
-    const handleSelectedSubcategoryIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const v = parseInt(event.target.value);
-
-        setSelectedSubcategoryId(v);
+    const handleSelectedSubcategoryIdChange = (subcategoryId: number) => {
+        setSelectedSubcategoryId(subcategoryId);
 
         getProductBySubcategoryIdMutation.mutate({
             page: page,
-            selectedSubcategoryId: v,
+            selectedSubcategoryId: subcategoryId,
             orderBy: "name"
         });
     };

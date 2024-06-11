@@ -56,7 +56,7 @@ export default function CreateProductForm({
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="newProductName" className="col-form-label">Price:</label>
-                                    <input type="number" id="newProductName" className="form-control" value={price}
+                                    <input type="number" id="newProductPrice" className="form-control" value={price}
                                            onChange={handlePriceChange}
                                            required/>
                                 </div>

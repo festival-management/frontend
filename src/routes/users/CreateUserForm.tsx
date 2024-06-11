@@ -35,7 +35,7 @@ export default function CreateUserForm({
                        onChange={handlePasswordChange}
                        required/>
                 <span className="input-group-text">Role</span>
-                <select className="form-select" value={roleId} onChange={handleRoleIdChange}>
+                <select className="form-select" value={roleId} onChange={handleRoleIdChange} id="newUserRoleId">
                     <option value="-1">Open this select menu</option>
                     {rolesName.map((e) => (
                         <option key={e.id} value={e.id}>{e.name}</option>
