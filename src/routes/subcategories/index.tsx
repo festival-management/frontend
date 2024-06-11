@@ -3,20 +3,28 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 
 import SubcategoriesTable from "./SubcategoriesTable";
 import useSubcategoriesApi from "../../api/subcategories";
-import ErrorMessage from "../../components/error-message";
 import CreateSubcategoryForm from "./CreateSubcategoryForm";
 import {Subcategory} from "../../models/subcategories.model";
+import ToastManager from "../../components/toast-manager.tsx";
 import PaginationControls from "../../components/pagination-controls";
+import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
 
 export default function RouteSubcategories() {
-    const [errorMessage, setErrorMessage] = useState("");
-    const [hasError, setHasError] = useState(false);
+    const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
     const [newSubcategoryName, setNewSubcategoryName] = useState("");
 
     const subcategoriesApi = useSubcategoriesApi();
+
+    const addToast = (message: string, type: ToastType) => {
+        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    };
+
+    const removeToast = (index: number) => {
+        setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
+    };
 
     const {data} = useQuery({
         queryKey: ["subcategories", page],
@@ -28,9 +36,7 @@ export default function RouteSubcategories() {
         mutationFn: subcategoriesApi.addSubcategory,
         onSuccess: async (data) => {
             if (data.error) {
-                setHasError(true);
-                setErrorMessage(data.message);
-                return;
+                return addToast(data.message, "error");
             }
 
             setNewSubcategoryName("");
@@ -42,8 +48,7 @@ export default function RouteSubcategories() {
         mutationFn: subcategoriesApi.deleteSubcategory,
         onSuccess: async (data, variables) => {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                return addToast(data.message, "error");
             }
 
             setSubcategories((prevState) => prevState.filter((subcategory) => subcategory.id !== variables));
@@ -52,11 +57,6 @@ export default function RouteSubcategories() {
 
     const handleNewSubcategoryNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewSubcategoryName(event.target.value);
-    };
-
-    const handleAfterTimeoutError = () => {
-        setHasError(false);
-        setErrorMessage("");
     };
 
     const handleSubmitAddSubcategory = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -72,8 +72,7 @@ export default function RouteSubcategories() {
     useEffect(() => {
         if (data) {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                return addToast(data.message, "error");
             }
 
             setSubcategories(data.subcategories!);
@@ -85,12 +84,12 @@ export default function RouteSubcategories() {
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
                     <CreateSubcategoryForm name={newSubcategoryName} handleNameChange={handleNewSubcategoryNameChange} handleSubmit={handleSubmitAddSubcategory}/>
                     <SubcategoriesTable data={subcategories} handlerDeleteSubcategory={handleDeleteSubcategory}/>
                     <PaginationControls page={page} setPage={setPage} totalCount={totalCount}/>
                 </div>
             </div>
+            <ToastManager toasts={toasts} removeToast={removeToast}/>
         </div>
     );
 }

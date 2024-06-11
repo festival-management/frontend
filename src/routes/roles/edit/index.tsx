@@ -8,16 +8,14 @@ import {PaperSize} from "../../../enums/paper-size";
 import {Permission} from "../../../enums/permission";
 import BaseResponse from "../../../models/base.model";
 import RoleEditPaperSizeForm from "./RoleEditPaperSizeForm";
-import ErrorMessage from "../../../components/error-message";
 import RoleEditPermissionsForm from "./RoleEditPermissionsForm";
-import SuccessMessage from "../../../components/success-message";
+import ToastManager from "../../../components/toast-manager.tsx";
+import ToastMessage, {ToastType} from "../../../models/toast-message.model.ts";
 
 export default function RouteRoleEdit() {
     const {id} = useParams();
 
-    const [errorMessage, setErrorMessage] = useState("");
-    const [hasError, setHasError] = useState(false);
-    const [isSaved, setIsSaved] = useState(false);
+    const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [roleName, setRoleName] = useState("");
     const [rolePermissions, setRolePermissions] = useState<{ [key in Permission]: boolean }>(
         Object.values(Permission).reduce((acc, permission) => {
@@ -29,6 +27,14 @@ export default function RouteRoleEdit() {
 
     const rolesApi = useRolesApi();
 
+    const addToast = (message: string, type: ToastType) => {
+        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    };
+
+    const removeToast = (index: number) => {
+        setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
+    };
+
     const {data} = useQuery({
         queryKey: ["roles-edit", id],
         queryFn: () => rolesApi.getRolesById(parseInt(id || "-1")),
@@ -37,11 +43,10 @@ export default function RouteRoleEdit() {
     });
     const onSuccessMutation = async (data: BaseResponse) => {
         if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
+            return addToast(data.message, "error");
         }
 
-        setIsSaved(true);
+        addToast("Done", "success");
     };
     const updateRoleNameMutation = useMutation({
         mutationFn: (variables: { id: number, name: string }) => rolesApi.updateRoleName(variables.id, variables.name),
@@ -77,15 +82,6 @@ export default function RouteRoleEdit() {
         setRolePaperSize(event.target.value);
     };
 
-    const handleAfterTimeoutError = () => {
-        setHasError(false);
-        setErrorMessage("");
-    }
-
-    const handleAfterTimeoutSaved = () => {
-        setIsSaved(false);
-    }
-
     const handleSubmitChangeName = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -107,8 +103,7 @@ export default function RouteRoleEdit() {
     useEffect(() => {
         if (data) {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                return addToast(data.message, "error");
             }
 
             setRoleName(data.name!);
@@ -126,8 +121,6 @@ export default function RouteRoleEdit() {
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
-                    <SuccessMessage message="Done" visible={isSaved} afterTimeout={handleAfterTimeoutSaved}/>
                     <RoleEditNameForm name={roleName} handleNameChange={handleNameChange}
                                       handleSubmit={handleSubmitChangeName}/>
                     <RoleEditPermissionsForm selectedPermissions={rolePermissions}
@@ -138,6 +131,7 @@ export default function RouteRoleEdit() {
 
                 </div>
             </div>
+            <ToastManager toasts={toasts} removeToast={removeToast}/>
         </div>
     );
 }

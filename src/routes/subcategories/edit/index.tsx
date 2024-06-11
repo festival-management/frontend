@@ -4,21 +4,27 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 
 import BaseResponse from "../../../models/base.model";
 import useSubcategoriesApi from "../../../api/subcategories";
-import ErrorMessage from "../../../components/error-message";
-import SuccessMessage from "../../../components/success-message";
 import SubcategoryEditNameForm from "./SubcategoryEditNameForm";
+import ToastManager from "../../../components/toast-manager.tsx";
 import SubcategoryEditOrderForm from "./SubcategoryEditOrderForm";
+import ToastMessage, {ToastType} from "../../../models/toast-message.model.ts";
 
 export default function RouteSubcategoryEdit() {
     const {id} = useParams();
 
-    const [errorMessage, setErrorMessage] = useState("");
-    const [hasError, setHasError] = useState(false);
-    const [isSaved, setIsSaved] = useState(false);
+    const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [subcategoryName, setSubcategoryName] = useState("");
     const [subcategoryOrder, setSubcategoryOrder] = useState(0);
 
     const subcategoriesApi = useSubcategoriesApi();
+
+    const addToast = (message: string, type: ToastType) => {
+        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    };
+
+    const removeToast = (index: number) => {
+        setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
+    };
 
     const {data} = useQuery({
         queryKey: ["subcategories-edit", id],
@@ -28,11 +34,10 @@ export default function RouteSubcategoryEdit() {
     });
     const onSuccessMutation = async (data: BaseResponse) => {
         if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
+            return addToast(data.message, "error");
         }
 
-        setIsSaved(true);
+        addToast("Done", "success");
     };
     const updateSubcategoryNameMutation = useMutation({
         mutationFn: (variables: {
@@ -57,15 +62,6 @@ export default function RouteSubcategoryEdit() {
         setSubcategoryOrder(parseInt(event.target.value));
     };
 
-    const handleAfterTimeoutError = () => {
-        setHasError(false);
-        setErrorMessage("");
-    };
-
-    const handleAfterTimeoutSaved = () => {
-        setIsSaved(false);
-    };
-
     const handleSubmitChangeName = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -81,8 +77,7 @@ export default function RouteSubcategoryEdit() {
     useEffect(() => {
         if (data) {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                return addToast(data.message, "error");
             }
 
             setSubcategoryName(data.name!);
@@ -94,14 +89,13 @@ export default function RouteSubcategoryEdit() {
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
-                    <SuccessMessage message="Done" visible={isSaved} afterTimeout={handleAfterTimeoutSaved}/>
                     <SubcategoryEditNameForm name={subcategoryName} handleNameChange={handleNameChange}
                                              handleSubmit={handleSubmitChangeName}/>
                     <SubcategoryEditOrderForm order={subcategoryOrder} handleOrderChange={handleOrderChange}
                                               handleSubmit={handleSubmitChangeOrder}/>
                 </div>
             </div>
+            <ToastManager toasts={toasts} removeToast={removeToast}/>
         </div>
     );
 }

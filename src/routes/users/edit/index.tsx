@@ -9,15 +9,13 @@ import {RoleName} from "../../../models/roles.model";
 import BaseResponse from "../../../models/base.model";
 import UserEditRoleIdForm from "./UserEditRoleIdForm";
 import UserEditPasswordForm from "./UserEditPasswordForm";
-import ErrorMessage from "../../../components/error-message";
-import SuccessMessage from "../../../components/success-message";
+import ToastManager from "../../../components/toast-manager.tsx";
+import ToastMessage, {ToastType} from "../../../models/toast-message.model.ts";
 
 export default function RouteUserEdit() {
     const {id} = useParams();
 
-    const [errorMessage, setErrorMessage] = useState("");
-    const [hasError, setHasError] = useState(false);
-    const [isSaved, setIsSaved] = useState(false);
+    const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [rolesName, setRolesName] = useState<RoleName[]>([]);
     const [userName, setUserName] = useState("");
     const [userPassword, setUserPassword] = useState("");
@@ -25,6 +23,14 @@ export default function RouteUserEdit() {
 
     const usersApi = useUsersApi();
     const rolesApi = useRolesApi();
+
+    const addToast = (message: string, type: ToastType) => {
+        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    };
+
+    const removeToast = (index: number) => {
+        setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
+    };
 
     const {data} = useQuery({
         queryKey: ["users-edit", id],
@@ -39,11 +45,10 @@ export default function RouteUserEdit() {
     });
     const onSuccessMutation = async (data: BaseResponse) => {
         if (data.error) {
-            setHasError(true);
-            return setErrorMessage(data.message);
+            return addToast(data.message, "error");
         }
 
-        setIsSaved(true);
+        addToast("Done", "success");
     };
     const updateUserNameMutation = useMutation({
         mutationFn: (variables: { id: number, name: string }) => usersApi.updateUserName(variables.id, variables.name),
@@ -76,15 +81,6 @@ export default function RouteUserEdit() {
         setUserRoleId(parseInt(event.target.value));
     };
 
-    const handleAfterTimeoutError = () => {
-        setHasError(false);
-        setErrorMessage("");
-    }
-
-    const handleAfterTimeoutSaved = () => {
-        setIsSaved(false);
-    }
-
     const handleSubmitChangeNewUserName = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -106,16 +102,14 @@ export default function RouteUserEdit() {
     useEffect(() => {
         if (data) {
             if (data.user.error) {
-                setHasError(true);
-                return setErrorMessage(data.user.message);
+                return addToast(data.user.message, "error");
             }
 
             setUserName(data.user.username!);
             setUserRoleId(data.user.role_id!);
 
             if (data.rolesName.error) {
-                setHasError(true);
-                return setErrorMessage(data.rolesName.message);
+                return addToast(data.rolesName.message, "error");
             }
 
             setRolesName(data.rolesName.roles!);
@@ -126,8 +120,6 @@ export default function RouteUserEdit() {
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
-                    <SuccessMessage message="Done" visible={isSaved} afterTimeout={handleAfterTimeoutSaved}/>
                     <UserEditNameForm name={userName} handleNameChange={handleUserNameChange}
                                       handleSubmit={handleSubmitChangeNewUserName}/>
                     <UserEditPasswordForm password={userPassword} handlePasswordChange={handleUserPasswordChange}
@@ -137,6 +129,7 @@ export default function RouteUserEdit() {
                                         handleSubmit={handleSubmitChangeNewUserRoleId}/>
                 </div>
             </div>
+            <ToastManager toasts={toasts} removeToast={removeToast}/>
         </div>
     );
 }

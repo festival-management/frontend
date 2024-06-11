@@ -1,19 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {useMutation, useQuery} from "@tanstack/react-query";
 
+import ProductsTable from "./ProductsTable";
 import useProductsApi from "../../api/products";
 import {Product} from "../../models/products.model";
-import useSubcategoriesApi from "../../api/subcategories";
-import ErrorMessage from "../../components/error-message";
-import {SubcategoryName} from "../../models/subcategories.model";
 import CreateProductForm from "./CreateProductForm";
+import useSubcategoriesApi from "../../api/subcategories";
+import ToastManager from "../../components/toast-manager.tsx";
+import {SubcategoryName} from "../../models/subcategories.model";
 import SelectProductSubcategoryId from "./SelectProductSubcategoryId";
 import PaginationControls from "../../components/pagination-controls";
-import ProductsTable from "./ProductsTable";
+import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
 
 export default function RouteProducts() {
-    const [errorMessage, setErrorMessage] = useState("");
-    const [hasError, setHasError] = useState(false);
+    const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const [products, setProducts] = useState<Product[]>([]);
@@ -26,6 +26,14 @@ export default function RouteProducts() {
 
     const subcategoriesApi = useSubcategoriesApi();
     const productsApi = useProductsApi();
+
+    const addToast = (message: string, type: ToastType) => {
+        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    };
+
+    const removeToast = (index: number) => {
+        setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
+    };
 
     const {data: dataSubcategories} = useQuery({
         queryKey: ["products-subcategories"],
@@ -43,8 +51,7 @@ export default function RouteProducts() {
         }) => productsApi.addProduct(variables.name, variables.shortName, variables.price, variables.category, variables.subcategoryId),
         onSuccess: async (data) => {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                return addToast(data.message, "error");
             }
 
             setNewProductName("");
@@ -66,8 +73,7 @@ export default function RouteProducts() {
         }) => productsApi.getProducts(variables.page, variables.selectedSubcategoryId, variables.orderBy),
         onSuccess: async (data) => {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                return addToast(data.message, "error");
             }
 
             setProducts(data.products!);
@@ -78,8 +84,7 @@ export default function RouteProducts() {
         mutationFn: productsApi.deleteProduct,
         onSuccess: async (data, variables) => {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                return addToast(data.message, "error");
             }
 
             if (products.length === 1)
@@ -117,11 +122,6 @@ export default function RouteProducts() {
         setNewProductCategory(event.target.value);
     };
 
-    const handleAfterTimeoutError = () => {
-        setHasError(false);
-        setErrorMessage("");
-    };
-
     const handleAddProduct = async () => {
         addProductMutation.mutate({
             name: newProductName,
@@ -139,8 +139,7 @@ export default function RouteProducts() {
     useEffect(() => {
         if (dataSubcategories) {
             if (dataSubcategories.error) {
-                setHasError(true);
-                return setErrorMessage(dataSubcategories.message);
+                return addToast(dataSubcategories.message, "error");
             }
 
             setSubcategoriesName(dataSubcategories.subcategories!);
@@ -151,7 +150,6 @@ export default function RouteProducts() {
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
                     <SelectProductSubcategoryId selectedSubcategoryId={selectedSubcategoryId}
                                                 subcategoriesName={subcategoriesName}
                                                 handleSelectedSubcategoryIdChange={handleSelectedSubcategoryIdChange}/>
@@ -165,6 +163,7 @@ export default function RouteProducts() {
                                        handleSubmit={handleAddProduct}/>
                 </div>
             </div>
+            <ToastManager toasts={toasts} removeToast={removeToast}/>
         </div>
     );
 }

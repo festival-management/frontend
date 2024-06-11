@@ -6,14 +6,14 @@ import useAuthApi from "../../api/auth";
 import useUsersApi from "../../api/users";
 import useRolesApi from "../../api/roles";
 import CreateUserForm from "./CreateUserForm";
-import {RoleName} from "../../models/roles.model";
 import {User} from "../../models/users.model";
-import ErrorMessage from "../../components/error-message";
+import {RoleName} from "../../models/roles.model";
+import ToastManager from "../../components/toast-manager.tsx";
 import PaginationControls from "../../components/pagination-controls";
+import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
 
 export default function RouteUsers() {
-    const [errorMessage, setErrorMessage] = useState("");
-    const [hasError, setHasError] = useState(false);
+    const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const [users, setUsers] = useState<User[]>([]);
@@ -25,6 +25,14 @@ export default function RouteUsers() {
     const authApi = useAuthApi();
     const rolesApi = useRolesApi();
     const usersApi = useUsersApi();
+
+    const addToast = (message: string, type: ToastType) => {
+        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    };
+
+    const removeToast = (index: number) => {
+        setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
+    };
 
     const {data} = useQuery({
         queryKey: ["users", page],
@@ -45,8 +53,7 @@ export default function RouteUsers() {
         }) => authApi.register(variables.username, variables.password, variables.roleId),
         onSuccess: async (data) => {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                return addToast(data.message, "error");
             }
 
             setNewUserName("");
@@ -60,8 +67,7 @@ export default function RouteUsers() {
         mutationFn: usersApi.deleteUser,
         onSuccess: async (data, variables) => {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                return addToast(data.message, "error");
             }
 
             setUsers((prevState) => prevState.filter((user) => user.id !== variables));
@@ -80,11 +86,6 @@ export default function RouteUsers() {
         setNewUserRoleId(parseInt(event.target.value));
     };
 
-    const handleAfterTimeoutError = () => {
-        setHasError(false);
-        setErrorMessage("");
-    };
-
     const handleSubmitAddUser = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -98,16 +99,14 @@ export default function RouteUsers() {
     useEffect(() => {
         if (data) {
             if (data.users.error) {
-                setHasError(true);
-                return setErrorMessage(data.users.message);
+                return addToast(data.users.message, "error");
             }
 
             setUsers(data.users.users!);
             setTotalCount(data.users.total_count!);
 
             if (data.rolesName.error) {
-                setHasError(true);
-                return setErrorMessage(data.rolesName.message);
+                return addToast(data.rolesName.message, "error");
             }
 
             setRolesName(data.rolesName.roles!);
@@ -118,7 +117,6 @@ export default function RouteUsers() {
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
                     <CreateUserForm name={newUserName} handleNameChange={handleNewUserNameChange}
                                     password={newUserPassword} handlePasswordChange={handleNewUserPasswordChange}
                                     roleId={newUserRoleId} handleRoleIdChange={handleNewUserRoleIdChange}
@@ -127,6 +125,7 @@ export default function RouteUsers() {
                     <PaginationControls page={page} setPage={setPage} totalCount={totalCount}/>
                 </div>
             </div>
+            <ToastManager toasts={toasts} removeToast={removeToast}/>
         </div>
     );
 }

@@ -5,19 +5,27 @@ import RolesTable from "./RolesTable";
 import useRolesApi from "../../api/roles";
 import CreateRoleForm from "./CreateRoleForm";
 import {Role} from "../../models/roles.model";
-import ErrorMessage from "../../components/error-message";
+import ToastManager from "../../components/toast-manager.tsx";
 import PaginationControls from "../../components/pagination-controls";
+import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
 
 
 export default function RouteRoles() {
-    const [errorMessage, setErrorMessage] = useState("");
-    const [hasError, setHasError] = useState(false);
+    const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const [roles, setRoles] = useState<Role[]>([]);
     const [newRoleName, setNewRoleName] = useState("");
 
     const rolesApi = useRolesApi();
+
+    const addToast = (message: string, type: ToastType) => {
+        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    };
+
+    const removeToast = (index: number) => {
+        setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
+    };
 
     const {data} = useQuery({
         queryKey: ["roles", page],
@@ -29,9 +37,7 @@ export default function RouteRoles() {
         mutationFn: rolesApi.addRole,
         onSuccess: async (data) => {
             if (data.error) {
-                setHasError(true);
-                setErrorMessage(data.message);
-                return;
+                return addToast(data.message, "error");
             }
 
             setNewRoleName("");
@@ -43,8 +49,7 @@ export default function RouteRoles() {
         mutationFn: rolesApi.deleteRole,
         onSuccess: async (data, variables) => {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                return addToast(data.message, "error");
             }
 
             setRoles((prevState) => prevState.filter((role) => role.id !== variables));
@@ -54,11 +59,6 @@ export default function RouteRoles() {
     const handleNewRoleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewRoleName(event.target.value);
     };
-
-    const handleAfterTimeoutError = () => {
-        setHasError(false);
-        setErrorMessage("");
-    }
 
     const handleSubmitAddRole = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -73,8 +73,7 @@ export default function RouteRoles() {
     useEffect(() => {
         if (data) {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                return addToast(data.message, "error");
             }
 
             setRoles(data.roles!);
@@ -82,18 +81,17 @@ export default function RouteRoles() {
         }
     }, [data]);
 
-
     return (
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
                     <CreateRoleForm name={newRoleName} handleNameChange={handleNewRoleNameChange}
                                     handleSubmit={handleSubmitAddRole}/>
                     <RolesTable data={roles} handlerDeleteRole={handleDeleteRole}/>
                     <PaginationControls page={page} setPage={setPage} totalCount={totalCount}/>
                 </div>
             </div>
+            <ToastManager toasts={toasts} removeToast={removeToast}/>
         </div>
     );
 }

@@ -2,18 +2,24 @@ import React, {useEffect, useState} from 'react';
 import {useMutation, useQuery} from "@tanstack/react-query";
 
 import useUsersApi from "../../api/users";
-import ErrorMessage from "../../components/error-message";
-import SuccessMessage from "../../components/success-message";
+import ToastManager from "../../components/toast-manager.tsx";
 import ProfileEditPasswordForm from "./ProfileEditPasswordForm";
+import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
 
 export default function RouteProfile() {
-    const [errorMessage, setErrorMessage] = useState("");
-    const [hasError, setHasError] = useState(false);
-    const [isSaved, setIsSaved] = useState(false);
+    const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
 
     const usersApi = useUsersApi();
+
+    const addToast = (message: string, type: ToastType) => {
+        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    };
+
+    const removeToast = (index: number) => {
+        setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
+    };
 
     const {data} = useQuery({
         queryKey: ["profile"],
@@ -25,26 +31,16 @@ export default function RouteProfile() {
         mutationFn: usersApi.updateUserPassword,
         onSuccess: async (data) => {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                return addToast(data.message, "error");
             }
 
-            setIsSaved(true);
+            addToast("Done", "success");
         }
     });
 
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
     };
-
-    const handleAfterTimeoutError = () => {
-        setHasError(false);
-        setErrorMessage("");
-    }
-
-    const handleAfterTimeoutSaved = () => {
-        setIsSaved(false);
-    }
 
     const handleSubmitChangePassword = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -55,8 +51,7 @@ export default function RouteProfile() {
     useEffect(() => {
         if (data) {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                return addToast(data.message, "error");
             }
 
             setUserName(data.username!);
@@ -67,8 +62,6 @@ export default function RouteProfile() {
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
-                    <SuccessMessage message="Done" visible={isSaved} afterTimeout={handleAfterTimeoutSaved}/>
                     <div className="mb-3">
                         Username: {userName}
                     </div>
@@ -77,6 +70,7 @@ export default function RouteProfile() {
                                              handleSubmit={handleSubmitChangePassword}/>
                 </div>
             </div>
+            <ToastManager toasts={toasts} removeToast={removeToast}/>
         </div>
     );
 }

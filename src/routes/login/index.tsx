@@ -3,15 +3,23 @@ import {useMutation} from "@tanstack/react-query";
 
 import LoginForm from "./LoginForm";
 import useAuthApi from "../../api/auth";
-import ErrorMessage from "../../components/error-message";
+import ToastManager from "../../components/toast-manager.tsx";
+import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
 
 export default function RouteLogin() {
-    const [errorMessage, setErrorMessage] = useState("");
-    const [hasError, setHasError] = useState(false);
+    const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     const authApi = useAuthApi();
+
+    const addToast = (message: string, type: ToastType) => {
+        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    };
+
+    const removeToast = (index: number) => {
+        setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
+    };
 
     const loginMutation = useMutation({
         mutationFn: (variables: {
@@ -20,8 +28,7 @@ export default function RouteLogin() {
         }) => authApi.login(variables.username, variables.password),
         onSuccess: async (data) => {
             if (data.error) {
-                setHasError(true);
-                return setErrorMessage(data.message);
+                addToast(data.message, "error");
             }
         }
     });
@@ -34,11 +41,6 @@ export default function RouteLogin() {
         setPassword(event.target.value);
     };
 
-    const handleAfterTimeoutError = () => {
-        setHasError(false);
-        setErrorMessage("");
-    }
-
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -47,7 +49,6 @@ export default function RouteLogin() {
 
     return (
         <div className="container mt-3">
-            <ErrorMessage message={errorMessage} visible={hasError} afterTimeout={handleAfterTimeoutError}/>
             <LoginForm
                 username={username}
                 password={password}
@@ -55,6 +56,7 @@ export default function RouteLogin() {
                 handlePasswordChange={handlePasswordChange}
                 handleSubmit={handleSubmit}
             />
+            <ToastManager toasts={toasts} removeToast={removeToast}/>
         </div>
     );
 }
