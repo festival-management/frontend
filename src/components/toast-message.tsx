@@ -3,13 +3,13 @@ import React, {useEffect, useRef, useState} from "react";
 import {ToastType} from "../models/toast-message.model.ts";
 
 type ToastMessageProps = {
-    key: number;
+    index: number;
     message: string;
     type: ToastType;
     onClose: () => void;
 }
 
-export default function ToastMessage({key, message, type, onClose}: ToastMessageProps) {
+export default function ToastMessage({index, message, type, onClose}: ToastMessageProps) {
     const [localVisible, setLocalVisible] = useState(false);
     const timerRef = useRef<number | null>(null);
 
@@ -31,7 +31,7 @@ export default function ToastMessage({key, message, type, onClose}: ToastMessage
 
     return (
         localVisible && (
-            <div key={key} id={`${type}Toast${key}`} className={`toast show align-items-center ${toastClass} border-0`} role="alert"
+            <div id={`${type}Toast${index}`} className={`toast show align-items-center ${toastClass} border-0`} role="alert"
                  aria-live="assertive" aria-atomic="true">
                 <div className="d-flex">
                     <div className="toast-body">

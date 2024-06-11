@@ -44,10 +44,10 @@ const useRolesApi = () => {
         return response.data;
     };
 
-    const getRolesName = async () => {
+    const getRolesName = async (can_order?: boolean) => {
         const response: AxiosResponse<GetRolesNameResponse> = await http.get(
             "/",
-            {params: {only_name: true}}
+            {params: {only_name: true, can_order}}
         );
 
         return response.data;

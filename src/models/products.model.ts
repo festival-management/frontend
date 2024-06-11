@@ -16,6 +16,7 @@ export interface ProductIngredient {
 export interface ProductRole {
     id: number;
     role_id: number;
+    product_id: number;
 }
 
 export interface ProductVariant {
@@ -50,6 +51,10 @@ export interface AddProductDateResponse extends BaseResponse {
 
 export interface AddProductIngredientResponse extends BaseResponse {
     ingredient: ProductIngredient;
+}
+
+export interface AddProductRoleResponse extends BaseResponse {
+    role: ProductRole;
 }
 
 export interface CreateProductResponse extends BaseResponse {

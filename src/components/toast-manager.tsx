@@ -12,7 +12,9 @@ export default function ToastManager({toasts, removeToast}: ToastManagerProps) {
     return (
         <div className="toast-container position-fixed bottom-0 end-0 p-3">
             {toasts.map((toast, index) => (
-                <ToastMessage key={index} {...toast} onClose={() => removeToast(index)}/>
+                <React.Fragment key={index}>
+                    <ToastMessage index={index} {...toast} onClose={() => removeToast(index)}/>
+                </React.Fragment>
             ))}
         </div>
     );

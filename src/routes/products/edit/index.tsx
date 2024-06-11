@@ -19,11 +19,13 @@ import ToastMessage, {ToastType} from "../../../models/toast-message.model.ts";
 import {
     AddProductDateResponse,
     AddProductIngredientResponse,
+    AddProductRoleResponse,
     ProductDate,
     ProductIngredient,
     ProductRole,
     ProductVariant
 } from "../../../models/products.model";
+import ProductEditRoles from "./roles";
 
 
 export default function RouteProductEdit() {
@@ -66,7 +68,7 @@ export default function RouteProductEdit() {
     });
     const onSuccessMutation = async (data: BaseResponse) => {
         if (data.error) {
-            addToast(data.message, "error");
+            return addToast(data.message, "error");
         }
 
         addToast("Done", "success");
@@ -142,6 +144,32 @@ export default function RouteProductEdit() {
 
             if (!data.error) {
                 setProductIngredients((prevState) => prevState.filter((productIngredient) => productIngredient.id !== variables.productIngredientId));
+            }
+        }
+    });
+    const addProductRoleMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            roleId: number
+        }) => productsApi.addProductRole(variables.id, variables.roleId),
+        onSuccess: async (data: AddProductRoleResponse) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setProductRoles((prevState) => [...prevState, data.role!]);
+            }
+        }
+    });
+    const deleteProductRoleMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            productRoleId: number
+        }) => productsApi.deleteProductRole(variables.id, variables.productRoleId),
+        onSuccess: async (data: BaseResponse, variables) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setProductRoles((prevState) => prevState.filter((productRole) => productRole.id !== variables.productRoleId));
             }
         }
     });
@@ -222,10 +250,18 @@ export default function RouteProductEdit() {
         deleteProductIngredientMutation.mutate({id: parseInt(id || "-1"), productIngredientId});
     };
 
+    const handleSubmitAddRole = async (roleId: number) => {
+        addProductRoleMutation.mutate({id: parseInt(id || "-1"), roleId});
+    };
+
+    const handleDeleteProductRole = async (productRoleId: number) => {
+        deleteProductRoleMutation.mutate({id: parseInt(id || "-1"), productRoleId});
+    };
+
     useEffect(() => {
         if (data) {
             if (data.product.error) {
-                addToast(data.product.message, "error");
+                return addToast(data.product.message, "error");
             }
 
             setProductName(data.product.name!);
@@ -240,7 +276,7 @@ export default function RouteProductEdit() {
             setProductVariants(data.product.variants || []);
 
             if (data.subcategoriesName.error) {
-                addToast(data.subcategoriesName.message, "error");
+                return addToast(data.subcategoriesName.message, "error");
             }
 
             setSubcategoriesName(data.subcategoriesName.subcategories!);
@@ -269,6 +305,8 @@ export default function RouteProductEdit() {
                                       handleSubmit={handleSubmitAddDate}/>
                     <ProductEditIngredients productIngredients={productIngredients}
                                             handleDelete={handleDeleteProductIngredient} handleSubmit={handleSubmitAddIngredient}/>
+                    <ProductEditRoles productRoles={productRoles} handleDelete={handleDeleteProductRole}
+                                      handleSubmit={handleSubmitAddRole}/>
                 </div>
             </div>
             <ToastManager toasts={toasts} removeToast={removeToast}/>

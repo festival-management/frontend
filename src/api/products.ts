@@ -6,6 +6,7 @@ import BaseResponse from "../models/base.model";
 import {
     AddProductDateResponse,
     AddProductIngredientResponse,
+    AddProductRoleResponse,
     CreateProductResponse,
     GetProductResponse,
     GetProductsNameResponse,
@@ -43,7 +44,7 @@ const useProductsApi = () => {
     };
 
     const addProductRole = async (id: number, roleId: number) => {
-        const response: AxiosResponse<BaseResponse> = await http.post(
+        const response: AxiosResponse<AddProductRoleResponse> = await http.post(
             `/${id}/role`,
             {role_id: roleId}
         );
@@ -79,6 +80,14 @@ const useProductsApi = () => {
     const deleteProductIngredient = async (id: number, productIngredientId: number) => {
         const response: AxiosResponse<BaseResponse> = await http.delete(
             `/${id}/ingredient/${productIngredientId}`,
+        );
+
+        return response.data;
+    };
+
+    const deleteProductRole = async (id: number, productRoleId: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.delete(
+            `/${id}/role/${productRoleId}`,
         );
 
         return response.data;
@@ -182,6 +191,7 @@ const useProductsApi = () => {
         deleteProduct,
         deleteProductDate,
         deleteProductIngredient,
+        deleteProductRole,
         getProductById,
         getProducts,
         getProductsName,
