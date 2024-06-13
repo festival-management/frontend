@@ -5,10 +5,12 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 import ProductEditDates from "./dates";
 import ProductEditRoles from "./roles";
 import ProductEditVariants from "./variants";
+import useRolesApi from "../../../api/roles.ts";
 import ProductEditIngredients from "./ingredients";
 import useProductsApi from "../../../api/products";
 import BaseResponse from "../../../models/base.model";
 import ProductEditNameForm from "./ProductEditNameForm";
+import {RoleName} from "../../../models/roles.model.ts";
 import ProductEditPriceForm from "./ProductEditPriceForm";
 import useSubcategoriesApi from "../../../api/subcategories";
 import ProductEditPriorityForm from "./ProductEditPriorityForm";
@@ -33,6 +35,7 @@ export default function RouteProductEdit() {
     const {id} = useParams();
 
     const [toasts, setToasts] = useState<ToastMessage[]>([]);
+    const [rolesName, setRolesName] = useState<RoleName[]>([]);
     const [subcategoriesName, setSubcategoriesName] = useState<SubcategoryName[]>([]);
     const [productName, setProductName] = useState("");
     const [productShortName, setProductShortName] = useState("");
@@ -47,6 +50,7 @@ export default function RouteProductEdit() {
 
     const productsApi = useProductsApi();
     const subcategoriesApi = useSubcategoriesApi();
+    const rolesApi = useRolesApi();
 
     const addToast = (message: string, type: ToastType) => {
         setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
@@ -61,8 +65,9 @@ export default function RouteProductEdit() {
         queryFn: async () => {
             const data = await productsApi.getProductById(parseInt(id || "-1"), true, true, true, true);
             const dataSubcategoriesName = await subcategoriesApi.getSubcategoriesName("order");
+            const dataRolesName = await rolesApi.getRolesName(true);
 
-            return {product: data, subcategoriesName: dataSubcategoriesName};
+            return {product: data, subcategoriesName: dataSubcategoriesName, rolesName: dataRolesName};
         },
         enabled: true,
         staleTime: 0,
@@ -316,6 +321,12 @@ export default function RouteProductEdit() {
             }
 
             setSubcategoriesName(data.subcategoriesName.subcategories!);
+
+            if (data.rolesName.error) {
+                return addToast(data.rolesName.message, "error");
+            }
+
+            setRolesName(data.rolesName.roles!);
         }
     }, [data]);
 
@@ -341,7 +352,7 @@ export default function RouteProductEdit() {
                                       handleSubmit={handleSubmitAddDate}/>
                     <ProductEditIngredients productIngredients={productIngredients}
                                             handleDelete={handleDeleteProductIngredient} handleSubmit={handleSubmitAddIngredient}/>
-                    <ProductEditRoles productRoles={productRoles} handleDelete={handleDeleteProductRole}
+                    <ProductEditRoles rolesName={rolesName} productRoles={productRoles} handleDelete={handleDeleteProductRole}
                                       handleSubmit={handleSubmitAddRole}/>
                     <ProductEditVariants productVariants={productVariants} handleDelete={handleDeleteProductVariant}
                                          handleSubmit={handleSubmitAddVariant}/>
