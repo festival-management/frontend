@@ -3,6 +3,8 @@ import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from "@tanstack/react-query";
 
 import ProductEditDates from "./dates";
+import ProductEditRoles from "./roles";
+import ProductEditVariants from "./variants";
 import ProductEditIngredients from "./ingredients";
 import useProductsApi from "../../../api/products";
 import BaseResponse from "../../../models/base.model";
@@ -20,13 +22,12 @@ import {
     AddProductDateResponse,
     AddProductIngredientResponse,
     AddProductRoleResponse,
+    AddProductVariantResponse,
     ProductDate,
     ProductIngredient,
     ProductRole,
     ProductVariant
 } from "../../../models/products.model";
-import ProductEditRoles from "./roles";
-
 
 export default function RouteProductEdit() {
     const {id} = useParams();
@@ -173,6 +174,33 @@ export default function RouteProductEdit() {
             }
         }
     });
+    const addProductVariantMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            name: string,
+            price: number
+        }) => productsApi.addProductVariant(variables.id, variables.name, variables.price),
+        onSuccess: async (data: AddProductVariantResponse) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setProductVariants((prevState) => [...prevState, data.variant!]);
+            }
+        }
+    });
+    const deleteProductVariantMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            productVariantId: number
+        }) => productsApi.deleteProductVariant(variables.id, variables.productVariantId),
+        onSuccess: async (data: BaseResponse, variables) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setProductVariants((prevState) => prevState.filter((productVariant) => productVariant.id !== variables.productVariantId));
+            }
+        }
+    });
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setProductName(event.target.value);
@@ -258,6 +286,14 @@ export default function RouteProductEdit() {
         deleteProductRoleMutation.mutate({id: parseInt(id || "-1"), productRoleId});
     };
 
+    const handleSubmitAddVariant = async (name: string, price: number) => {
+        addProductVariantMutation.mutate({id: parseInt(id || "-1"), name, price});
+    };
+
+    const handleDeleteProductVariant = async (productVariantId: number) => {
+        deleteProductVariantMutation.mutate({id: parseInt(id || "-1"), productVariantId});
+    };
+
     useEffect(() => {
         if (data) {
             if (data.product.error) {
@@ -307,6 +343,8 @@ export default function RouteProductEdit() {
                                             handleDelete={handleDeleteProductIngredient} handleSubmit={handleSubmitAddIngredient}/>
                     <ProductEditRoles productRoles={productRoles} handleDelete={handleDeleteProductRole}
                                       handleSubmit={handleSubmitAddRole}/>
+                    <ProductEditVariants productVariants={productVariants} handleDelete={handleDeleteProductVariant}
+                                         handleSubmit={handleSubmitAddVariant}/>
                 </div>
             </div>
             <ToastManager toasts={toasts} removeToast={removeToast}/>

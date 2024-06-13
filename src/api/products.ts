@@ -7,6 +7,7 @@ import {
     AddProductDateResponse,
     AddProductIngredientResponse,
     AddProductRoleResponse,
+    AddProductVariantResponse,
     CreateProductResponse,
     GetProductResponse,
     GetProductsNameResponse,
@@ -53,7 +54,7 @@ const useProductsApi = () => {
     };
 
     const addProductVariant = async (id: number, name: string, price: number) => {
-        const response: AxiosResponse<BaseResponse> = await http.post(
+        const response: AxiosResponse<AddProductVariantResponse> = await http.post(
             `/${id}/variant`,
             {name, price}
         );
@@ -88,6 +89,14 @@ const useProductsApi = () => {
     const deleteProductRole = async (id: number, productRoleId: number) => {
         const response: AxiosResponse<BaseResponse> = await http.delete(
             `/${id}/role/${productRoleId}`,
+        );
+
+        return response.data;
+    };
+
+    const deleteProductVariant = async (id: number, productVariantId: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.delete(
+            `/${id}/variant/${productVariantId}`,
         );
 
         return response.data;
@@ -192,6 +201,7 @@ const useProductsApi = () => {
         deleteProductDate,
         deleteProductIngredient,
         deleteProductRole,
+        deleteProductVariant,
         getProductById,
         getProducts,
         getProductsName,

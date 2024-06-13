@@ -57,6 +57,10 @@ export interface AddProductRoleResponse extends BaseResponse {
     role: ProductRole;
 }
 
+export interface AddProductVariantResponse extends BaseResponse {
+    variant: ProductVariant;
+}
+
 export interface CreateProductResponse extends BaseResponse {
     product?: Product;
 }
