@@ -16,7 +16,6 @@ export interface ProductIngredient {
 export interface ProductRole {
     id: number;
     role_id: number;
-    product_id: number;
 }
 
 export interface ProductVariant {
