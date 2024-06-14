@@ -59,10 +59,8 @@ export default function RouteProducts() {
             setNewProductPrice(0);
             setNewProductCategory("-1");
 
-            if (totalCount === 0)
-                setTotalCount(1);
-
             setProducts((prevState) => [...prevState, data.product!]);
+            setTotalCount((prevState) => prevState + 1);
         }
     });
     const getProductBySubcategoryIdMutation = useMutation({
@@ -91,6 +89,7 @@ export default function RouteProducts() {
                 setTotalCount(0);
 
             setProducts((prevState) => prevState.filter((product) => product.id !== variables));
+            setTotalCount((prevState) => prevState - 1);
         }
     });
 

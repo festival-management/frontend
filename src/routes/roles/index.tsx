@@ -43,6 +43,7 @@ export default function RouteRoles() {
             setNewRoleName("");
 
             setRoles((prevState) => [...prevState, data.role!]);
+            setTotalCount((prevState) => prevState + 1);
         }
     });
     const deleteRoleMutation = useMutation({
@@ -53,6 +54,7 @@ export default function RouteRoles() {
             }
 
             setRoles((prevState) => prevState.filter((role) => role.id !== variables));
+            setTotalCount((prevState) => prevState - 1);
         }
     });
 

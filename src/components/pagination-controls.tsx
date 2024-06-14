@@ -10,6 +10,9 @@ function PaginationControls({page, setPage, totalCount}: PaginationControlsProps
     const pages: React.JSX.Element[] = [];
     const totalPages = Math.ceil(totalCount / import.meta.env.VITE_DEFAULT_LIMIT_VALUE);
 
+    if (page > totalPages)
+        setPage(totalPages);
+
     for (let i = 1; i <= totalPages; i++) {
         pages.push(
             (

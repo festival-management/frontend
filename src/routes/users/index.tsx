@@ -61,6 +61,7 @@ export default function RouteUsers() {
             setNewUserRoleId(-1);
 
             setUsers((prevState) => [...prevState, data.user!]);
+            setTotalCount((prevState) => prevState + 1);
         }
     });
     const deleteUserMutation = useMutation({
@@ -71,6 +72,7 @@ export default function RouteUsers() {
             }
 
             setUsers((prevState) => prevState.filter((user) => user.id !== variables));
+            setTotalCount((prevState) => prevState - 1);
         }
     });
 

@@ -12,6 +12,7 @@ import RouteUserEdit from "./routes/users/edit";
 import RouteProductEdit from "./routes/products/edit";
 import RouteSubcategories from "./routes/subcategories";
 import RouteSubcategoryEdit from "./routes/subcategories/edit";
+import RouteMenus from "./routes/menu";
 
 const routers = createBrowserRouter(
     [
@@ -22,6 +23,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/login",
                     element: <RouteLogin/>
+                },
+                {
+                    path: "/menus",
+                    element: <RouteMenus/>
                 },
                 {
                     path: "/products",

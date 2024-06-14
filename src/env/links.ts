@@ -9,6 +9,6 @@ export const LINKS = [
     new LinkModel(NavLink, "/users", "nav-link", "Users", (t) => t.canUserAdminister()),
     new LinkModel(NavLink, "/subcategories", "nav-link", "Subcategories", (t) => t.canUserAdminister()),
     new LinkModel(NavLink, "/products", "nav-link", "Products", (t) => t.canUserAdminister()),
-    new LinkModel(NavLink, "/menu", "nav-link", "Menu", (t) => t.canUserAdminister()),
+    new LinkModel(NavLink, "/menus", "nav-link", "Menu", (t) => t.canUserAdminister()),
     new LinkModel(NavLink, "/profile", "nav-link", "Profile", (t) => t.isLoggedIn()),
 ];

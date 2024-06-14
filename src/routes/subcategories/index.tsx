@@ -42,6 +42,7 @@ export default function RouteSubcategories() {
             setNewSubcategoryName("");
 
             setSubcategories((prevState) => [...prevState, data.subcategory!]);
+            setTotalCount((prevState) => prevState + 1);
         }
     });
     const deleteSubcategoryMutation = useMutation({
@@ -52,6 +53,7 @@ export default function RouteSubcategories() {
             }
 
             setSubcategories((prevState) => prevState.filter((subcategory) => subcategory.id !== variables));
+            setTotalCount((prevState) => prevState - 1);
         }
     });
 
