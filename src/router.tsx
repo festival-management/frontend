@@ -2,17 +2,18 @@ import React from "react";
 import {createBrowserRouter} from "react-router-dom";
 
 import RouteHome from "./routes/home";
+import RouteMenus from "./routes/menu";
 import RouteLogin from "./routes/login";
 import RouteRoles from "./routes/roles";
 import RouteUsers from "./routes/users";
 import RouteProfile from "./routes/profile";
 import RouteProducts from "./routes/products";
+import RouteMenuEdit from "./routes/menu/edit";
 import RouteRoleEdit from "./routes/roles/edit";
 import RouteUserEdit from "./routes/users/edit";
 import RouteProductEdit from "./routes/products/edit";
 import RouteSubcategories from "./routes/subcategories";
 import RouteSubcategoryEdit from "./routes/subcategories/edit";
-import RouteMenus from "./routes/menu";
 
 const routers = createBrowserRouter(
     [
@@ -27,6 +28,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/menus",
                     element: <RouteMenus/>
+                },
+                {
+                    path: "/menus/edit/:id",
+                    element: <RouteMenuEdit/>
                 },
                 {
                     path: "/products",

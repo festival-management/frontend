@@ -50,11 +50,41 @@ const useMenusApi = () => {
         return response.data;
     };
 
+    const updateMenuName = async (id: number, name: string) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/name`,
+            {name}
+        );
+
+        return response.data;
+    };
+
+    const updateMenuShortName = async (id: number, shortName: string) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/short_name`,
+            {short_name: shortName}
+        );
+
+        return response.data;
+    };
+
+    const updateMenuPrice = async (id: number, price: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/price`,
+            {price}
+        );
+
+        return response.data;
+    };
+
     return {
         addMenu,
         deleteMenu,
         getMenuById,
-        getMenus
+        getMenus,
+        updateMenuName,
+        updateMenuPrice,
+        updateMenuShortName
     }
 }
 
