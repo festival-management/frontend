@@ -13,6 +13,7 @@ import MenuEditShortNameForm from "./MenuEditShortNameForm.tsx";
 import ToastManager from "../../../components/toast-manager.tsx";
 import ToastMessage, {ToastType} from "../../../models/toast-message.model.ts";
 import {AddMenuDateResponse, AddMenuRoleResponse, MenuDate, MenuRole} from "../../../models/menus.model.ts";
+import MenuEditRoles from "./roles";
 
 
 export default function RouteMenuEdit() {
@@ -172,6 +173,8 @@ export default function RouteMenuEdit() {
             setMenuName(data.menu.name!);
             setMenuShortName(data.menu.short_name!);
             setMenuPrice(data.menu.price!);
+            setMenuDates(data.menu.dates!);
+            setMenuRoles(data.menu.roles!);
 
             if (data.rolesName.error) {
                 return addToast(data.rolesName.message, "error");
@@ -189,6 +192,7 @@ export default function RouteMenuEdit() {
                     <MenuEditShortNameForm shortName={menuShortName} handleShortNameChange={handleShortNameChange} handleSubmit={handleSubmitChangeShortName}/>
                     <MenuEditPriceForm price={menuPrice} handlePriceChange={handlePriceChange} handleSubmit={handleSubmitChangePrice}/>
                     <MenuEditDates menuDates={menuDates} handleDelete={handleDeleteMenuDate} handleSubmit={handleSubmitAddDate}/>
+                    <MenuEditRoles rolesName={rolesName} menuRoles={menuRoles} handleDelete={handleDeleteMenuRole} handleSubmit={handleSubmitAddRole}/>
                 </div>
             </div>
             <ToastManager toasts={toasts} removeToast={removeToast}/>
