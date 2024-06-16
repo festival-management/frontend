@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 
-import ProductEditRoleAdd from "./ProductEditRoleAdd.tsx";
 import {RoleName} from "../../../../models/roles.model.ts";
-import ProductEditRoleTable from "./ProductEditRoleTable.tsx";
+import ProductEditRolesAdd from "./ProductEditRolesAdd.tsx";
+import ProductEditRolesTable from "./ProductEditRolesTable.tsx";
 import {ProductRole} from "../../../../models/products.model.ts";
 
 type ProductEditRolesProps = {
@@ -30,10 +30,10 @@ export default function ProductEditRoles({rolesName, productRoles, handleDelete,
     return (
         <>
             <h6 className="mb-3">Roles</h6>
-            <ProductEditRoleAdd rolesName={rolesName} newProductRoleId={newProductRoleId}
-                                handleProductRoleIdChange={handleNewProductRoleIdChange}
-                                handleSubmit={handleSubmitAddRole}/>
-            <ProductEditRoleTable data={productRoles} rolesName={rolesName} handleDelete={handleDelete}/>
+            <ProductEditRolesAdd rolesName={rolesName} newProductRoleId={newProductRoleId}
+                                 handleProductRoleIdChange={handleNewProductRoleIdChange}
+                                 handleSubmit={handleSubmitAddRole}/>
+            <ProductEditRolesTable data={productRoles} rolesName={rolesName} handleDelete={handleDelete}/>
             <hr/>
         </>
     );

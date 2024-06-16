@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 
-import {ProductDate} from "../../../../models/products.model.ts";
 import ProductEditDatesAdd from "./ProductEditDatesAdd.tsx";
 import ProductEditDatesTable from "./ProductEditDatesTable.tsx";
+import {ProductDate} from "../../../../models/products.model.ts";
 
 type ProductEditDatesProps = {
     productDates: ProductDate[];

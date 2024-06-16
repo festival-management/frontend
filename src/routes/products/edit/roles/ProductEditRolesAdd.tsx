@@ -9,7 +9,7 @@ type ProductEditRoleAddProps = {
     handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
-export default function ProductEditRoleAdd({
+export default function ProductEditRolesAdd({
                                                rolesName,
                                                newProductRoleId,
                                                handleProductRoleIdChange,

@@ -7,7 +7,7 @@ type ProductEditVariantTableProps = {
     handleDelete: (productVariantId: number) => Promise<void>;
 }
 
-export default function ProductEditVariantTable({data, handleDelete}: ProductEditVariantTableProps) {
+export default function ProductEditVariantsTable({data, handleDelete}: ProductEditVariantTableProps) {
     const productVariants: React.JSX.Element[] = data.map(v => (
         <tr key={v.id}>
             <th scope="row">{v.id}</th>

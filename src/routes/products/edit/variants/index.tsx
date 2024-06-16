@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 
+import ProductEditVariantsAdd from "./ProductEditVariantsAdd.tsx";
 import {ProductVariant} from "../../../../models/products.model.ts";
-import ProductEditVariantAdd from "./ProductEditVariantAdd.tsx";
-import ProductEditVariantTable from "./ProductEditVariantTable.tsx";
+import ProductEditVariantsTable from "./ProductEditVariantsTable.tsx";
 
 type ProductEditVariantsProps = {
     productVariants: ProductVariant[];
@@ -34,12 +34,12 @@ export default function ProductEditVariants({productVariants, handleDelete, hand
     return (
         <>
             <h6 className="mb-3">Variants</h6>
-            <ProductEditVariantAdd newProductVariantName={newProductVariantName}
-                                   newProductVariantPrice={newProductVariantPrice}
-                                   handleProductVariantNameChange={handleProductVariantNameChange}
-                                   handleProductVariantPriceChange={handleProductVariantPriceChange}
-                                   handleSubmit={handleSubmitAddVariant}/>
-            <ProductEditVariantTable data={productVariants} handleDelete={handleDelete}/>
+            <ProductEditVariantsAdd newProductVariantName={newProductVariantName}
+                                    newProductVariantPrice={newProductVariantPrice}
+                                    handleProductVariantNameChange={handleProductVariantNameChange}
+                                    handleProductVariantPriceChange={handleProductVariantPriceChange}
+                                    handleSubmit={handleSubmitAddVariant}/>
+            <ProductEditVariantsTable data={productVariants} handleDelete={handleDelete}/>
         </>
     );
 }

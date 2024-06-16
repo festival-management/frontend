@@ -9,7 +9,7 @@ type ProductEditRoleTableProps = {
     handleDelete: (productRoleId: number) => Promise<void>;
 }
 
-export default function ProductEditRoleTable({data, rolesName, handleDelete}: ProductEditRoleTableProps) {
+export default function ProductEditRolesTable({data, rolesName, handleDelete}: ProductEditRoleTableProps) {
     const rolesIdName: Map<number, string> = new Map();
 
     rolesName.map((roleName) => {

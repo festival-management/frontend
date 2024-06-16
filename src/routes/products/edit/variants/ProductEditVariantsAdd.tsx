@@ -8,7 +8,7 @@ type ProductEditVariantAddProps = {
     handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
-export default function ProductEditVariantAdd({
+export default function ProductEditVariantsAdd({
                                                   newProductVariantName,
                                                   newProductVariantPrice,
                                                   handleProductVariantNameChange,
