@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from "@tanstack/react-query";
 
+import MenuEditDates from "./dates";
 import useMenusApi from "../../../api/menus.ts";
 import useRolesApi from "../../../api/roles.ts";
 import MenuEditNameForm from "./MenuEditNameForm.tsx";
@@ -11,6 +12,7 @@ import BaseResponse from "../../../models/base.model.ts";
 import MenuEditShortNameForm from "./MenuEditShortNameForm.tsx";
 import ToastManager from "../../../components/toast-manager.tsx";
 import ToastMessage, {ToastType} from "../../../models/toast-message.model.ts";
+import {AddMenuDateResponse, AddMenuRoleResponse, MenuDate, MenuRole} from "../../../models/menus.model.ts";
 
 
 export default function RouteMenuEdit() {
@@ -21,6 +23,8 @@ export default function RouteMenuEdit() {
     const [menuName, setMenuName] = useState("");
     const [menuShortName, setMenuShortName] = useState("");
     const [menuPrice, setMenuPrice] = useState(0);
+    const [menuDates, setMenuDates] = useState<MenuDate[]>([]);
+    const [menuRoles, setMenuRoles] = useState<MenuRole[]>([]);
 
     const menusApi = useMenusApi();
     const rolesApi = useRolesApi();
@@ -63,6 +67,55 @@ export default function RouteMenuEdit() {
         mutationFn: (variables: { id: number, price: number }) => menusApi.updateMenuPrice(variables.id, variables.price),
         onSuccess: onSuccessMutation
     });
+    const addMenuDateMutation = useMutation({
+        mutationFn: (variables: { id: number, startDate: string, endDate: string }) => menusApi.addMenuDate(variables.id, variables.startDate, variables.endDate),
+        onSuccess: async (data: AddMenuDateResponse) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setMenuDates((prevState) => [...prevState, data.date!])
+            }
+        }
+    });
+    const deleteMenuDateMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            menuDateId: number
+        }) => menusApi.deleteMenuDate(variables.id, variables.menuDateId),
+        onSuccess: async (data: BaseResponse, variables) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setMenuDates((prevState) => prevState.filter((menuDate) => menuDate.id !== variables.menuDateId));
+            }
+        }
+    });
+    const addMenuRoleMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            roleId: number
+        }) => menusApi.addMenuRole(variables.id, variables.roleId),
+        onSuccess: async (data: AddMenuRoleResponse) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setMenuRoles((prevState) => [...prevState, data.role!]);
+            }
+        }
+    });
+    const deleteMenuRoleMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            menuRoleId: number
+        }) => menusApi.deleteMenuRole(variables.id, variables.menuRoleId),
+        onSuccess: async (data: BaseResponse, variables) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setMenuRoles((prevState) => prevState.filter((menuRole) => menuRole.id !== variables.menuRoleId));
+            }
+        }
+    });
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setMenuName(event.target.value);
@@ -94,6 +147,22 @@ export default function RouteMenuEdit() {
         updateMenuPriceMutation.mutate({id: parseInt(id || "-1"), price: menuPrice});
     };
 
+    const handleSubmitAddDate = async (startDate: string, endDate: string) => {
+        addMenuDateMutation.mutate({id: parseInt(id || "-1"), startDate, endDate});
+    };
+
+    const handleDeleteMenuDate = async (menuDateId: number) => {
+        deleteMenuDateMutation.mutate({id: parseInt(id || "-1"), menuDateId});
+    };
+
+    const handleSubmitAddRole = async (roleId: number) => {
+        addMenuRoleMutation.mutate({id: parseInt(id || "-1"), roleId});
+    };
+
+    const handleDeleteMenuRole = async (menuRoleId: number) => {
+        deleteMenuRoleMutation.mutate({id: parseInt(id || "-1"), menuRoleId});
+    };
+
     useEffect(() => {
         if (data) {
             if (data.menu.error) {
@@ -119,6 +188,7 @@ export default function RouteMenuEdit() {
                     <MenuEditNameForm name={menuName} handleNameChange={handleNameChange} handleSubmit={handleSubmitChangeName}/>
                     <MenuEditShortNameForm shortName={menuShortName} handleShortNameChange={handleShortNameChange} handleSubmit={handleSubmitChangeShortName}/>
                     <MenuEditPriceForm price={menuPrice} handlePriceChange={handlePriceChange} handleSubmit={handleSubmitChangePrice}/>
+                    <MenuEditDates menuDates={menuDates} handleDelete={handleDeleteMenuDate} handleSubmit={handleSubmitAddDate}/>
                 </div>
             </div>
             <ToastManager toasts={toasts} removeToast={removeToast}/>

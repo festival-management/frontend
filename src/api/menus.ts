@@ -3,7 +3,13 @@ import {AxiosResponse} from "axios";
 import API from "../env/api";
 import useHttpClient from "./utils";
 import BaseResponse from "../models/base.model.ts";
-import {CreateMenuResponse, GetMenuResponse, GetMenusResponse} from "../models/menus.model.ts";
+import {
+    AddMenuDateResponse,
+    AddMenuRoleResponse,
+    CreateMenuResponse,
+    GetMenuResponse,
+    GetMenusResponse
+} from "../models/menus.model.ts";
 
 const useMenusApi = () => {
     const {http} = useHttpClient(API.MENUS.toString());
@@ -17,9 +23,43 @@ const useMenusApi = () => {
         return response.data;
     };
 
+    const addMenuDate = async (id: number, startDate: string, endDate: string) => {
+        const response: AxiosResponse<AddMenuDateResponse> = await http.post(
+            `/${id}/date`,
+            {start_date: startDate, end_date: endDate}
+        );
+
+        return response.data;
+    };
+
+    const addMenuRole = async (id: number, roleId: number) => {
+        const response: AxiosResponse<AddMenuRoleResponse> = await http.post(
+            `/${id}/role`,
+            {role_id: roleId}
+        );
+
+        return response.data;
+    };
+
     const deleteMenu = async (id: number) => {
         const response: AxiosResponse<BaseResponse> = await http.delete(
             `/${id}`,
+        );
+
+        return response.data;
+    };
+
+    const deleteMenuDate = async (id: number, menuDateId: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.delete(
+            `/${id}/date/${menuDateId}`,
+        );
+
+        return response.data;
+    };
+
+    const deleteMenuRole = async (id: number, menuRoleId: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.delete(
+            `/${id}/role/${menuRoleId}`,
         );
 
         return response.data;
@@ -79,7 +119,11 @@ const useMenusApi = () => {
 
     return {
         addMenu,
+        addMenuDate,
+        addMenuRole,
         deleteMenu,
+        deleteMenuDate,
+        deleteMenuRole,
         getMenuById,
         getMenus,
         updateMenuName,

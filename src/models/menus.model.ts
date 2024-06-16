@@ -35,6 +35,14 @@ export interface Menu {
     roles?: MenuRole[];
 }
 
+export interface AddMenuDateResponse extends BaseResponse {
+    date?: MenuDate;
+}
+
+export interface AddMenuRoleResponse extends BaseResponse {
+    role: MenuRole;
+}
+
 export interface CreateMenuResponse extends BaseResponse {
     menu?: Menu;
 }
