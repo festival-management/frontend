@@ -47,7 +47,7 @@ export default function RouteMenuEdit() {
         setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
     };
 
-    const {data} = useQuery({
+    const {data, refetch} = useQuery({
         queryKey: ["menu-edit", id],
         queryFn: async () => {
             const data = await menusApi.getMenuById(parseInt(id || "-1"), true, true, true);
@@ -76,6 +76,14 @@ export default function RouteMenuEdit() {
     const updateMenuPriceMutation = useMutation({
         mutationFn: (variables: { id: number, price: number }) => menusApi.updateMenuPrice(variables.id, variables.price),
         onSuccess: onSuccessMutation
+    });
+    const updateMenuFieldNameMutation = useMutation({
+        mutationFn: (variables: { id: number, menuFieldId: number, name: string }) => menusApi.updateMenuFieldName(variables.id, variables.menuFieldId, variables.name),
+        onSuccess: async (data: BaseResponse) => {
+            await onSuccessMutation(data);
+
+            await refetch();
+        }
     });
     const addMenuDateMutation = useMutation({
         mutationFn: (variables: { id: number, startDate: string, endDate: string }) => menusApi.addMenuDate(variables.id, variables.startDate, variables.endDate),
@@ -180,6 +188,10 @@ export default function RouteMenuEdit() {
         updateMenuPriceMutation.mutate({id: parseInt(id || "-1"), price: menuPrice});
     };
 
+    const handleChangeFieldName = async (menuFieldId: number, name: string) => {
+        updateMenuFieldNameMutation.mutate({id: parseInt(id || "-1"), menuFieldId, name});
+    };
+
     const handleSubmitAddDate = async (startDate: string, endDate: string) => {
         addMenuDateMutation.mutate({id: parseInt(id || "-1"), startDate, endDate});
     };
@@ -233,7 +245,7 @@ export default function RouteMenuEdit() {
                     <MenuEditShortNameForm shortName={menuShortName} handleShortNameChange={handleShortNameChange} handleSubmit={handleSubmitChangeShortName}/>
                     <MenuEditPriceForm price={menuPrice} handlePriceChange={handlePriceChange} handleSubmit={handleSubmitChangePrice}/>
                     <MenuEditDates menuDates={menuDates} handleDelete={handleDeleteMenuDate} handleSubmit={handleSubmitAddDate}/>
-                    <MenuEditFields menuFields={menuFields} handleDelete={handleDeleteMenuField} handleSubmit={handleSubmitAddField}/>
+                    <MenuEditFields menuFields={menuFields} handleChangeFieldName={handleChangeFieldName} handleDelete={handleDeleteMenuField} handleSubmit={handleSubmitAddField}/>
                     <MenuEditRoles rolesName={rolesName} menuRoles={menuRoles} handleDelete={handleDeleteMenuRole} handleSubmit={handleSubmitAddRole}/>
                 </div>
             </div>

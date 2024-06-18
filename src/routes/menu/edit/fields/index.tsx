@@ -7,11 +7,12 @@ import MenuEditFieldsTable from "./MenuEditFieldsTable.tsx";
 
 type MenuEditFieldsProps = {
     menuFields: MenuField[];
+    handleChangeFieldName: (menuFieldId: number, name: string) => Promise<void>;
     handleDelete: (menuFieldId: number) => Promise<void>;
     handleSubmit: (name: string, maxSortableElements: number) => Promise<void>;
 }
 
-export default function MenuEditFields({menuFields, handleDelete, handleSubmit}: MenuEditFieldsProps) {
+export default function MenuEditFields({menuFields, handleChangeFieldName, handleDelete, handleSubmit}: MenuEditFieldsProps) {
     const [newMenuFieldName, setNewMenuFieldName] = useState("");
     const [newMenuFieldMaxSortableElements, setNewMenuFieldMaxSortableElements] = useState(0);
 
@@ -40,7 +41,7 @@ export default function MenuEditFields({menuFields, handleDelete, handleSubmit}:
                                handleMenuFieldNameChange={handleMenuFieldNameChange}
                                handleMenuFieldMaxSortableElementsChange={handleMenuFieldMaxSortableElementsChange}
                                handleSubmit={handleSubmitAddField}/>
-            <MenuEditFieldsTable data={menuFields} handleDelete={handleDelete}/>
+            <MenuEditFieldsTable data={menuFields} handleChangeFieldName={handleChangeFieldName} handleDelete={handleDelete}/>
             <hr/>
         </>
     );

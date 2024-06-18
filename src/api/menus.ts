@@ -107,6 +107,33 @@ const useMenusApi = () => {
         return response.data;
     };
 
+    const updateMenuFieldIsOptional = async (id: number, menuFieldId: number, isOptional: boolean) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/field/${menuFieldId}/is_optional`,
+            {is_optional: isOptional}
+        );
+
+        return response.data;
+    };
+
+    const updateMenuFieldMaxSortableElements = async (id: number, menuFieldId: number, maxSortableElements: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/field/${menuFieldId}/max_sortable_elements`,
+            {max_sortable_elements: maxSortableElements}
+        );
+
+        return response.data;
+    };
+
+    const updateMenuFieldName = async (id: number, menuFieldId: number, name: string) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/field/${menuFieldId}/name`,
+            {name}
+        );
+
+        return response.data;
+    };
+
     const updateMenuName = async (id: number, name: string) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/name`,
@@ -145,6 +172,9 @@ const useMenusApi = () => {
         deleteMenuRole,
         getMenuById,
         getMenus,
+        updateMenuFieldIsOptional,
+        updateMenuFieldMaxSortableElements,
+        updateMenuFieldName,
         updateMenuName,
         updateMenuPrice,
         updateMenuShortName
