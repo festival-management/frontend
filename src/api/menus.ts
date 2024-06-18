@@ -4,7 +4,7 @@ import API from "../env/api";
 import useHttpClient from "./utils";
 import BaseResponse from "../models/base.model.ts";
 import {
-    AddMenuDateResponse,
+    AddMenuDateResponse, AddMenuFieldResponse,
     AddMenuRoleResponse,
     CreateMenuResponse,
     GetMenuResponse,
@@ -32,6 +32,15 @@ const useMenusApi = () => {
         return response.data;
     };
 
+    const addMenuField = async (id: number, name: string, maxSortableElements: number) => {
+        const response: AxiosResponse<AddMenuFieldResponse> = await http.post(
+            `/${id}/field`,
+            {name, max_sortable_elements: maxSortableElements}
+        );
+
+        return response.data;
+    };
+
     const addMenuRole = async (id: number, roleId: number) => {
         const response: AxiosResponse<AddMenuRoleResponse> = await http.post(
             `/${id}/role`,
@@ -52,6 +61,14 @@ const useMenusApi = () => {
     const deleteMenuDate = async (id: number, menuDateId: number) => {
         const response: AxiosResponse<BaseResponse> = await http.delete(
             `/${id}/date/${menuDateId}`,
+        );
+
+        return response.data;
+    };
+
+    const deleteMenuField = async (id: number, menuFieldId: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.delete(
+            `/${id}/field/${menuFieldId}`,
         );
 
         return response.data;
@@ -120,9 +137,11 @@ const useMenusApi = () => {
     return {
         addMenu,
         addMenuDate,
+        addMenuField,
         addMenuRole,
         deleteMenu,
         deleteMenuDate,
+        deleteMenuField,
         deleteMenuRole,
         getMenuById,
         getMenus,

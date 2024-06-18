@@ -2,7 +2,9 @@ import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from "@tanstack/react-query";
 
+import MenuEditRoles from "./roles";
 import MenuEditDates from "./dates";
+import MenuEditFields from "./fields";
 import useMenusApi from "../../../api/menus.ts";
 import useRolesApi from "../../../api/roles.ts";
 import MenuEditNameForm from "./MenuEditNameForm.tsx";
@@ -12,8 +14,14 @@ import BaseResponse from "../../../models/base.model.ts";
 import MenuEditShortNameForm from "./MenuEditShortNameForm.tsx";
 import ToastManager from "../../../components/toast-manager.tsx";
 import ToastMessage, {ToastType} from "../../../models/toast-message.model.ts";
-import {AddMenuDateResponse, AddMenuRoleResponse, MenuDate, MenuRole} from "../../../models/menus.model.ts";
-import MenuEditRoles from "./roles";
+import {
+    AddMenuDateResponse,
+    AddMenuFieldResponse,
+    AddMenuRoleResponse,
+    MenuDate,
+    MenuField,
+    MenuRole
+} from "../../../models/menus.model.ts";
 
 
 export default function RouteMenuEdit() {
@@ -25,6 +33,7 @@ export default function RouteMenuEdit() {
     const [menuShortName, setMenuShortName] = useState("");
     const [menuPrice, setMenuPrice] = useState(0);
     const [menuDates, setMenuDates] = useState<MenuDate[]>([]);
+    const [menuFields, setMenuFields] = useState<MenuField[]>([]);
     const [menuRoles, setMenuRoles] = useState<MenuRole[]>([]);
 
     const menusApi = useMenusApi();
@@ -88,6 +97,29 @@ export default function RouteMenuEdit() {
 
             if (!data.error) {
                 setMenuDates((prevState) => prevState.filter((menuDate) => menuDate.id !== variables.menuDateId));
+            }
+        }
+    });
+    const addMenuFieldMutation = useMutation({
+        mutationFn: (variables: { id: number, name: string, maxSortableElements: number }) => menusApi.addMenuField(variables.id, variables.name, variables.maxSortableElements),
+        onSuccess: async (data: AddMenuFieldResponse) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setMenuFields((prevState) => [...prevState, data.field!])
+            }
+        }
+    });
+    const deleteMenuFieldMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            menuFieldId: number
+        }) => menusApi.deleteMenuField(variables.id, variables.menuFieldId),
+        onSuccess: async (data: BaseResponse, variables) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setMenuFields((prevState) => prevState.filter((menuField) => menuField.id !== variables.menuFieldId));
             }
         }
     });
@@ -156,6 +188,14 @@ export default function RouteMenuEdit() {
         deleteMenuDateMutation.mutate({id: parseInt(id || "-1"), menuDateId});
     };
 
+    const handleSubmitAddField = async (name: string, maxSortableElements: number) => {
+        addMenuFieldMutation.mutate({id: parseInt(id || "-1"), name, maxSortableElements});
+    };
+
+    const handleDeleteMenuField = async (menuFieldId: number) => {
+        deleteMenuFieldMutation.mutate({id: parseInt(id || "-1"), menuFieldId});
+    };
+
     const handleSubmitAddRole = async (roleId: number) => {
         addMenuRoleMutation.mutate({id: parseInt(id || "-1"), roleId});
     };
@@ -174,6 +214,7 @@ export default function RouteMenuEdit() {
             setMenuShortName(data.menu.short_name!);
             setMenuPrice(data.menu.price!);
             setMenuDates(data.menu.dates!);
+            setMenuFields(data.menu.fields!);
             setMenuRoles(data.menu.roles!);
 
             if (data.rolesName.error) {
@@ -192,6 +233,7 @@ export default function RouteMenuEdit() {
                     <MenuEditShortNameForm shortName={menuShortName} handleShortNameChange={handleShortNameChange} handleSubmit={handleSubmitChangeShortName}/>
                     <MenuEditPriceForm price={menuPrice} handlePriceChange={handlePriceChange} handleSubmit={handleSubmitChangePrice}/>
                     <MenuEditDates menuDates={menuDates} handleDelete={handleDeleteMenuDate} handleSubmit={handleSubmitAddDate}/>
+                    <MenuEditFields menuFields={menuFields} handleDelete={handleDeleteMenuField} handleSubmit={handleSubmitAddField}/>
                     <MenuEditRoles rolesName={rolesName} menuRoles={menuRoles} handleDelete={handleDeleteMenuRole} handleSubmit={handleSubmitAddRole}/>
                 </div>
             </div>

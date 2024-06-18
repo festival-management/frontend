@@ -39,6 +39,10 @@ export interface AddMenuDateResponse extends BaseResponse {
     date?: MenuDate;
 }
 
+export interface AddMenuFieldResponse extends BaseResponse {
+    field?: MenuField;
+}
+
 export interface AddMenuRoleResponse extends BaseResponse {
     role: MenuRole;
 }

@@ -33,7 +33,6 @@ export default function MenuEditRoles({rolesName, menuRoles, handleDelete, handl
             <MenuEditRolesAdd rolesName={rolesName} newMenuRoleId={newMenuRoleId}
                               handleMenuRoleIdChange={handleNewMenuRoleIdChange} handleSubmit={handleSubmitAddRole}/>
             <MenuEditRolesTable data={menuRoles} rolesName={rolesName} handleDelete={handleDelete}/>
-            <hr/>
         </>
     );
 }
