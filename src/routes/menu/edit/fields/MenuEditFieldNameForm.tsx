@@ -32,7 +32,7 @@ export default function MenuEditFieldNameForm({menuFieldId, menuFieldName, handl
                     onChange={handleMenuFieldNameChange}
                     required
                 />
-                <button className="btn btn-success">Save</button>
+                <button className="btn btn-success">Change</button>
             </div>
         </form>
     );

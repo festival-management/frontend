@@ -85,6 +85,10 @@ export default function RouteMenuEdit() {
             await refetch();
         }
     });
+    const updateMenuFieldIsOptionalMutation = useMutation({
+        mutationFn: (variables: { id: number, menuFieldId: number, isOptional: boolean }) => menusApi.updateMenuFieldIsOptional(variables.id, variables.menuFieldId, variables.isOptional),
+        onSuccess: onSuccessMutation
+    });
     const addMenuDateMutation = useMutation({
         mutationFn: (variables: { id: number, startDate: string, endDate: string }) => menusApi.addMenuDate(variables.id, variables.startDate, variables.endDate),
         onSuccess: async (data: AddMenuDateResponse) => {
@@ -192,6 +196,10 @@ export default function RouteMenuEdit() {
         updateMenuFieldNameMutation.mutate({id: parseInt(id || "-1"), menuFieldId, name});
     };
 
+    const handleChangeFieldIsOptional = async (menuFieldId: number, isOptional: boolean) => {
+        updateMenuFieldIsOptionalMutation.mutate({id: parseInt(id || "-1"), menuFieldId, isOptional});
+    };
+
     const handleSubmitAddDate = async (startDate: string, endDate: string) => {
         addMenuDateMutation.mutate({id: parseInt(id || "-1"), startDate, endDate});
     };
@@ -245,7 +253,7 @@ export default function RouteMenuEdit() {
                     <MenuEditShortNameForm shortName={menuShortName} handleShortNameChange={handleShortNameChange} handleSubmit={handleSubmitChangeShortName}/>
                     <MenuEditPriceForm price={menuPrice} handlePriceChange={handlePriceChange} handleSubmit={handleSubmitChangePrice}/>
                     <MenuEditDates menuDates={menuDates} handleDelete={handleDeleteMenuDate} handleSubmit={handleSubmitAddDate}/>
-                    <MenuEditFields menuFields={menuFields} handleChangeFieldName={handleChangeFieldName} handleDelete={handleDeleteMenuField} handleSubmit={handleSubmitAddField}/>
+                    <MenuEditFields menuFields={menuFields} handleChangeFieldName={handleChangeFieldName} handleChangeFieldIsOptional={handleChangeFieldIsOptional} handleDelete={handleDeleteMenuField} handleSubmit={handleSubmitAddField}/>
                     <MenuEditRoles rolesName={rolesName} menuRoles={menuRoles} handleDelete={handleDeleteMenuRole} handleSubmit={handleSubmitAddRole}/>
                 </div>
             </div>
