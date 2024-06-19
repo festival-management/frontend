@@ -6,7 +6,11 @@ type MenuEditShortNameFormProps = {
     handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
-export default function MenuEditShortNameForm({shortName, handleShortNameChange, handleSubmit}: MenuEditShortNameFormProps) {
+export default function MenuEditShortNameForm({
+                                                  shortName,
+                                                  handleShortNameChange,
+                                                  handleSubmit
+                                              }: MenuEditShortNameFormProps) {
     return (
         <>
             <h6>Change short name</h6>

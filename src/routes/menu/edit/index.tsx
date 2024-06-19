@@ -40,7 +40,7 @@ export default function RouteMenuEdit() {
     const rolesApi = useRolesApi();
 
     const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+        setToasts((prevToasts) => [{message, type}, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -70,27 +70,53 @@ export default function RouteMenuEdit() {
         onSuccess: onSuccessMutation
     });
     const updateMenuShortNameMutation = useMutation({
-        mutationFn: (variables: { id: number, shortName: string }) => menusApi.updateMenuShortName(variables.id, variables.shortName),
+        mutationFn: (variables: {
+            id: number,
+            shortName: string
+        }) => menusApi.updateMenuShortName(variables.id, variables.shortName),
         onSuccess: onSuccessMutation
     });
     const updateMenuPriceMutation = useMutation({
-        mutationFn: (variables: { id: number, price: number }) => menusApi.updateMenuPrice(variables.id, variables.price),
+        mutationFn: (variables: {
+            id: number,
+            price: number
+        }) => menusApi.updateMenuPrice(variables.id, variables.price),
+        onSuccess: onSuccessMutation
+    });
+    const updateMenuFieldIsOptionalMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            menuFieldId: number,
+            isOptional: boolean
+        }) => menusApi.updateMenuFieldIsOptional(variables.id, variables.menuFieldId, variables.isOptional),
+        onSuccess: onSuccessMutation
+    });
+    const updateMenuFieldMaxSortableElementsMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            menuFieldId: number,
+            maxSortableElements: number
+        }) => menusApi.updateMenuFieldMaxSortableElements(variables.id, variables.menuFieldId, variables.maxSortableElements),
         onSuccess: onSuccessMutation
     });
     const updateMenuFieldNameMutation = useMutation({
-        mutationFn: (variables: { id: number, menuFieldId: number, name: string }) => menusApi.updateMenuFieldName(variables.id, variables.menuFieldId, variables.name),
+        mutationFn: (variables: {
+            id: number,
+            menuFieldId: number,
+            name: string
+        }) => menusApi.updateMenuFieldName(variables.id, variables.menuFieldId, variables.name),
         onSuccess: async (data: BaseResponse) => {
             await onSuccessMutation(data);
 
             await refetch();
         }
     });
-    const updateMenuFieldIsOptionalMutation = useMutation({
-        mutationFn: (variables: { id: number, menuFieldId: number, isOptional: boolean }) => menusApi.updateMenuFieldIsOptional(variables.id, variables.menuFieldId, variables.isOptional),
-        onSuccess: onSuccessMutation
-    });
     const addMenuDateMutation = useMutation({
-        mutationFn: (variables: { id: number, startDate: string, endDate: string }) => menusApi.addMenuDate(variables.id, variables.startDate, variables.endDate),
+        mutationFn: (variables: {
+            id: number,
+            startDate: string,
+            endDate: string
+        }) => menusApi.addMenuDate(variables.id, variables.startDate, variables.endDate),
         onSuccess: async (data: AddMenuDateResponse) => {
             await onSuccessMutation(data);
 
@@ -113,7 +139,11 @@ export default function RouteMenuEdit() {
         }
     });
     const addMenuFieldMutation = useMutation({
-        mutationFn: (variables: { id: number, name: string, maxSortableElements: number }) => menusApi.addMenuField(variables.id, variables.name, variables.maxSortableElements),
+        mutationFn: (variables: {
+            id: number,
+            name: string,
+            maxSortableElements: number
+        }) => menusApi.addMenuField(variables.id, variables.name, variables.maxSortableElements),
         onSuccess: async (data: AddMenuFieldResponse) => {
             await onSuccessMutation(data);
 
@@ -192,12 +222,16 @@ export default function RouteMenuEdit() {
         updateMenuPriceMutation.mutate({id: parseInt(id || "-1"), price: menuPrice});
     };
 
-    const handleChangeFieldName = async (menuFieldId: number, name: string) => {
-        updateMenuFieldNameMutation.mutate({id: parseInt(id || "-1"), menuFieldId, name});
-    };
-
     const handleChangeFieldIsOptional = async (menuFieldId: number, isOptional: boolean) => {
         updateMenuFieldIsOptionalMutation.mutate({id: parseInt(id || "-1"), menuFieldId, isOptional});
+    };
+
+    const handleChangeFieldMaxSortableElements = async (menuFieldId: number, maxSortableElements: number) => {
+        updateMenuFieldMaxSortableElementsMutation.mutate({id: parseInt(id || "-1"), menuFieldId, maxSortableElements});
+    };
+
+    const handleChangeFieldName = async (menuFieldId: number, name: string) => {
+        updateMenuFieldNameMutation.mutate({id: parseInt(id || "-1"), menuFieldId, name});
     };
 
     const handleSubmitAddDate = async (startDate: string, endDate: string) => {
@@ -249,12 +283,20 @@ export default function RouteMenuEdit() {
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <MenuEditNameForm name={menuName} handleNameChange={handleNameChange} handleSubmit={handleSubmitChangeName}/>
-                    <MenuEditShortNameForm shortName={menuShortName} handleShortNameChange={handleShortNameChange} handleSubmit={handleSubmitChangeShortName}/>
-                    <MenuEditPriceForm price={menuPrice} handlePriceChange={handlePriceChange} handleSubmit={handleSubmitChangePrice}/>
-                    <MenuEditDates menuDates={menuDates} handleDelete={handleDeleteMenuDate} handleSubmit={handleSubmitAddDate}/>
-                    <MenuEditFields menuFields={menuFields} handleChangeFieldName={handleChangeFieldName} handleChangeFieldIsOptional={handleChangeFieldIsOptional} handleDelete={handleDeleteMenuField} handleSubmit={handleSubmitAddField}/>
-                    <MenuEditRoles rolesName={rolesName} menuRoles={menuRoles} handleDelete={handleDeleteMenuRole} handleSubmit={handleSubmitAddRole}/>
+                    <MenuEditNameForm name={menuName} handleNameChange={handleNameChange}
+                                      handleSubmit={handleSubmitChangeName}/>
+                    <MenuEditShortNameForm shortName={menuShortName} handleShortNameChange={handleShortNameChange}
+                                           handleSubmit={handleSubmitChangeShortName}/>
+                    <MenuEditPriceForm price={menuPrice} handlePriceChange={handlePriceChange}
+                                       handleSubmit={handleSubmitChangePrice}/>
+                    <MenuEditDates menuDates={menuDates} handleDelete={handleDeleteMenuDate}
+                                   handleSubmit={handleSubmitAddDate}/>
+                    <MenuEditFields menuFields={menuFields} handleChangeFieldIsOptional={handleChangeFieldIsOptional}
+                                    handleChangeFieldMaxSortableElements={handleChangeFieldMaxSortableElements}
+                                    handleChangeFieldName={handleChangeFieldName}
+                                    handleDelete={handleDeleteMenuField} handleSubmit={handleSubmitAddField}/>
+                    <MenuEditRoles rolesName={rolesName} menuRoles={menuRoles} handleDelete={handleDeleteMenuRole}
+                                   handleSubmit={handleSubmitAddRole}/>
                 </div>
             </div>
             <ToastManager toasts={toasts} removeToast={removeToast}/>

@@ -7,13 +7,21 @@ import MenuEditFieldsTable from "./MenuEditFieldsTable.tsx";
 
 type MenuEditFieldsProps = {
     menuFields: MenuField[];
-    handleChangeFieldName: (menuFieldId: number, name: string) => Promise<void>;
     handleChangeFieldIsOptional: (menuFieldId: number, isOptional: boolean) => Promise<void>;
+    handleChangeFieldMaxSortableElements: (menuFieldId: number, maxSortableElements: number) => Promise<void>;
+    handleChangeFieldName: (menuFieldId: number, name: string) => Promise<void>;
     handleDelete: (menuFieldId: number) => Promise<void>;
     handleSubmit: (name: string, maxSortableElements: number) => Promise<void>;
 }
 
-export default function MenuEditFields({menuFields, handleChangeFieldName, handleChangeFieldIsOptional, handleDelete, handleSubmit}: MenuEditFieldsProps) {
+export default function MenuEditFields({
+                                           menuFields,
+                                           handleChangeFieldIsOptional,
+                                           handleChangeFieldMaxSortableElements,
+                                           handleChangeFieldName,
+                                           handleDelete,
+                                           handleSubmit
+                                       }: MenuEditFieldsProps) {
     const [newMenuFieldName, setNewMenuFieldName] = useState("");
     const [newMenuFieldMaxSortableElements, setNewMenuFieldMaxSortableElements] = useState(0);
 
@@ -42,7 +50,10 @@ export default function MenuEditFields({menuFields, handleChangeFieldName, handl
                                handleMenuFieldNameChange={handleMenuFieldNameChange}
                                handleMenuFieldMaxSortableElementsChange={handleMenuFieldMaxSortableElementsChange}
                                handleSubmit={handleSubmitAddField}/>
-            <MenuEditFieldsTable data={menuFields} handleChangeFieldName={handleChangeFieldName} handleChangeFieldIsOptional={handleChangeFieldIsOptional} handleDelete={handleDelete}/>
+            <MenuEditFieldsTable data={menuFields} handleChangeFieldIsOptional={handleChangeFieldIsOptional}
+                                 handleChangeFieldMaxSortableElements={handleChangeFieldMaxSortableElements}
+                                 handleChangeFieldName={handleChangeFieldName}
+                                 handleDelete={handleDelete}/>
             <hr/>
         </>
     );

@@ -6,7 +6,11 @@ type MenuEditFieldNameFormProps = {
     handleChangeFieldName: (menuFieldId: number, name: string) => Promise<void>;
 }
 
-export default function MenuEditFieldNameForm({menuFieldId, menuFieldName, handleChangeFieldName}: MenuEditFieldNameFormProps) {
+export default function MenuEditFieldNameForm({
+                                                  menuFieldId,
+                                                  menuFieldName,
+                                                  handleChangeFieldName
+                                              }: MenuEditFieldNameFormProps) {
     const [newMenuFieldName, setNewMenuFieldName] = useState(menuFieldName);
 
     const handleMenuFieldNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {

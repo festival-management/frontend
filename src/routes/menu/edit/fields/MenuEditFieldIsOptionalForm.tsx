@@ -6,7 +6,11 @@ type MenuEditFieldIsOptionalFormProps = {
     handleChangeFieldIsOptional: (menuFieldId: number, isOptional: boolean) => Promise<void>;
 }
 
-export default function MenuEditFieldIsOptionalForm({menuFieldId, menuFieldIsOptional, handleChangeFieldIsOptional}: MenuEditFieldIsOptionalFormProps) {
+export default function MenuEditFieldIsOptionalForm({
+                                                        menuFieldId,
+                                                        menuFieldIsOptional,
+                                                        handleChangeFieldIsOptional
+                                                    }: MenuEditFieldIsOptionalFormProps) {
     const [newMenuFieldIsOptional, setNewMenuFieldIsOptional] = useState(menuFieldIsOptional);
 
     const handleMenuFieldIsOptionalChange = () => {
@@ -24,7 +28,8 @@ export default function MenuEditFieldIsOptionalForm({menuFieldId, menuFieldIsOpt
             <div className="input-group mb-3">
                 <span className="input-group-text">Is optional?</span>
                 <div className="form-control d-flex justify-content-center">
-                    <input className="form-check-input" type="checkbox" checked={newMenuFieldIsOptional} onChange={handleMenuFieldIsOptionalChange} />
+                    <input className="form-check-input" type="checkbox" checked={newMenuFieldIsOptional}
+                           onChange={handleMenuFieldIsOptionalChange}/>
                 </div>
                 <button className="btn btn-success">Change</button>
             </div>
