@@ -4,7 +4,9 @@ import API from "../env/api";
 import useHttpClient from "./utils";
 import BaseResponse from "../models/base.model.ts";
 import {
-    AddMenuDateResponse, AddMenuFieldResponse,
+    AddMenuDateResponse,
+    AddMenuFieldProductResponse,
+    AddMenuFieldResponse,
     AddMenuRoleResponse,
     CreateMenuResponse,
     GetMenuResponse,
@@ -36,6 +38,15 @@ const useMenusApi = () => {
         const response: AxiosResponse<AddMenuFieldResponse> = await http.post(
             `/${id}/field`,
             {name, max_sortable_elements: maxSortableElements}
+        );
+
+        return response.data;
+    };
+
+    const addMenuFieldProduct = async (id: number, menuFieldId: number, price: number, productId: number) => {
+        const response: AxiosResponse<AddMenuFieldProductResponse> = await http.post(
+            `/${id}/field/${menuFieldId}/product`,
+            {price, product_id: productId}
         );
 
         return response.data;
@@ -165,6 +176,7 @@ const useMenusApi = () => {
         addMenu,
         addMenuDate,
         addMenuField,
+        addMenuFieldProduct,
         addMenuRole,
         deleteMenu,
         deleteMenuDate,

@@ -43,6 +43,10 @@ export interface AddMenuFieldResponse extends BaseResponse {
     field?: MenuField;
 }
 
+export interface AddMenuFieldProductResponse extends BaseResponse {
+    field_product?: MenuFieldProduct;
+}
+
 export interface AddMenuRoleResponse extends BaseResponse {
     role: MenuRole;
 }

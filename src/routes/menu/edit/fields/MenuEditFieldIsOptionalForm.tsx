@@ -28,7 +28,7 @@ export default function MenuEditFieldIsOptionalForm({
             <div className="input-group mb-3">
                 <span className="input-group-text">Is optional?</span>
                 <div className="form-control d-flex justify-content-center">
-                    <input className="form-check-input" type="checkbox" checked={newMenuFieldIsOptional}
+                    <input className="form-check-input" id="menuFieldIsOptional" type="checkbox" checked={newMenuFieldIsOptional}
                            onChange={handleMenuFieldIsOptionalChange}/>
                 </div>
                 <button className="btn btn-success">Change</button>

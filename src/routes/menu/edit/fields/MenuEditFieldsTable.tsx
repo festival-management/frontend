@@ -2,22 +2,28 @@ import React from "react";
 
 import {MenuField} from "../../../../models/menus.model.ts";
 import MenuEditFieldNameForm from "./MenuEditFieldNameForm.tsx";
+import {ProductName} from "../../../../models/products.model.ts";
+import MenuEditFieldProductAdd from "./MenuEditFieldProductAdd.tsx";
 import MenuEditFieldIsOptionalForm from "./MenuEditFieldIsOptionalForm.tsx";
 import MenuEditFieldMaxSortableElementsForm from "./MenuEditFieldMaxSortableElementsForm.tsx";
 
 type MenuEditFieldsTableProps = {
+    productsName: ProductName[];
     data: MenuField[];
     handleChangeFieldIsOptional: (menuFieldId: number, isOptional: boolean) => Promise<void>;
     handleChangeFieldMaxSortableElements: (menuFieldId: number, maxSortableElements: number) => Promise<void>;
     handleChangeFieldName: (menuFieldId: number, name: string) => Promise<void>;
+    handleSubmitAddFieldProduct: (menuFieldId: number, price: number, productId: number) => void;
     handleDelete: (menuFieldId: number) => Promise<void>;
 }
 
 export default function MenuEditFieldsTable({
+                                                productsName,
                                                 data,
                                                 handleChangeFieldIsOptional,
                                                 handleChangeFieldMaxSortableElements,
                                                 handleChangeFieldName,
+                                                handleSubmitAddFieldProduct,
                                                 handleDelete
                                             }: MenuEditFieldsTableProps) {
     const menuFields: React.JSX.Element[] = data.map((v, index) => (
@@ -37,6 +43,8 @@ export default function MenuEditFieldsTable({
                     <MenuEditFieldMaxSortableElementsForm menuFieldId={v.id}
                                                           menuFieldMaxSortableElements={v.max_sortable_elements}
                                                           handleChangeFieldMaxSortableElements={handleChangeFieldMaxSortableElements}/>
+                    <MenuEditFieldProductAdd menuFieldId={v.id} productsName={productsName}
+                                             handleSubmit={handleSubmitAddFieldProduct}/>
                     <button
                         type="button"
                         className="btn btn-danger"
