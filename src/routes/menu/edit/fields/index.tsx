@@ -15,6 +15,7 @@ type MenuEditFieldsProps = {
     handleDelete: (menuFieldId: number) => Promise<void>;
     handleSubmit: (name: string, maxSortableElements: number) => Promise<void>;
     handleSubmitAddFieldProduct: (menuFieldId: number, price: number, productId: number) => void;
+    handleDeleteMenuFieldProduct: (menuFieldId: number, menuFieldProductId: number) => void;
 }
 
 export default function MenuEditFields({
@@ -25,7 +26,8 @@ export default function MenuEditFields({
                                            handleChangeFieldName,
                                            handleDelete,
                                            handleSubmit,
-                                           handleSubmitAddFieldProduct
+                                           handleSubmitAddFieldProduct,
+                                           handleDeleteMenuFieldProduct
                                        }: MenuEditFieldsProps) {
     const [newMenuFieldName, setNewMenuFieldName] = useState("");
     const [newMenuFieldMaxSortableElements, setNewMenuFieldMaxSortableElements] = useState(0);
@@ -60,7 +62,8 @@ export default function MenuEditFields({
                                  handleChangeFieldMaxSortableElements={handleChangeFieldMaxSortableElements}
                                  handleChangeFieldName={handleChangeFieldName}
                                  handleSubmitAddFieldProduct={handleSubmitAddFieldProduct}
-                                 handleDelete={handleDelete}/>
+                                 handleDelete={handleDelete}
+                                 handleDeleteMenuFieldProduct={handleDeleteMenuFieldProduct}/>
             <hr/>
         </>
     );

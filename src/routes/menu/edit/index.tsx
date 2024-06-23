@@ -52,7 +52,7 @@ export default function RouteMenuEdit() {
         setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
     };
 
-    const {data, refetch} = useQuery({
+    const {data} = useQuery({
         queryKey: ["menu-edit", id],
         queryFn: async () => {
             const data = await menusApi.getMenuById(parseInt(id || "-1"), true, true, true);
@@ -111,10 +111,15 @@ export default function RouteMenuEdit() {
             menuFieldId: number,
             name: string
         }) => menusApi.updateMenuFieldName(variables.id, variables.menuFieldId, variables.name),
-        onSuccess: async (data: BaseResponse) => {
+        onSuccess: async (data: BaseResponse, variables) => {
             await onSuccessMutation(data);
 
-            await refetch();
+            if (!data.error) {
+                setMenuFields((prevState) => prevState.map((menuField) => menuField.id === variables.menuFieldId ? {
+                    ...menuField,
+                    name: variables.name
+                } : menuField));
+            }
         }
     });
     const addMenuDateMutation = useMutation({
@@ -186,6 +191,23 @@ export default function RouteMenuEdit() {
 
             if (!data.error) {
                 setMenuFields((prevState) => prevState.filter((menuField) => menuField.id !== variables.menuFieldId));
+            }
+        }
+    });
+    const deleteMenuFieldProductMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            menuFieldId: number,
+            menuFieldProductId: number
+        }) => menusApi.deleteMenuFieldProduct(variables.id, variables.menuFieldId, variables.menuFieldProductId),
+        onSuccess: async (data: BaseResponse, variables) => {
+            await onSuccessMutation(data);
+
+            if (!data.error) {
+                setMenuFields((prevState) => prevState.map((menuField) => menuField.id === variables.menuFieldId ? {
+                    ...menuField,
+                    products: menuField.products.filter((menuFieldProduct) => menuFieldProduct.id !== variables.menuFieldProductId)
+                } : menuField))
             }
         }
     });
@@ -278,6 +300,10 @@ export default function RouteMenuEdit() {
         deleteMenuFieldMutation.mutate({id: parseInt(id || "-1"), menuFieldId});
     };
 
+    const handleDeleteMenuFieldProduct = async (menuFieldId: number, menuFieldProductId: number) => {
+        deleteMenuFieldProductMutation.mutate({id: parseInt(id || "-1"), menuFieldId, menuFieldProductId});
+    };
+
     const handleSubmitAddRole = async (roleId: number) => {
         addMenuRoleMutation.mutate({id: parseInt(id || "-1"), roleId});
     };
@@ -330,7 +356,8 @@ export default function RouteMenuEdit() {
                                     handleChangeFieldMaxSortableElements={handleChangeFieldMaxSortableElements}
                                     handleChangeFieldName={handleChangeFieldName}
                                     handleDelete={handleDeleteMenuField} handleSubmit={handleSubmitAddField}
-                                    handleSubmitAddFieldProduct={handleSubmitAddFieldProduct}/>
+                                    handleSubmitAddFieldProduct={handleSubmitAddFieldProduct}
+                                    handleDeleteMenuFieldProduct={handleDeleteMenuFieldProduct}/>
                     <MenuEditRoles rolesName={rolesName} menuRoles={menuRoles} handleDelete={handleDeleteMenuRole}
                                    handleSubmit={handleSubmitAddRole}/>
                 </div>

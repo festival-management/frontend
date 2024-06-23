@@ -4,6 +4,7 @@ import {MenuField} from "../../../../models/menus.model.ts";
 import MenuEditFieldNameForm from "./MenuEditFieldNameForm.tsx";
 import {ProductName} from "../../../../models/products.model.ts";
 import MenuEditFieldProductAdd from "./MenuEditFieldProductAdd.tsx";
+import MenuEditFieldProductsTable from "./MenuEditFieldProductsTable.tsx";
 import MenuEditFieldIsOptionalForm from "./MenuEditFieldIsOptionalForm.tsx";
 import MenuEditFieldMaxSortableElementsForm from "./MenuEditFieldMaxSortableElementsForm.tsx";
 
@@ -15,6 +16,7 @@ type MenuEditFieldsTableProps = {
     handleChangeFieldName: (menuFieldId: number, name: string) => Promise<void>;
     handleSubmitAddFieldProduct: (menuFieldId: number, price: number, productId: number) => void;
     handleDelete: (menuFieldId: number) => Promise<void>;
+    handleDeleteMenuFieldProduct: (menuFieldId: number, menuFieldProductId: number) => void;
 }
 
 export default function MenuEditFieldsTable({
@@ -24,7 +26,8 @@ export default function MenuEditFieldsTable({
                                                 handleChangeFieldMaxSortableElements,
                                                 handleChangeFieldName,
                                                 handleSubmitAddFieldProduct,
-                                                handleDelete
+                                                handleDelete,
+                                                handleDeleteMenuFieldProduct
                                             }: MenuEditFieldsTableProps) {
     const menuFields: React.JSX.Element[] = data.map((v, index) => (
         <div key={index} className="accordion-item">
@@ -45,6 +48,8 @@ export default function MenuEditFieldsTable({
                                                           handleChangeFieldMaxSortableElements={handleChangeFieldMaxSortableElements}/>
                     <MenuEditFieldProductAdd menuFieldId={v.id} productsName={productsName}
                                              handleSubmit={handleSubmitAddFieldProduct}/>
+                    <MenuEditFieldProductsTable menuFieldId={v.id} productsName={productsName} data={v.products}
+                                                handleDeleteMenuFieldProduct={handleDeleteMenuFieldProduct}/>
                     <button
                         type="button"
                         className="btn btn-danger"

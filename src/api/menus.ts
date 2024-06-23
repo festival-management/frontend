@@ -85,6 +85,14 @@ const useMenusApi = () => {
         return response.data;
     };
 
+    const deleteMenuFieldProduct = async (id: number, menuFieldId: number, menuFieldProductId: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.delete(
+            `/${id}/field/${menuFieldId}/product/${menuFieldProductId}`,
+        );
+
+        return response.data;
+    };
+
     const deleteMenuRole = async (id: number, menuRoleId: number) => {
         const response: AxiosResponse<BaseResponse> = await http.delete(
             `/${id}/role/${menuRoleId}`,
@@ -181,6 +189,7 @@ const useMenusApi = () => {
         deleteMenu,
         deleteMenuDate,
         deleteMenuField,
+        deleteMenuFieldProduct,
         deleteMenuRole,
         getMenuById,
         getMenus,
