@@ -355,7 +355,7 @@ export default function RouteMenuEdit() {
                                     handleChangeFieldIsOptional={handleChangeFieldIsOptional}
                                     handleChangeFieldMaxSortableElements={handleChangeFieldMaxSortableElements}
                                     handleChangeFieldName={handleChangeFieldName}
-                                    handleDelete={handleDeleteMenuField} handleSubmit={handleSubmitAddField}
+                                    handleSubmit={handleSubmitAddField} handleDelete={handleDeleteMenuField}
                                     handleSubmitAddFieldProduct={handleSubmitAddFieldProduct}
                                     handleDeleteMenuFieldProduct={handleDeleteMenuFieldProduct}/>
                     <MenuEditRoles rolesName={rolesName} menuRoles={menuRoles} handleDelete={handleDeleteMenuRole}

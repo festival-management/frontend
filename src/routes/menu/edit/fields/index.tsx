@@ -12,8 +12,8 @@ type MenuEditFieldsProps = {
     handleChangeFieldIsOptional: (menuFieldId: number, isOptional: boolean) => Promise<void>;
     handleChangeFieldMaxSortableElements: (menuFieldId: number, maxSortableElements: number) => Promise<void>;
     handleChangeFieldName: (menuFieldId: number, name: string) => Promise<void>;
-    handleDelete: (menuFieldId: number) => Promise<void>;
     handleSubmit: (name: string, maxSortableElements: number) => Promise<void>;
+    handleDelete: (menuFieldId: number) => Promise<void>;
     handleSubmitAddFieldProduct: (menuFieldId: number, price: number, productId: number) => void;
     handleDeleteMenuFieldProduct: (menuFieldId: number, menuFieldProductId: number) => void;
 }
@@ -24,8 +24,8 @@ export default function MenuEditFields({
                                            handleChangeFieldIsOptional,
                                            handleChangeFieldMaxSortableElements,
                                            handleChangeFieldName,
-                                           handleDelete,
                                            handleSubmit,
+                                           handleDelete,
                                            handleSubmitAddFieldProduct,
                                            handleDeleteMenuFieldProduct
                                        }: MenuEditFieldsProps) {
