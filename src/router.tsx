@@ -6,6 +6,7 @@ import RouteMenus from "./routes/menus";
 import RouteLogin from "./routes/login";
 import RouteRoles from "./routes/roles";
 import RouteUsers from "./routes/users";
+import RouteOrder from "./routes/order";
 import RouteProfile from "./routes/profile";
 import RouteProducts from "./routes/products";
 import RouteMenuEdit from "./routes/menus/edit";
@@ -32,6 +33,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/menus/edit/:id",
                     element: <RouteMenuEdit/>
+                },
+                {
+                    path: "/order",
+                    element: <RouteOrder/>
                 },
                 {
                     path: "/products",
