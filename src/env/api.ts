@@ -4,7 +4,7 @@ const API = {
         return new URL("/auth", this.BASE_URL);
     },
     get MENUS() {
-        return new URL("/menu", this.BASE_URL);
+        return new URL("/menus", this.BASE_URL);
     },
     get PRODUCTS() {
         return new URL("/products", this.BASE_URL);

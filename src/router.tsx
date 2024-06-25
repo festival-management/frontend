@@ -2,13 +2,13 @@ import React from "react";
 import {createBrowserRouter} from "react-router-dom";
 
 import RouteHome from "./routes/home";
-import RouteMenus from "./routes/menu";
+import RouteMenus from "./routes/menus";
 import RouteLogin from "./routes/login";
 import RouteRoles from "./routes/roles";
 import RouteUsers from "./routes/users";
 import RouteProfile from "./routes/profile";
 import RouteProducts from "./routes/products";
-import RouteMenuEdit from "./routes/menu/edit";
+import RouteMenuEdit from "./routes/menus/edit";
 import RouteRoleEdit from "./routes/roles/edit";
 import RouteUserEdit from "./routes/users/edit";
 import RouteProductEdit from "./routes/products/edit";

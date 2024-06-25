@@ -50,6 +50,7 @@ export default function MenuEditFieldProductAdd({
                     type="number"
                     className="form-control"
                     id="newMenuFieldPrice"
+                    step="0.01"
                     value={newMenuFieldPrice}
                     onChange={handleNewMenuFieldPriceChange}
                     required

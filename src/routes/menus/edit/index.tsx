@@ -53,7 +53,7 @@ export default function RouteMenuEdit() {
     };
 
     const {data} = useQuery({
-        queryKey: ["menu-edit", id],
+        queryKey: ["menus-edit", id],
         queryFn: async () => {
             const data = await menusApi.getMenuById(parseInt(id || "-1"), true, true, true);
             const dataRolesName = await rolesApi.getRolesName(true);
