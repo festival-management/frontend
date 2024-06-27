@@ -22,7 +22,7 @@ function NavLinkList() {
 
 function NavBar() {
     return (
-        <nav className="navbar navbar-expand-lg bg-light">
+        <nav className="navbar navbar-expand-lg bg-light" id="navbar">
             <div className="container-fluid">
                 <Link to="/" className="navbar-brand">Festival</Link>
                 <button

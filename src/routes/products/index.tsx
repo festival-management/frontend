@@ -8,7 +8,7 @@ import CreateProductForm from "./CreateProductForm";
 import useSubcategoriesApi from "../../api/subcategories";
 import ToastManager from "../../components/toast-manager.tsx";
 import {SubcategoryName} from "../../models/subcategories.model";
-import SelectProductSubcategoryId from "./SelectProductSubcategoryId";
+import SelectProductSubcategoryId from "../../components/select-product-subcategory-id.tsx";
 import PaginationControls from "../../components/pagination-controls";
 import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
 

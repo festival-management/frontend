@@ -118,11 +118,11 @@ const useProductsApi = () => {
         return response.data;
     };
 
-    const getProducts = async (page: number, subcategoryId?: number, orderBy?: string) => {
+    const getProducts = async (page?: number, subcategoryId?: number, orderBy?: string) => {
         const limit = import.meta.env.VITE_DEFAULT_LIMIT_VALUE;
         const response: AxiosResponse<GetProductsResponse> = await http.get(
             "/",
-            {params: {offset: limit * (page - 1), limit: limit, order_by: orderBy, subcategory_id: subcategoryId}}
+            {params: {offset: page ? limit * (page - 1) : null, limit: limit, order_by: orderBy, subcategory_id: subcategoryId}}
         );
 
         return response.data;

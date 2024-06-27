@@ -116,11 +116,11 @@ const useMenusApi = () => {
         return response.data;
     };
 
-    const getMenus = async (page: number, orderBy?: string) => {
+    const getMenus = async (page?: number, orderBy?: string) => {
         const limit = import.meta.env.VITE_DEFAULT_LIMIT_VALUE;
         const response: AxiosResponse<GetMenusResponse> = await http.get(
             "/",
-            {params: {offset: limit * (page - 1), limit: limit, order_by: orderBy}}
+            {params: {offset: page ? limit * (page - 1) : null, limit: limit, order_by: orderBy}}
         );
 
         return response.data;

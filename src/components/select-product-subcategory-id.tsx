@@ -1,6 +1,6 @@
 import React from "react";
 
-import {SubcategoryName} from "../../models/subcategories.model";
+import {SubcategoryName} from "../models/subcategories.model.ts";
 
 type SelectProductSubcategoryIdProps = {
     selectedSubcategoryId: number;
