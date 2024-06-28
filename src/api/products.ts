@@ -118,11 +118,20 @@ const useProductsApi = () => {
         return response.data;
     };
 
-    const getProducts = async (page?: number, subcategoryId?: number, orderBy?: string) => {
+    const getProducts = async (page: number, subcategoryId?: number, orderBy?: string) => {
         const limit = import.meta.env.VITE_DEFAULT_LIMIT_VALUE;
         const response: AxiosResponse<GetProductsResponse> = await http.get(
             "/",
-            {params: {offset: page ? limit * (page - 1) : null, limit: limit, order_by: orderBy, subcategory_id: subcategoryId}}
+            {params: {offset: limit * (page - 1), limit: limit, order_by: orderBy, subcategory_id: subcategoryId}}
+        );
+
+        return response.data;
+    };
+
+    const getAllProductsUser = async (orderBy?: string, includeIngredients?: boolean, includeVariants?: boolean) => {
+        const response: AxiosResponse<GetProductsResponse> = await http.get(
+            "/",
+            {params: {order_by: orderBy, include_ingredients: includeIngredients, include_variants: includeVariants}}
         );
 
         return response.data;
@@ -204,6 +213,7 @@ const useProductsApi = () => {
         deleteProductVariant,
         getProductById,
         getProducts,
+        getAllProductsUser,
         getProductsName,
         updateProductCategory,
         updateProductIsPriority,

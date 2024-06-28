@@ -35,7 +35,7 @@ export default function RouteOrder() {
         queryKey: ["order"],
         queryFn: async () => {
             const dataSubcategoriesName = await subcategoriesApi.getSubcategoriesName("order");
-            const dataProducts = await productsApi.getProducts();
+            const dataProducts = await productsApi.getAllProductsUser("name", true, true);
             const dataMenus = await menusApi.getMenus();
 
             return {subcategoriesName: dataSubcategoriesName, products: dataProducts, menus: dataMenus};
