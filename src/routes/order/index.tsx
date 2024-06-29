@@ -5,11 +5,12 @@ import useMenusApi from "../../api/menus.ts";
 import {Menu} from "../../models/menus.model.ts";
 import useProductsApi from "../../api/products.ts";
 import {Product} from "../../models/products.model.ts";
+import OrderProductsTable from "./OrderProductsTable.tsx";
 import useSubcategoriesApi from "../../api/subcategories.ts";
 import ToastManager from "../../components/toast-manager.tsx";
+import {Order, OrderProduct} from "../../models/order.model.ts";
 import {SubcategoryName} from "../../models/subcategories.model.ts";
 import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
-import OrderProductsTable from "./OrderProductsTable.tsx";
 
 export default function RouteOrder() {
     const [toasts, setToasts] = useState<ToastMessage[]>([]);
@@ -18,6 +19,7 @@ export default function RouteOrder() {
     const [subcategoriesName, setSubcategoriesName] = useState<SubcategoryName[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [menus, setMenus] = useState<Menu[]>([]);
+    const [order, setOrder] = useState<Order>({products: [], menus: []});
 
     const subcategoriesApi = useSubcategoriesApi();
     const productsApi = useProductsApi();
@@ -43,6 +45,13 @@ export default function RouteOrder() {
         enabled: true,
         staleTime: 0,
     });
+
+    const handleSubmitAddProduct = async (product: OrderProduct) => {
+        setOrder((prevState) => ({
+            ...prevState,
+            products: [...prevState.products, product]
+        }));
+    };
 
     useEffect(() => {
         const handleResize = () => {
@@ -96,7 +105,7 @@ export default function RouteOrder() {
                                 </button>
                             </div>
                             <div className="overflow-y-scroll">
-                                <OrderProductsTable subcategoriesName={subcategoriesName} products={products}/>
+                                <OrderProductsTable subcategoriesName={subcategoriesName} products={products} handleSubmitAddProduct={handleSubmitAddProduct}/>
                             </div>
                         </div>
                     </div>

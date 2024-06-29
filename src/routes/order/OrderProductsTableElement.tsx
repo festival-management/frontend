@@ -1,15 +1,17 @@
 import React, {useState} from "react";
 
 import {Product} from "../../models/products.model.ts";
+import {OrderProduct} from "../../models/order.model.ts";
 
 type OrderProductsTableElementProps = {
     product: Product;
+    handleSubmitAddProduct: (product: OrderProduct) => Promise<void>;
 }
 
-export default function OrderProductsTableElement({product}: OrderProductsTableElementProps) {
+export default function OrderProductsTableElement({product, handleSubmitAddProduct}: OrderProductsTableElementProps) {
     const [price, setPrice] = useState(product.price);
     const [selectedVariantIndex, setSelectedVariantIndex] = useState(-1);
-    const [selectedIngredientsId, setSelectedIngredientsId] = useState<number[]>([]);
+    const [selectedIngredientsIndex, setSelectedIngredientsIndex] = useState<number[]>([]);
 
     const handleSelectedVariantIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const prevVariantIndex = selectedVariantIndex;
@@ -27,13 +29,25 @@ export default function OrderProductsTableElement({product}: OrderProductsTableE
     const handleSelectedIngredientsIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const ingredientIndex = parseInt(event.target.value);
 
-        if (selectedIngredientsId.includes(ingredientIndex)) {
-            setSelectedIngredientsId((prevState) => prevState.splice(prevState.find((value) => value === ingredientIndex), 1));
+        if (selectedIngredientsIndex.includes(ingredientIndex)) {
+            setSelectedIngredientsIndex((prevState) => prevState.splice(prevState.find((value) => value === ingredientIndex), 1));
             setPrice((prevState) => prevState - product.ingredients![ingredientIndex].price);
         } else {
-            setSelectedIngredientsId((prevState) => [...prevState, ingredientIndex]);
+            setSelectedIngredientsIndex((prevState) => [...prevState, ingredientIndex]);
             setPrice((prevState) => prevState + product.ingredients![ingredientIndex].price);
         }
+    };
+
+    const handleSubmit = async () => {
+        await handleSubmitAddProduct({
+            id: product.id,
+            variant: product.variants && product.variants.length > 0 ? product.variants![selectedVariantIndex].id : undefined,
+            ingredients: product.ingredients && product.ingredients.length > 0 ? selectedIngredientsIndex.map((value) => product.ingredients![value].id) : undefined
+        });
+
+        setPrice(product.price);
+        setSelectedVariantIndex(-1);
+        setSelectedIngredientsIndex([]);
     };
 
     return (
@@ -67,7 +81,7 @@ export default function OrderProductsTableElement({product}: OrderProductsTableE
                                             type="checkbox"
                                             id={`ingredient-${index}`}
                                             value={index}
-                                            checked={selectedIngredientsId.includes(index)}
+                                            checked={selectedIngredientsIndex.includes(index)}
                                             onChange={handleSelectedIngredientsIdChange}
                                         />
                                         <label className="form-check-label" htmlFor={`ingredient-${index}`}>
@@ -78,7 +92,7 @@ export default function OrderProductsTableElement({product}: OrderProductsTableE
                             </div>
                         </div> : null}
                     <div className="text-center">
-                        <button type="button" className="btn btn-primary">Add</button>
+                        <button type="button" className="btn btn-primary" onClick={handleSubmit}>Add</button>
                     </div>
                 </div>
             </div>
