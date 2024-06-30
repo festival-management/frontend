@@ -4,6 +4,7 @@ import {useQuery} from "@tanstack/react-query";
 import useMenusApi from "../../api/menus.ts";
 import {Menu} from "../../models/menus.model.ts";
 import useProductsApi from "../../api/products.ts";
+import OrderMenusTable from "./OrderMenusTable.tsx";
 import {Product} from "../../models/products.model.ts";
 import OrderProductsTable from "./OrderProductsTable.tsx";
 import useSubcategoriesApi from "../../api/subcategories.ts";
@@ -11,6 +12,8 @@ import ToastManager from "../../components/toast-manager.tsx";
 import {Order, OrderProduct} from "../../models/order.model.ts";
 import {SubcategoryName} from "../../models/subcategories.model.ts";
 import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
+
+import "./style.css";
 
 export default function RouteOrder() {
     const [toasts, setToasts] = useState<ToastMessage[]>([]);
@@ -47,6 +50,10 @@ export default function RouteOrder() {
     });
 
     const handleSubmitAddProduct = async (product: OrderProduct) => {
+        if (product.variant === -1) {
+            return addToast("Variant not exist", "error");
+        }
+
         setOrder((prevState) => ({
             ...prevState,
             products: [...prevState.products, product]
@@ -91,8 +98,8 @@ export default function RouteOrder() {
         <div className="container-fluid p-4" style={{height: `calc(100vh - ${navbarHeight}px)`}}>
             <div className="row h-100">
                 <div className="col-sm-8 d-flex h-100">
-                    <div className="card w-100">
-                        <div className="card-body d-flex flex-column">
+                    <div className="card w-100 h-100">
+                        <div className="card-body d-flex flex-column h-100">
                             <div className="btn-group d-flex flex-wrap mb-3" role="group"
                                  aria-label="Select menu or product">
                                 <button type="button"
@@ -104,9 +111,10 @@ export default function RouteOrder() {
                                         onClick={() => setIsSelectedProducts(false)}>Menus
                                 </button>
                             </div>
-                            <div className="overflow-y-scroll">
-                                <OrderProductsTable subcategoriesName={subcategoriesName} products={products} handleSubmitAddProduct={handleSubmitAddProduct}/>
-                            </div>
+                            {isSelectedProducts ?
+                                <OrderProductsTable subcategoriesName={subcategoriesName} products={products}
+                                                    handleSubmitAddProduct={handleSubmitAddProduct}/> :
+                                <OrderMenusTable/>}
                         </div>
                     </div>
                 </div>

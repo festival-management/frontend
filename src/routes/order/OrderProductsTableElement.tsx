@@ -39,9 +39,19 @@ export default function OrderProductsTableElement({product, handleSubmitAddProdu
     };
 
     const handleSubmit = async () => {
+        let variantId = undefined;
+
+        if (product.variants && product.variants.length > 0) {
+            if (selectedVariantIndex !== -1) {
+                product.variants![selectedVariantIndex].id;
+            } else {
+                variantId = -1;
+            }
+        }
+
         await handleSubmitAddProduct({
             id: product.id,
-            variant: product.variants && product.variants.length > 0 ? product.variants![selectedVariantIndex].id : undefined,
+            variant: variantId,
             ingredients: product.ingredients && product.ingredients.length > 0 ? selectedIngredientsIndex.map((value) => product.ingredients![value].id) : undefined
         });
 

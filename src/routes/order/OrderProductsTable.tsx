@@ -51,14 +51,16 @@ export default function OrderProductsTable({subcategoriesName, products, handleS
         } else {
             setProductsElements([]);
         }
-    }, [selectedSubcategoryId, subcategoryIdProducts]);
+    }, [handleSubmitAddProduct, selectedSubcategoryId, subcategoryIdProducts]);
 
     return (
         <>
             <SelectProductSubcategoryId selectedSubcategoryId={selectedSubcategoryId}
                                         subcategoriesName={subcategoriesNameUsed}
                                         handleSelectedSubcategoryIdChange={handleSelectedSubcategoryIdChange}/>
-            {productsElements}
+            <div className="overflow-y-scroll remove-scrollbar">
+                {productsElements}
+            </div>
         </>
     );
 }
