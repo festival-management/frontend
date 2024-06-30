@@ -3,6 +3,7 @@ export interface OrderProduct {
     id: number;
     variant?: number;
     ingredients?: number[];
+    price: number;
 }
 
 export interface OrderMenuField {

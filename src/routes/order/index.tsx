@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useQuery} from "@tanstack/react-query";
 
 import useMenusApi from "../../api/menus.ts";
+import OrderDetails from "./OrderDetails.tsx";
 import {Menu} from "../../models/menus.model.ts";
 import useProductsApi from "../../api/products.ts";
 import OrderMenusTable from "./OrderMenusTable.tsx";
@@ -58,6 +59,11 @@ export default function RouteOrder() {
             ...prevState,
             products: [...prevState.products, product]
         }));
+    };
+
+    const handleSubmitRemoveProduct = async (index: number) => {
+        const updatedProducts = order.products.filter((_, i) => i !== index);
+        setOrder({ ...order, products: updatedProducts });
     };
 
     useEffect(() => {
@@ -123,7 +129,7 @@ export default function RouteOrder() {
                         <div className="card-body d-flex flex-column h-100">
                             <h6 className="pb-2">Details</h6>
                             <div className="overflow-y-scroll mb-3">
-                                Content
+                                <OrderDetails order={order} products={products} menus={menus} handleSubmitRemoveProduct={handleSubmitRemoveProduct}/>
                             </div>
                             <button type="button" className="align-self-center btn btn-block btn-primary mt-auto">Submit
                             </button>

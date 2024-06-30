@@ -43,7 +43,7 @@ export default function OrderProductsTableElement({product, handleSubmitAddProdu
 
         if (product.variants && product.variants.length > 0) {
             if (selectedVariantIndex !== -1) {
-                product.variants![selectedVariantIndex].id;
+                variantId = product.variants![selectedVariantIndex].id;
             } else {
                 variantId = -1;
             }
@@ -52,7 +52,8 @@ export default function OrderProductsTableElement({product, handleSubmitAddProdu
         await handleSubmitAddProduct({
             id: product.id,
             variant: variantId,
-            ingredients: product.ingredients && product.ingredients.length > 0 ? selectedIngredientsIndex.map((value) => product.ingredients![value].id) : undefined
+            ingredients: product.ingredients && product.ingredients.length > 0 ? selectedIngredientsIndex.map((value) => product.ingredients![value].id) : undefined,
+            price: price
         });
 
         setPrice(product.price);
