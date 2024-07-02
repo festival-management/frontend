@@ -10,8 +10,8 @@ import {Product} from "../../models/products.model.ts";
 import OrderProductsTable from "./OrderProductsTable.tsx";
 import useSubcategoriesApi from "../../api/subcategories.ts";
 import ToastManager from "../../components/toast-manager.tsx";
-import {Order, OrderProduct} from "../../models/order.model.ts";
 import {SubcategoryName} from "../../models/subcategories.model.ts";
+import {Order, OrderMenu, OrderProduct} from "../../models/order.model.ts";
 import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
 
 import "./style.css";
@@ -42,7 +42,7 @@ export default function RouteOrder() {
         queryFn: async () => {
             const dataSubcategoriesName = await subcategoriesApi.getSubcategoriesName("order");
             const dataProducts = await productsApi.getAllProductsUser("name", true, true);
-            const dataMenus = await menusApi.getMenus();
+            const dataMenus = await menusApi.getAllMenusUser("name", true);
 
             return {subcategoriesName: dataSubcategoriesName, products: dataProducts, menus: dataMenus};
         },
@@ -58,6 +58,13 @@ export default function RouteOrder() {
         setOrder((prevState) => ({
             ...prevState,
             products: [...prevState.products, product]
+        }));
+    };
+
+    const handleSubmitAddMenu = async (menu: OrderMenu) => {
+        setOrder((prevState) => ({
+            ...prevState,
+            menus: [...prevState.menus, menu]
         }));
     };
 
@@ -120,7 +127,7 @@ export default function RouteOrder() {
                             {isSelectedProducts ?
                                 <OrderProductsTable subcategoriesName={subcategoriesName} products={products}
                                                     handleSubmitAddProduct={handleSubmitAddProduct}/> :
-                                <OrderMenusTable/>}
+                                <OrderMenusTable menus={menus} products={products} addToast={addToast} handleSubmitAddMenu={handleSubmitAddMenu}/>}
                         </div>
                     </div>
                 </div>
