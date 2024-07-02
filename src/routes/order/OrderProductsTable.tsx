@@ -14,52 +14,41 @@ type OrderProductsTableProps = {
 
 export default function OrderProductsTable({subcategoriesName, products, handleSubmitAddProduct}: OrderProductsTableProps) {
     const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(-1);
-    const [subcategoryIdProducts, setSubcategoryIdProducts] = useState<Map<number, Product[]>>(new Map());
-    const [subcategoriesNameUsed, setSubcategoriesNameUsed] = useState<SubcategoryName[]>([]);
-    const [productsElements, setProductsElements] = useState<React.JSX.Element[]>([]);
+    const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+    const [subcategoriesWithProducts, setSubcategoriesWithProducts] = useState<SubcategoryName[]>([]);
 
     const handleSelectedSubcategoryIdChange = (subcategoryId: number) => {
         setSelectedSubcategoryId(subcategoryId);
     };
 
     useEffect(() => {
-        const newSubcategoryIdProducts = new Map<number, Product[]>();
-
-        for (const product of products) {
-            if (!newSubcategoryIdProducts.get(product.subcategory_id)) {
-                newSubcategoryIdProducts.set(product.subcategory_id, []);
-            }
-            newSubcategoryIdProducts.get(product.subcategory_id).push(product);
-        }
-
-        const newSubcategoriesNameUsed = subcategoriesName.filter(subcategoryName =>
-            newSubcategoryIdProducts.has(subcategoryName.id)
-        );
-
-        setSubcategoryIdProducts(newSubcategoryIdProducts);
-        setSubcategoriesNameUsed(newSubcategoriesNameUsed);
+        const subcategoriesSet = new Set(products.map(product => product.subcategory_id));
+        const validSubcategories = subcategoriesName.filter(subcategory => subcategoriesSet.has(subcategory.id));
+        setSubcategoriesWithProducts(validSubcategories);
     }, [subcategoriesName, products]);
 
     useEffect(() => {
-        if (selectedSubcategoryId !== -1 && subcategoryIdProducts.has(selectedSubcategoryId)) {
-            const newProductsElements = subcategoryIdProducts.get(selectedSubcategoryId).map((product) => (
-                <React.Fragment key={product.id}>
-                    <OrderProductsTableElement product={product} handleSubmitAddProduct={handleSubmitAddProduct}/>
-                </React.Fragment>
-            ));
-            setProductsElements(newProductsElements);
+        if (selectedSubcategoryId !== -1) {
+            const newFilteredProducts = products.filter(product => product.subcategory_id === selectedSubcategoryId);
+            setFilteredProducts(newFilteredProducts);
         } else {
-            setProductsElements([]);
+            setFilteredProducts([]);
         }
-    }, [handleSubmitAddProduct, selectedSubcategoryId, subcategoryIdProducts]);
+    }, [selectedSubcategoryId, products]);
 
     return (
         <>
-            <SelectProductSubcategoryId selectedSubcategoryId={selectedSubcategoryId}
-                                        subcategoriesName={subcategoriesNameUsed}
-                                        handleSelectedSubcategoryIdChange={handleSelectedSubcategoryIdChange}/>
+            <SelectProductSubcategoryId
+                selectedSubcategoryId={selectedSubcategoryId}
+                subcategoriesName={subcategoriesWithProducts}
+                handleSelectedSubcategoryIdChange={handleSelectedSubcategoryIdChange}
+            />
             <div className="overflow-y-scroll remove-scrollbar">
-                {productsElements}
+                {filteredProducts.map(product => (
+                    <React.Fragment key={product.id}>
+                        <OrderProductsTableElement product={product} handleSubmitAddProduct={handleSubmitAddProduct} />
+                    </React.Fragment>
+                ))}
             </div>
         </>
     );
