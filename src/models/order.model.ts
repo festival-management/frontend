@@ -14,6 +14,7 @@ export interface OrderMenuField {
 export interface OrderMenu {
     id: number;
     fields: OrderMenuField[];
+    price: number;
 }
 
 export interface Order {

@@ -73,6 +73,11 @@ export default function RouteOrder() {
         setOrder({ ...order, products: updatedProducts });
     };
 
+    const handleSubmitRemoveMenu = async (index: number) => {
+        const updatedMenus = order.menus.filter((_, i) => i !== index);
+        setOrder({ ...order, menus: updatedMenus });
+    };
+
     useEffect(() => {
         const handleResize = () => {
             setNavbarHeight(document.getElementById('navbar').offsetHeight);
@@ -136,7 +141,7 @@ export default function RouteOrder() {
                         <div className="card-body d-flex flex-column h-100">
                             <h6 className="pb-2">Details</h6>
                             <div className="overflow-y-scroll mb-3">
-                                <OrderDetails order={order} products={products} menus={menus} handleSubmitRemoveProduct={handleSubmitRemoveProduct}/>
+                                <OrderDetails order={order} products={products} menus={menus} handleSubmitRemoveProduct={handleSubmitRemoveProduct} handleSubmitRemoveMenu={handleSubmitRemoveMenu}/>
                             </div>
                             <button type="button" className="align-self-center btn btn-block btn-primary mt-auto">Submit
                             </button>

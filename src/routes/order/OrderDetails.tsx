@@ -1,52 +1,64 @@
 import React, {useEffect, useState} from "react";
 
 import {Menu} from "../../models/menus.model.ts";
-import {Order} from "../../models/order.model.ts";
 import {Product} from "../../models/products.model.ts";
+import {Order, OrderProduct} from "../../models/order.model.ts";
 
 type OrderDetailsProps = {
     order: Order;
     products: Product[];
     menus: Menu[];
     handleSubmitRemoveProduct: (index: number) => Promise<void>;
+    handleSubmitRemoveMenu: (index: number) => Promise<void>;
 }
 
-export default function OrderDetails({order, products, menus, handleSubmitRemoveProduct}: OrderDetailsProps) {
+const getProductDetails = (product: OrderProduct, products: Product[]) => {
+    const productDetails = products.find(p => p.id === product.id);
+    let variantName = "";
+    let ingredientNames = "";
+
+    if (product.variant !== undefined) {
+        const variant = productDetails?.variants!.find(v => v.id === product.variant);
+        if (variant) {
+            variantName = variant.name;
+        }
+    }
+
+    if (product.ingredients && product.ingredients.length > 0) {
+        const ingredients = product.ingredients.map(ingredientId => {
+            const ingredient = productDetails?.ingredients!.find(i => i.id === ingredientId);
+            return ingredient ? ingredient.name : "";
+        });
+        ingredientNames = `(${ingredients.join(', ')})`;
+    }
+
+    return {
+        name: productDetails?.name || "",
+        variantName,
+        ingredientNames,
+        price: product.price.toFixed(2),
+    };
+};
+
+export default function OrderDetails({order, products, menus, handleSubmitRemoveProduct, handleSubmitRemoveMenu}: OrderDetailsProps) {
     const [orderProducts, setOrderProducts] = useState<React.JSX.Element[]>([]);
+    const [orderMenus, setOrderMenus] = useState<React.JSX.Element[]>([]);
 
     useEffect(() => {
         const newOrderProducts = order.products.map((value, index) => {
-            const product = products.find(p => p.id === value.id);
-
-            let variantName = "";
-            let ingredientNames = "";
-
-            if (value.variant !== undefined) {
-                const variant = product.variants!.find(v => v.id === value.variant);
-                if (variant) {
-                    variantName = variant.name;
-                }
-            }
-
-            if (value.ingredients && value.ingredients.length > 0) {
-                const ingredients = value.ingredients.map(ingredientId => {
-                    const ingredient = product.ingredients!.find(i => i.id === ingredientId);
-                    return ingredient ? ingredient.name : "";
-                });
-                ingredientNames = `(${ingredients.join(', ')})`;
-            }
+            const { name, variantName, ingredientNames, price } = getProductDetails(value, products);
 
             return (
                 <div className="row mb-2" key={index}>
                     <div className="col-12 col-md-6 col-lg-7 d-flex align-items-center">
-                        <strong>{product?.name}</strong>
+                        <strong>{name}</strong>
                         {variantName && <span className="text-muted fst-italic ms-2">{variantName}</span>}
                         {ingredientNames && <span className="text-secondary ms-2">{ingredientNames}</span>}
                     </div>
                     <div className="col-6 col-md-3 col-lg-2 d-flex align-items-center justify-content-end">
-                        {value.price.toFixed(2)} €
+                        {price} €
                     </div>
-                    <div className="col-6 col-md-3 col-lg-3 text-end">
+                    <div className="col-6 col-md-3 col-lg-3 d-flex align-items-center justify-content-end">
                         <button
                             type="button"
                             className="btn btn-danger"
@@ -60,11 +72,61 @@ export default function OrderDetails({order, products, menus, handleSubmitRemove
         });
 
         setOrderProducts(newOrderProducts);
-    }, [handleSubmitRemoveProduct, order, products]);
+    }, [handleSubmitRemoveProduct, order.products, products]);
+
+    useEffect(() => {
+        setOrderMenus(order.menus.map((menu, menuIndex) => {
+            const menuDetails = menus.find(m => m.id === menu.id);
+
+            return (
+                <div key={menuIndex} className="row mb-2">
+                    <div className="col-12 col-md-6 col-lg-7 d-flex align-items-center">
+                        <div className="d-flex flex-column">
+                            <strong>{menuDetails.name}</strong>
+                            {menu.fields.map((field, fieldIndex) => (
+                                <div key={fieldIndex} className="ms-3">
+                                    {field.products.map((product, productIndex) => {
+                                        const {name, variantName, ingredientNames} = getProductDetails(product, products);
+
+                                        return (
+                                            <div key={productIndex} className="mb-2">
+                                                <div className="d-flex align-items-center justify-content-between">
+                                                    <strong>{name}</strong>
+                                                    <div>
+                                                        {variantName &&
+                                                            <span className="text-muted fst-italic ms-2">{variantName}</span>}
+                                                        {ingredientNames &&
+                                                            <span className="text-secondary ms-2">{ingredientNames}</span>}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="col-6 col-md-3 col-lg-2 d-flex align-items-center justify-content-end">
+                        {menu.price.toFixed(2)} €
+                    </div>
+                    <div className="col-6 col-md-3 col-lg-3 d-flex align-items-center justify-content-end">
+                        <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={() => handleSubmitRemoveMenu(menuIndex)}
+                        >
+                            <i className="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            );
+        }));
+    }, [order.menus, menus, products, handleSubmitRemoveMenu]);
 
     return (
         <div className="container-fluid">
             {orderProducts}
+            {orderMenus}
         </div>
     );
 }
