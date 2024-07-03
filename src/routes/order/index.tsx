@@ -140,7 +140,7 @@ export default function RouteOrder() {
                     <div className="card w-100">
                         <div className="card-body d-flex flex-column h-100">
                             <h6 className="pb-2">Details</h6>
-                            <div className="overflow-y-scroll mb-3">
+                            <div className="overflow-y-scroll mb-3 remove-scrollbar">
                                 <OrderDetails order={order} products={products} menus={menus} handleSubmitRemoveProduct={handleSubmitRemoveProduct} handleSubmitRemoveMenu={handleSubmitRemoveMenu}/>
                             </div>
                             <button type="button" className="align-self-center btn btn-block btn-primary mt-auto">Submit
