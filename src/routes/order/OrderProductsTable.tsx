@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 
 import {Product} from "../../models/products.model.ts";
 import {OrderProduct} from "../../models/order.model.ts";
+import {ToastType} from "../../models/toast-message.model.ts";
 import {SubcategoryName} from "../../models/subcategories.model.ts";
 import OrderProductsTableElement from "./OrderProductsTableElement.tsx";
 import SelectProductSubcategoryId from "../../components/select-product-subcategory-id.tsx";
@@ -9,10 +10,11 @@ import SelectProductSubcategoryId from "../../components/select-product-subcateg
 type OrderProductsTableProps = {
     subcategoriesName: SubcategoryName[];
     products: Product[];
+    addToast: (message: string, type: ToastType) => void;
     handleSubmitAddProduct: (product: OrderProduct) => Promise<void>;
 }
 
-export default function OrderProductsTable({subcategoriesName, products, handleSubmitAddProduct}: OrderProductsTableProps) {
+export default function OrderProductsTable({subcategoriesName, products, addToast, handleSubmitAddProduct}: OrderProductsTableProps) {
     const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(-1);
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
     const [subcategoriesWithProducts, setSubcategoriesWithProducts] = useState<SubcategoryName[]>([]);
@@ -46,7 +48,7 @@ export default function OrderProductsTable({subcategoriesName, products, handleS
             <div className="overflow-y-scroll remove-scrollbar">
                 {filteredProducts.map(product => (
                     <React.Fragment key={product.id}>
-                        <OrderProductsTableElement product={product} handleSubmitAddProduct={handleSubmitAddProduct} />
+                        <OrderProductsTableElement product={product} addToast={addToast} handleSubmitAddProduct={handleSubmitAddProduct} />
                     </React.Fragment>
                 ))}
             </div>

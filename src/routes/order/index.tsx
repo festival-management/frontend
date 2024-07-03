@@ -51,10 +51,6 @@ export default function RouteOrder() {
     });
 
     const handleSubmitAddProduct = async (product: OrderProduct) => {
-        if (product.variant === -1) {
-            return addToast("Variant not exist", "error");
-        }
-
         setOrder((prevState) => ({
             ...prevState,
             products: [...prevState.products, product]
@@ -130,7 +126,7 @@ export default function RouteOrder() {
                                 </button>
                             </div>
                             {isSelectedProducts ?
-                                <OrderProductsTable subcategoriesName={subcategoriesName} products={products}
+                                <OrderProductsTable subcategoriesName={subcategoriesName} products={products} addToast={addToast}
                                                     handleSubmitAddProduct={handleSubmitAddProduct}/> :
                                 <OrderMenusTable menus={menus} products={products} addToast={addToast} handleSubmitAddMenu={handleSubmitAddMenu}/>}
                         </div>

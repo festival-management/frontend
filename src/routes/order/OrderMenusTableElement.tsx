@@ -130,7 +130,17 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
         });
 
         if (!allRequiredFieldsSelected) {
-            addToast("Please select at least one product for all required fields", "error");
+            return addToast("Please select at least one product for all required fields", "error");
+        }
+
+        for (const field of selectedFields) {
+            for (const product of field.products) {
+                const productDetails = getProductDetails(product.id);
+
+                if (productDetails.variants && productDetails.variants.length > 0 && (!product.variant || product.variant === -1)) {
+                    return addToast("Select a variant", "error");
+                }
+            }
         }
 
         await handleSubmitAddMenu({

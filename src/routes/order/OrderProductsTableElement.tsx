@@ -2,15 +2,17 @@ import React, {useState} from "react";
 
 import {Product} from "../../models/products.model.ts";
 import {OrderProduct} from "../../models/order.model.ts";
+import {ToastType} from "../../models/toast-message.model.ts";
 import VariantSelector from "../../components/variant-selector.tsx";
 import IngredientsSelector from "../../components/ingredients-selector.tsx";
 
 type OrderProductsTableElementProps = {
     product: Product;
+    addToast: (message: string, type: ToastType) => void;
     handleSubmitAddProduct: (product: OrderProduct) => Promise<void>;
 }
 
-export default function OrderProductsTableElement({product, handleSubmitAddProduct}: OrderProductsTableElementProps) {
+export default function OrderProductsTableElement({product, addToast, handleSubmitAddProduct}: OrderProductsTableElementProps) {
     const [price, setPrice] = useState(product.price);
     const [selectedVariantId, setSelectedVariantId] = useState<number>(-1);
     const [selectedIngredientIds, setSelectedIngredientIds] = useState<number[]>([]);
@@ -38,9 +40,13 @@ export default function OrderProductsTableElement({product, handleSubmitAddProdu
     };
 
     const handleSubmit = async () => {
+        if (product.variants && product.variants.length > 0 && selectedVariantId === -1) {
+            return addToast("Variant not exist", "error");
+        }
+
         await handleSubmitAddProduct({
             id: product.id,
-            variant: product.variants && product.variants.length > 0 ? selectedVariantId : undefined, // TODO
+            variant: selectedVariantId,
             ingredients: product.ingredients && selectedIngredientIds.length > 0 ? selectedIngredientIds : undefined,
             price: price
         });
