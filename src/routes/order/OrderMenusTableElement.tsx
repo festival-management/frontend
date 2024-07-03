@@ -170,7 +170,7 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
                                                     onChange={(e) => handleProductSelection(field.id, fp, e.target.checked, field.max_sortable_elements)}
                                                 />
                                                 <label className="form-check-label" htmlFor={`product-${fp.id}`}>
-                                                    {productDetails.name} - {fp.price.toFixed(2)} €
+                                                    {productDetails.name}
                                                 </label>
                                             </div>
                                             <div className="ms-4">
