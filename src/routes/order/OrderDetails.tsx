@@ -2,10 +2,11 @@ import React, {useEffect, useState} from "react";
 
 import {Menu} from "../../models/menus.model.ts";
 import {Product} from "../../models/products.model.ts";
-import {Order, OrderProduct} from "../../models/order.model.ts";
+import {OrderMenu, OrderProduct} from "../../models/order.model.ts";
 
 type OrderDetailsProps = {
-    order: Order;
+    orderProducts: OrderProduct[];
+    orderMenus: OrderMenu[];
     products: Product[];
     menus: Menu[];
     handleSubmitRemoveProduct: (index: number) => Promise<void>;
@@ -40,12 +41,12 @@ const getProductDetails = (product: OrderProduct, products: Product[]) => {
     };
 };
 
-export default function OrderDetails({order, products, menus, handleSubmitRemoveProduct, handleSubmitRemoveMenu}: OrderDetailsProps) {
-    const [orderProducts, setOrderProducts] = useState<React.JSX.Element[]>([]);
-    const [orderMenus, setOrderMenus] = useState<React.JSX.Element[]>([]);
+export default function OrderDetails({orderProducts, orderMenus, products, menus, handleSubmitRemoveProduct, handleSubmitRemoveMenu}: OrderDetailsProps) {
+    const [orderProductsElem, setOrderProductsElem] = useState<React.JSX.Element[]>([]);
+    const [orderMenusElem, setOrderMenusElem] = useState<React.JSX.Element[]>([]);
 
     useEffect(() => {
-        const newOrderProducts = order.products.map((value, index) => {
+        const newOrderProducts = orderProducts.map((value, index) => {
             const { name, variantName, ingredientNames, price } = getProductDetails(value, products);
 
             return (
@@ -74,11 +75,11 @@ export default function OrderDetails({order, products, menus, handleSubmitRemove
             );
         });
 
-        setOrderProducts(newOrderProducts);
-    }, [handleSubmitRemoveProduct, order.products, products]);
+        setOrderProductsElem(newOrderProducts);
+    }, [handleSubmitRemoveProduct, orderProducts, products]);
 
     useEffect(() => {
-        setOrderMenus(order.menus.map((menu, menuIndex) => {
+        setOrderMenusElem(orderMenus.map((menu, menuIndex) => {
             const menuDetails = menus.find(m => m.id === menu.menu_id);
 
             return (
@@ -133,12 +134,12 @@ export default function OrderDetails({order, products, menus, handleSubmitRemove
                 </div>
             );
         }));
-    }, [order.menus, menus, products, handleSubmitRemoveMenu]);
+    }, [orderMenus, menus, products, handleSubmitRemoveMenu]);
 
     return (
         <div className="container-fluid">
-            {orderProducts}
-            {orderMenus}
+            {orderProductsElem}
+            {orderMenusElem}
         </div>
     );
 }

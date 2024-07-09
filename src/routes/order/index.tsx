@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useQuery} from "@tanstack/react-query";
 
+import OrderInfo from "./OrderInfo.tsx";
 import useMenusApi from "../../api/menus.ts";
 import OrderDetails from "./OrderDetails.tsx";
 import {Menu} from "../../models/menus.model.ts";
@@ -11,7 +12,7 @@ import OrderProductsTable from "./OrderProductsTable.tsx";
 import useSubcategoriesApi from "../../api/subcategories.ts";
 import ToastManager from "../../components/toast-manager.tsx";
 import {SubcategoryName} from "../../models/subcategories.model.ts";
-import {Order, OrderMenu, OrderProduct} from "../../models/order.model.ts";
+import {OrderMenu, OrderProduct} from "../../models/order.model.ts";
 import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
 
 import "./style.css";
@@ -23,7 +24,12 @@ export default function RouteOrder() {
     const [subcategoriesName, setSubcategoriesName] = useState<SubcategoryName[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [menus, setMenus] = useState<Menu[]>([]);
-    const [order, setOrder] = useState<Order>({products: [], menus: []});
+    const [orderCustomer, setOrderCustomer] = useState("");
+    const [orderGuests, setOrderGuests] = useState(1);
+    const [orderIsTakeAway, setOrderIsTakeAway] = useState(false);
+    const [orderTable, setOrderTable] = useState(1);
+    const [orderProducts, setOrderProducts] = useState<OrderProduct[]>([]);
+    const [orderMenus, setOrderMenus] = useState<OrderMenu[]>([]);
 
     const subcategoriesApi = useSubcategoriesApi();
     const productsApi = useProductsApi();
@@ -50,28 +56,38 @@ export default function RouteOrder() {
         staleTime: 0,
     });
 
+    const handleOrderCustomerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOrderCustomer(event.target.value);
+    };
+
+    const handleOrderGuestsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOrderGuests(parseInt(event.target.value));
+    };
+
+    const handleOrderIsTakeAwayChange = () => {
+        setOrderIsTakeAway((prevState) => !prevState);
+    };
+
+    const handleOrderTableChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOrderTable(parseInt(event.target.value));
+    };
+
     const handleSubmitAddProduct = async (product: OrderProduct) => {
-        setOrder((prevState) => ({
-            ...prevState,
-            products: [...prevState.products, product]
-        }));
+        setOrderProducts((prevState) => [...prevState, product]);
     };
 
     const handleSubmitAddMenu = async (menu: OrderMenu) => {
-        setOrder((prevState) => ({
-            ...prevState,
-            menus: [...prevState.menus, menu]
-        }));
+        setOrderMenus((prevState) => [...prevState, menu]);
     };
 
     const handleSubmitRemoveProduct = async (index: number) => {
-        const updatedProducts = order.products.filter((_, i) => i !== index);
-        setOrder({ ...order, products: updatedProducts });
+        const updatedProducts = orderProducts.filter((_, i) => i !== index);
+        setOrderProducts(updatedProducts);
     };
 
     const handleSubmitRemoveMenu = async (index: number) => {
-        const updatedMenus = order.menus.filter((_, i) => i !== index);
-        setOrder({ ...order, menus: updatedMenus });
+        const updatedMenus = orderMenus.filter((_, i) => i !== index);
+        setOrderMenus(updatedMenus);
     };
 
     useEffect(() => {
@@ -114,6 +130,12 @@ export default function RouteOrder() {
                 <div className="col-sm-8 d-flex h-100">
                     <div className="card w-100 h-100">
                         <div className="card-body d-flex flex-column h-100">
+                            <OrderInfo customer={orderCustomer} guests={orderGuests} isTakeAway={orderIsTakeAway}
+                                       table={orderTable}
+                                       handleCustomerChange={handleOrderCustomerChange}
+                                       handleGuestsChange={handleOrderGuestsChange}
+                                       handleIsTakeAwayChange={handleOrderIsTakeAwayChange}
+                                       handleTableChange={handleOrderTableChange}/>
                             <div className="btn-group d-flex flex-wrap mb-3" role="group"
                                  aria-label="Select menu or product">
                                 <button type="button"
@@ -137,7 +159,9 @@ export default function RouteOrder() {
                         <div className="card-body d-flex flex-column h-100">
                             <h6 className="pb-2">Details</h6>
                             <div className="overflow-y-scroll mb-3 remove-scrollbar">
-                                <OrderDetails order={order} products={products} menus={menus} handleSubmitRemoveProduct={handleSubmitRemoveProduct} handleSubmitRemoveMenu={handleSubmitRemoveMenu}/>
+                                <OrderDetails orderProducts={orderProducts} orderMenus={orderMenus} products={products}
+                                              menus={menus} handleSubmitRemoveProduct={handleSubmitRemoveProduct}
+                                              handleSubmitRemoveMenu={handleSubmitRemoveMenu}/>
                             </div>
                             <button type="button" className="align-self-center btn btn-block btn-primary mt-auto">Submit
                             </button>

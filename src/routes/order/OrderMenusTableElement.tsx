@@ -163,6 +163,23 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
         selectedFields.forEach(field => {
             field.products.forEach(product => {
                 basePrice += product.price;
+
+                const productDetails = getProductDetails(product.product_id);
+
+                if (product.variant_id && productDetails) {
+                    const selectedVariant = productDetails.variants!.find(v => v.id === product.variant_id);
+                    if (selectedVariant) {
+                        basePrice += selectedVariant.price;
+                    }
+                }
+
+                if (product.ingredients && productDetails) {
+                    const ingredientsPrice = product.ingredients.reduce((total, id) => {
+                        const ingredient = productDetails.ingredients!.find(ing => ing.id === id);
+                        return ingredient ? total + ingredient.price : total;
+                    }, 0);
+                    basePrice += ingredientsPrice;
+                }
             });
         });
 
