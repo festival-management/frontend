@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery} from "@tanstack/react-query";
 
 import OrderInfo from "./OrderInfo.tsx";
 import useMenusApi from "../../api/menus.ts";
 import OrderDetails from "./OrderDetails.tsx";
-import {Menu} from "../../models/menus.model.ts";
+import useOrdersApi from "../../api/orders.ts";
 import useProductsApi from "../../api/products.ts";
 import OrderMenusTable from "./OrderMenusTable.tsx";
 import {Product} from "../../models/products.model.ts";
@@ -13,6 +13,7 @@ import useSubcategoriesApi from "../../api/subcategories.ts";
 import ToastManager from "../../components/toast-manager.tsx";
 import {SubcategoryName} from "../../models/subcategories.model.ts";
 import {OrderMenu, OrderProduct} from "../../models/order.model.ts";
+import {CreateMenuResponse, Menu} from "../../models/menus.model.ts";
 import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
 
 import "./style.css";
@@ -34,6 +35,7 @@ export default function RouteOrder() {
     const subcategoriesApi = useSubcategoriesApi();
     const productsApi = useProductsApi();
     const menusApi = useMenusApi();
+    const ordersApi = useOrdersApi();
 
     const addToast = (message: string, type: ToastType) => {
         setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
@@ -54,6 +56,29 @@ export default function RouteOrder() {
         },
         enabled: true,
         staleTime: 0,
+    });
+    const addOrderMutation = useMutation({
+        mutationFn: (variables: {
+            customer: string,
+            guests: number | null,
+            isTakeAway: boolean,
+            table: number | null,
+            products: OrderProduct[],
+            menus: OrderMenu[]
+        }) => ordersApi.addOrder(variables.customer, variables.guests, variables.isTakeAway, variables.table, variables.products, variables.menus),
+        onSuccess: async (data: CreateMenuResponse) => {
+            if (data.error) {
+                return addToast(data.message, "error");
+            }
+
+            setOrderCustomer("");
+            setOrderGuests(1);
+            setOrderIsTakeAway(false);
+            setOrderTable(1);
+
+            setOrderProducts([]);
+            setOrderMenus([]);
+        }
     });
 
     const handleOrderCustomerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,6 +113,17 @@ export default function RouteOrder() {
     const handleSubmitRemoveMenu = async (index: number) => {
         const updatedMenus = orderMenus.filter((_, i) => i !== index);
         setOrderMenus(updatedMenus);
+    };
+
+    const handleSubmit = async () => {
+        addOrderMutation.mutate({
+            customer: orderCustomer,
+            guests: orderIsTakeAway ? null : orderGuests,
+            isTakeAway: orderIsTakeAway,
+            table: orderIsTakeAway ? null : orderTable,
+            products: orderProducts,
+            menus: orderMenus
+        });
     };
 
     useEffect(() => {
@@ -163,7 +199,8 @@ export default function RouteOrder() {
                                               menus={menus} handleSubmitRemoveProduct={handleSubmitRemoveProduct}
                                               handleSubmitRemoveMenu={handleSubmitRemoveMenu}/>
                             </div>
-                            <button type="button" className="align-self-center btn btn-block btn-primary mt-auto">Submit
+                            <button type="button" className="align-self-center btn btn-block btn-primary mt-auto"
+                                    onClick={handleSubmit}>Submit
                             </button>
                         </div>
                     </div>

@@ -6,6 +6,9 @@ const API = {
     get MENUS() {
         return new URL("/menus", this.BASE_URL);
     },
+    get ORDERS() {
+        return new URL("/orders", this.BASE_URL);
+    },
     get PRODUCTS() {
         return new URL("/products", this.BASE_URL);
     },
