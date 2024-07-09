@@ -1,10 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import {Product} from "../../models/products.model.ts";
 import {ToastType} from "../../models/toast-message.model.ts";
 import {Menu, MenuFieldProduct} from "../../models/menus.model.ts";
-import {OrderMenu, OrderMenuField} from "../../models/order.model.ts";
 import VariantSelector from "../../components/variant-selector.tsx";
+import {OrderMenu, OrderMenuField} from "../../models/order.model.ts";
+import QuantitySelector from "../../components/quantity-selector.tsx";
 import IngredientsSelector from "../../components/ingredients-selector.tsx";
 
 type OrderMenusTableElementProps = {
@@ -16,6 +17,7 @@ type OrderMenusTableElementProps = {
 
 export default function OrderMenusTableElement({menu, products, addToast, handleSubmitAddMenu}: OrderMenusTableElementProps) {
     const [price, setPrice] = useState(menu.price);
+    const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
     const [selectedFields, setSelectedFields] = useState<OrderMenuField[]>([]);
 
     const getProductDetails = (productId: number) => {
@@ -23,34 +25,34 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
     };
 
     const isProductSelected = (fieldId: number, productId: number) => {
-        const field = selectedFields.find(f => f.id === fieldId);
-        return field ? field.products.some(p => p.id === productId) : false;
+        const field = selectedFields.find(f => f.menu_field_id === fieldId);
+        return field ? field.products.some(p => p.product_id === productId) : false;
     };
 
     const getProductVariantSelected = (fieldId: number, productId: number) => {
-        const field = selectedFields.find(f => f.id === fieldId);
+        const field = selectedFields.find(f => f.menu_field_id === fieldId);
 
         if (!field) {
             return -1;
         }
 
-        const product = field.products.find(p => p.id === productId);
+        const product = field.products.find(p => p.product_id === productId);
 
         if (!product) {
             return -1;
         }
 
-        return product.variant || -1;
+        return product.variant_id || -1;
     };
 
     const getProductIngredientsSelected = (fieldId: number, productId: number) => {
-        const field = selectedFields.find(f => f.id === fieldId);
+        const field = selectedFields.find(f => f.menu_field_id === fieldId);
 
         if (!field) {
             return [];
         }
 
-        const product = field.products.find(p => p.id === productId);
+        const product = field.products.find(p => p.product_id === productId);
 
         if (!product) {
             return [];
@@ -59,30 +61,30 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
         return product.ingredients || [];
     };
 
+    const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedQuantity(parseInt(event.target.value));
+    };
+
     const handleProductSelection = (fieldId: number, product: MenuFieldProduct, isSelected: boolean, maxElements: number) => {
         const updatedFields = [...selectedFields];
-        const fieldIndex = updatedFields.findIndex(field => field.id === fieldId);
+        const fieldIndex = updatedFields.findIndex(field => field.menu_field_id === fieldId);
 
         if (fieldIndex >= 0) {
             const field = updatedFields[fieldIndex];
             if (isSelected) {
                 if (field.products.length < maxElements) {
-                    field.products.push({ id: product.product_id, price: product.price });
+                    field.products.push({product_id: product.product_id, price: product.price});
                 } else {
                     return addToast(`You can select up to ${maxElements} products for this field`, "error");
                 }
             } else {
-                field.products = field.products.filter(p => p.id !== product.product_id);
+                field.products = field.products.filter(p => p.product_id !== product.product_id);
             }
         } else if (isSelected) {
             updatedFields.push({
-                id: fieldId,
-                products: [{ id: product.product_id, price: product.price }]
+                menu_field_id: fieldId,
+                products: [{product_id: product.product_id, price: product.price}]
             });
-        }
-
-        if (product.price > 0) {
-            setPrice((prevState) => isSelected ? prevState + product.price : prevState - product.price);
         }
 
         setSelectedFields(updatedFields);
@@ -91,11 +93,11 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
     const handleVariantSelection = (fieldId: number, productId: number, variantId: number) => {
         const updatedFields = [...selectedFields];
 
-        const field = updatedFields.find(f => f.id === fieldId);
-        const product = field?.products.find(p => p.id === productId);
+        const field = updatedFields.find(f => f.menu_field_id === fieldId);
+        const product = field?.products.find(p => p.product_id === productId);
 
         if (product) {
-            product.variant = variantId;
+            product.variant_id = variantId;
         }
 
         setSelectedFields(updatedFields);
@@ -104,10 +106,10 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
     const handleIngredientSelection = (fieldId: number, productId: number, ingredientId: number, isSelected: boolean) => {
         const updatedFields = [...selectedFields];
 
-        const fieldIndex = updatedFields.findIndex(f => f.id === fieldId);
+        const fieldIndex = updatedFields.findIndex(f => f.menu_field_id === fieldId);
 
         if (fieldIndex !== -1) {
-            const productIndex = updatedFields[fieldIndex].products.findIndex(p => p.id === productId);
+            const productIndex = updatedFields[fieldIndex].products.findIndex(p => p.product_id === productId);
 
             if (productIndex !== -1) {
                 updatedFields[fieldIndex].products[productIndex] = {
@@ -125,7 +127,7 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
     const handleSubmit = async () => {
         const requiredFields = menu.fields!.filter(field => !field.is_optional) || [];
         const allRequiredFieldsSelected = requiredFields.every(field => {
-            const selectedField = selectedFields.find(f => f.id === field.id);
+            const selectedField = selectedFields.find(f => f.menu_field_id === field.id);
             return selectedField && selectedField.products.length > 0;
         });
 
@@ -135,23 +137,37 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
 
         for (const field of selectedFields) {
             for (const product of field.products) {
-                const productDetails = getProductDetails(product.id);
+                const productDetails = getProductDetails(product.product_id);
 
-                if (productDetails.variants && productDetails.variants.length > 0 && (!product.variant || product.variant === -1)) {
+                if (productDetails.variants && productDetails.variants.length > 0 && (!product.variant_id || product.variant_id === -1)) {
                     return addToast("Select a variant", "error");
                 }
             }
         }
 
         await handleSubmitAddMenu({
-            id: menu.id,
+            menu_id: menu.id,
             fields: selectedFields,
+            quantity: selectedQuantity,
             price: price
         });
 
         setPrice(menu.price);
+        setSelectedQuantity(1);
         setSelectedFields([]);
     };
+
+    useEffect(() => {
+        let basePrice = menu.price;
+
+        selectedFields.forEach(field => {
+            field.products.forEach(product => {
+                basePrice += product.price;
+            });
+        });
+
+        setPrice(basePrice * selectedQuantity);
+    }, [selectedQuantity, selectedFields, menu]);
 
     return (
         <div className="card mb-2">
@@ -161,6 +177,8 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
                     <h6 className="mb-0"><strong>Price:&nbsp;</strong>{price.toFixed(2)} €</h6>
                 </div>
                 <div className="mt-2">
+                    <QuantitySelector index={menu.id} quantity={selectedQuantity}
+                                      handleQuantityChange={handleQuantityChange}/>
                     {menu.fields && menu.fields.map(field => (
                         <div key={field.id} className="mb-3">
                             <h5>
@@ -187,6 +205,7 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
                                                 {productDetails.variants && productDetails.variants.length > 0 && (
                                                     <div className="mt-2">
                                                         <VariantSelector
+                                                            index={productDetails.id}
                                                             variants={productDetails.variants}
                                                             selectedVariantId={getProductVariantSelected(field.id, fp.product_id)}
                                                             onVariantChange={(variantId) => handleVariantSelection(field.id, fp.product_id, variantId)}

@@ -1,19 +1,21 @@
 
 export interface OrderProduct {
-    id: number;
-    variant?: number;
+    product_id: number;
+    variant_id?: number;
     ingredients?: number[];
+    quantity?: number;
     price: number;
 }
 
 export interface OrderMenuField {
-    id: number;
+    menu_field_id: number;
     products: OrderProduct[];
 }
 
 export interface OrderMenu {
-    id: number;
+    menu_id: number;
     fields: OrderMenuField[];
+    quantity: number;
     price: number;
 }
 

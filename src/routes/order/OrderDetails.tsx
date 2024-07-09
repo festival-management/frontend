@@ -13,12 +13,12 @@ type OrderDetailsProps = {
 }
 
 const getProductDetails = (product: OrderProduct, products: Product[]) => {
-    const productDetails = products.find(p => p.id === product.id);
+    const productDetails = products.find(p => p.id === product.product_id);
     let variantName = "";
     let ingredientNames = "";
 
-    if (product.variant !== undefined) {
-        const variant = productDetails?.variants!.find(v => v.id === product.variant);
+    if (product.variant_id !== undefined) {
+        const variant = productDetails?.variants!.find(v => v.id === product.variant_id);
         if (variant) {
             variantName = variant.name;
         }
@@ -55,10 +55,13 @@ export default function OrderDetails({order, products, menus, handleSubmitRemove
                         {variantName && <span className="text-muted fst-italic ms-2">{variantName}</span>}
                         {ingredientNames && <span className="text-secondary ms-2">{ingredientNames}</span>}
                     </div>
-                    <div className="col-6 col-md-3 col-lg-2 d-flex align-items-center justify-content-end">
+                    <div className="col-2 col-md-2 col-lg-1 d-flex align-items-center">
+                        {value.quantity}
+                    </div>
+                    <div className="col-5 col-md-2 col-lg-2 d-flex align-items-center justify-content-end">
                         {price} €
                     </div>
-                    <div className="col-6 col-md-3 col-lg-3 d-flex align-items-center justify-content-end">
+                    <div className="col-5 col-md-2 col-lg-2 d-flex align-items-center justify-content-end">
                         <button
                             type="button"
                             className="btn btn-danger"
@@ -76,7 +79,7 @@ export default function OrderDetails({order, products, menus, handleSubmitRemove
 
     useEffect(() => {
         setOrderMenus(order.menus.map((menu, menuIndex) => {
-            const menuDetails = menus.find(m => m.id === menu.id);
+            const menuDetails = menus.find(m => m.id === menu.menu_id);
 
             return (
                 <div key={menuIndex} className="row mb-2">
@@ -86,7 +89,11 @@ export default function OrderDetails({order, products, menus, handleSubmitRemove
                             {menu.fields.map((field, fieldIndex) => (
                                 <div key={fieldIndex} className="ms-3">
                                     {field.products.map((product, productIndex) => {
-                                        const {name, variantName, ingredientNames} = getProductDetails(product, products);
+                                        const {
+                                            name,
+                                            variantName,
+                                            ingredientNames
+                                        } = getProductDetails(product, products);
 
                                         return (
                                             <div key={productIndex} className="mb-2">
@@ -94,9 +101,11 @@ export default function OrderDetails({order, products, menus, handleSubmitRemove
                                                     <strong>{name}</strong>
                                                     <div>
                                                         {variantName &&
-                                                            <span className="text-muted fst-italic ms-2">{variantName}</span>}
+                                                            <span
+                                                                className="text-muted fst-italic ms-2">{variantName}</span>}
                                                         {ingredientNames &&
-                                                            <span className="text-secondary ms-2">{ingredientNames}</span>}
+                                                            <span
+                                                                className="text-secondary ms-2">{ingredientNames}</span>}
                                                     </div>
                                                 </div>
                                             </div>
@@ -106,10 +115,13 @@ export default function OrderDetails({order, products, menus, handleSubmitRemove
                             ))}
                         </div>
                     </div>
-                    <div className="col-6 col-md-3 col-lg-2 d-flex align-items-center justify-content-end">
+                    <div className="col-2 col-md-2 col-lg-1 d-flex align-items-center">
+                        {menu.quantity}
+                    </div>
+                    <div className="col-5 col-md-2 col-lg-2 d-flex align-items-center justify-content-end">
                         {menu.price.toFixed(2)} €
                     </div>
-                    <div className="col-6 col-md-3 col-lg-3 d-flex align-items-center justify-content-end">
+                    <div className="col-5 col-md-2 col-lg-2 d-flex align-items-center justify-content-end">
                         <button
                             type="button"
                             className="btn btn-danger"
