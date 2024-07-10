@@ -50,7 +50,7 @@ export default function OrderProductsTableElement({product, addToast, handleSubm
 
         setPrice(product.price);
         setSelectedQuantity(1);
-        setSelectedVariantId(null);
+        setSelectedVariantId(-1);
         setSelectedIngredientIds([]);
     };
 
