@@ -3,6 +3,8 @@ import {useMutation} from "@tanstack/react-query";
 
 import LoginForm from "./LoginForm";
 import useAuthApi from "../../api/auth";
+import {LoginResponse} from "../../models/auth.model.ts";
+import getErrorMessage from "../../errors/errorMessages.ts";
 import ToastManager from "../../components/toast-manager.tsx";
 import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
 
@@ -26,9 +28,9 @@ export default function RouteLogin() {
             username: string,
             password: string
         }) => authApi.login(variables.username, variables.password),
-        onSuccess: async (data) => {
+        onSuccess: async (data: LoginResponse) => {
             if (data.error) {
-                addToast(data.message, "error");
+                addToast(getErrorMessage(data.error.code), "error");
             }
         }
     });

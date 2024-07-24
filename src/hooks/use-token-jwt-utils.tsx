@@ -1,4 +1,4 @@
-import {jwtDecode} from "jwt-decode";
+import {InvalidTokenError, jwtDecode} from "jwt-decode";
 
 import useTokenJwt from "../store/token-jwt";
 import {Token} from "../models/token.model";
@@ -8,16 +8,42 @@ const useTokenJwtUtils = () => {
     const {tokenJwt, reset, setTokenJwt} = useTokenJwt();
 
     const isTokenExpired = () => {
-        if (tokenJwt === '')
-            return true;
+        const decodedToken = getDecodedToken();
 
-        return new Date((jwtDecode(tokenJwt) as Token).exp * 1000) < new Date();
+        if (!decodedToken) return true;
+
+        return new Date(decodedToken.exp * 1000) < new Date();
     }
     const isLoggedIn = () => !isTokenExpired();
-    const canUserAdminister = () => isLoggedIn() && (jwtDecode(tokenJwt) as Token).permissions["can_administer"];
-    const canUserOrder = () => isLoggedIn() && (jwtDecode(tokenJwt) as Token).permissions["can_order"];
-    const getToken = () => isLoggedIn() ? (jwtDecode(tokenJwt) as Token) : null;
+    const canUserAdminister = () => {
+        const decodedToken = getDecodedToken();
+
+        if (!decodedToken) return false;
+
+        return isLoggedIn() && decodedToken.permissions["can_administer"];
+    }
+    const canUserOrder = () => {
+        const decodedToken = getDecodedToken();
+
+        if (!decodedToken) return false;
+
+        return isLoggedIn() && decodedToken.permissions["can_order"];
+    }
+    const getToken = () => {
+        const decodedToken = getDecodedToken();
+        return isLoggedIn() ? decodedToken : null;
+    }
     const getTokenString = () => isLoggedIn() ? tokenJwt : null;
+
+    const getDecodedToken = () => {
+        try {
+            return jwtDecode(tokenJwt) as Token;
+        } catch (error) {
+            if (error instanceof InvalidTokenError) {
+                return null;
+            }
+        }
+    }
 
     return {
         isTokenExpired,
