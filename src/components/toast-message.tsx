@@ -1,15 +1,16 @@
 import React, {useEffect, useRef, useState} from "react";
 
 import {ToastType} from "../models/toast-message.model.ts";
+import getErrorMessage from "../errors/errorMessages.ts";
 
 type ToastMessageProps = {
     index: number;
-    message: string;
+    errorCode: number;
     type: ToastType;
     onClose: () => void;
 }
 
-export default function ToastMessage({index, message, type, onClose}: ToastMessageProps) {
+export default function ToastMessage({index, errorCode, type, onClose}: ToastMessageProps) {
     const [localVisible, setLocalVisible] = useState(false);
     const timerRef = useRef<number | null>(null);
 
@@ -35,7 +36,7 @@ export default function ToastMessage({index, message, type, onClose}: ToastMessa
                  aria-live="assertive" aria-atomic="true">
                 <div className="d-flex">
                     <div className="toast-body">
-                        {message}
+                        {getErrorMessage(errorCode)}
                     </div>
                     <button type="button" className="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
                             aria-label="Close" onClick={() => setLocalVisible(false)}></button>

@@ -4,7 +4,6 @@ import {useMutation} from "@tanstack/react-query";
 import LoginForm from "./LoginForm";
 import useAuthApi from "../../api/auth";
 import {LoginResponse} from "../../models/auth.model.ts";
-import getErrorMessage from "../../errors/errorMessages.ts";
 import ToastManager from "../../components/toast-manager.tsx";
 import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
 
@@ -15,8 +14,8 @@ export default function RouteLogin() {
 
     const authApi = useAuthApi();
 
-    const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    const addToast = (errorCode: number, type: ToastType) => {
+        setToasts((prevToasts) => [{ errorCode, type }, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -30,7 +29,7 @@ export default function RouteLogin() {
         }) => authApi.login(variables.username, variables.password),
         onSuccess: async (data: LoginResponse) => {
             if (data.error) {
-                addToast(getErrorMessage(data.code), "error");
+                addToast(data.code, "error");
             }
         }
     });

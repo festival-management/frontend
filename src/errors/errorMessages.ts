@@ -1,6 +1,6 @@
 import { ErrorCodes } from './ErrorCodes';
 
-const errorMessagesEn: { [key in ErrorCodes]: string } = {
+const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.INVALID_USERNAME_OR_PASSWORD]: "Invalid username or password.",
     [ErrorCodes.USERNAME_TOO_LONG]: "The username is too long.",
     [ErrorCodes.CANNOT_CREATE_ADMIN_USER]: "Cannot create admin user.",
@@ -34,7 +34,7 @@ const errorMessagesEn: { [key in ErrorCodes]: string } = {
     [ErrorCodes.REQUEST_VALIDATION_ERROR]: "Request validation error.",
 };
 
-export default function getErrorMessage(errorCode: ErrorCodes, language: string = 'en'): string {
+export default function getErrorMessage(errorCode: number, language: string = 'en'): string {
     switch (language) {
         case 'en':
         default:

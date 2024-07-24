@@ -19,8 +19,8 @@ export default function RouteRoles() {
 
     const rolesApi = useRolesApi();
 
-    const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    const addToast = (errorCode: number, type: ToastType) => {
+        setToasts((prevToasts) => [{ errorCode, type }, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -37,7 +37,7 @@ export default function RouteRoles() {
         mutationFn: rolesApi.addRole,
         onSuccess: async (data) => {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setNewRoleName("");
@@ -50,7 +50,7 @@ export default function RouteRoles() {
         mutationFn: rolesApi.deleteRole,
         onSuccess: async (data, variables) => {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setRoles((prevState) => prevState.filter((role) => role.id !== variables));
@@ -75,7 +75,7 @@ export default function RouteRoles() {
     useEffect(() => {
         if (data) {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setRoles(data.roles!);
