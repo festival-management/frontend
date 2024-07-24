@@ -7,6 +7,7 @@ import RoleEditNameForm from "./RoleEditNameForm";
 import {PaperSize} from "../../../enums/paper-size";
 import {Permission} from "../../../enums/permission";
 import BaseResponse from "../../../models/base.model";
+import {ErrorCodes} from "../../../errors/ErrorCodes.ts";
 import RoleEditPaperSizeForm from "./RoleEditPaperSizeForm";
 import RoleEditPermissionsForm from "./RoleEditPermissionsForm";
 import ToastManager from "../../../components/toast-manager.tsx";
@@ -27,8 +28,8 @@ export default function RouteRoleEdit() {
 
     const rolesApi = useRolesApi();
 
-    const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    const addToast = (errorCode: number, type: ToastType) => {
+        setToasts((prevToasts) => [{ errorCode, type }, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -43,10 +44,10 @@ export default function RouteRoleEdit() {
     });
     const onSuccessMutation = async (data: BaseResponse) => {
         if (data.error) {
-            return addToast(data.message, "error");
+            return addToast(data.code, "error");
         }
 
-        addToast("Done", "success");
+        addToast(ErrorCodes.SUCCESS, "success");
     };
     const updateRoleNameMutation = useMutation({
         mutationFn: (variables: { id: number, name: string }) => rolesApi.updateRoleName(variables.id, variables.name),
@@ -103,7 +104,7 @@ export default function RouteRoleEdit() {
     useEffect(() => {
         if (data) {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setRoleName(data.name!);

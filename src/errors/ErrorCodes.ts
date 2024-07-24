@@ -1,7 +1,7 @@
 
 
 export enum ErrorCodes {
-    SUCCESS,
+    SUCCESS = 0,
 
     // Auth
     // Login
@@ -10,10 +10,9 @@ export enum ErrorCodes {
 
     // Register
     CANNOT_CREATE_ADMIN_USER,
-    ROLE_NOT_FOUND,
     USER_ALREADY_EXISTS,
 
-    // Order
+    // Orders
     // Create
     INPUT_MENU_FIELD_PRODUCT_VARIANT,
     INPUT_PRODUCT_VARIANT,
@@ -36,12 +35,21 @@ export enum ErrorCodes {
     PRODUCT_VARIANT_NOT_EXIST,
     SET_GUESTS_NUMBER,
 
+    // Roles
+    ROLE_NOT_FOUND,
+    // Create
+    ROLE_ALREADY_EXISTS,
+
     // Token
     INVALID_JWT_TOKEN,
 
     // Permission
     NOT_ALLOWED,
     NOT_AUTHENTICATED,
+
+    // Validation
+    ONLY_ONE_STATISTICS_CAN_BE_TRUE,
+    PAPER_SIZE_REQUIRED_IF_CAN_ORDER,
 
     // Default
     GENERIC_HTTP_EXCEPTION,
