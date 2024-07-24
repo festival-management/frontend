@@ -30,7 +30,7 @@ export default function RouteLogin() {
         }) => authApi.login(variables.username, variables.password),
         onSuccess: async (data: LoginResponse) => {
             if (data.error) {
-                addToast(getErrorMessage(data.error.code), "error");
+                addToast(getErrorMessage(data.code), "error");
             }
         }
     });

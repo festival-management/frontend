@@ -1,9 +1,11 @@
 
 
 export enum ErrorCodes {
+    SUCCESS,
+
     // Auth
     // Login
-    INVALID_USERNAME_OR_PASSWORD = 1,
+    INVALID_USERNAME_OR_PASSWORD,
     USERNAME_TOO_LONG,
 
     // Register

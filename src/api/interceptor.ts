@@ -11,7 +11,7 @@ const errorInterceptor = (token: TokenJwtUtils, navigate: NavigateFunction) => {
 
             if (
                 error.response.status === 401 &&
-                responseData.error.code === ErrorCodes.INVALID_JWT_TOKEN.valueOf() &&
+                responseData.code === ErrorCodes.INVALID_JWT_TOKEN.valueOf() &&
                 token.isTokenExpired()
             ) {
                 token.reset();
