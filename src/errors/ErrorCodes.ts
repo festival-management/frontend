@@ -40,6 +40,9 @@ export enum ErrorCodes {
     // Create
     ROLE_ALREADY_EXISTS,
 
+    // Users
+    USER_NOT_FOUND,
+
     // Token
     INVALID_JWT_TOKEN,
 

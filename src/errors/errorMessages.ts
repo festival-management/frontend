@@ -28,6 +28,7 @@ const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.SET_GUESTS_NUMBER]: "Set guests number.",
     [ErrorCodes.ROLE_NOT_FOUND]: "Role not found.",
     [ErrorCodes.ROLE_ALREADY_EXISTS]: "Role already exists.",
+    [ErrorCodes.USER_NOT_FOUND]: "User not found..",
     [ErrorCodes.INVALID_JWT_TOKEN]: "Invalid JWT token.",
     [ErrorCodes.NOT_ALLOWED]: "Not allowed.",
     [ErrorCodes.NOT_AUTHENTICATED]: "Not authenticated.",

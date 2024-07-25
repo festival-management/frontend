@@ -8,6 +8,7 @@ import UserEditNameForm from "./UserEditNameForm";
 import {RoleName} from "../../../models/roles.model";
 import BaseResponse from "../../../models/base.model";
 import UserEditRoleIdForm from "./UserEditRoleIdForm";
+import {ErrorCodes} from "../../../errors/ErrorCodes.ts";
 import UserEditPasswordForm from "./UserEditPasswordForm";
 import ToastManager from "../../../components/toast-manager.tsx";
 import ToastMessage, {ToastType} from "../../../models/toast-message.model.ts";
@@ -24,8 +25,8 @@ export default function RouteUserEdit() {
     const usersApi = useUsersApi();
     const rolesApi = useRolesApi();
 
-    const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    const addToast = (errorCode: number, type: ToastType) => {
+        setToasts((prevToasts) => [{ errorCode, type }, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -45,10 +46,10 @@ export default function RouteUserEdit() {
     });
     const onSuccessMutation = async (data: BaseResponse) => {
         if (data.error) {
-            return addToast(data.message, "error");
+            return addToast(data.code, "error");
         }
 
-        addToast("Done", "success");
+        addToast(ErrorCodes.SUCCESS, "success");
     };
     const updateUserNameMutation = useMutation({
         mutationFn: (variables: { id: number, name: string }) => usersApi.updateUserName(variables.id, variables.name),
@@ -102,14 +103,14 @@ export default function RouteUserEdit() {
     useEffect(() => {
         if (data) {
             if (data.user.error) {
-                return addToast(data.user.message, "error");
+                return addToast(data.user.code, "error");
             }
 
             setUserName(data.user.username!);
             setUserRoleId(data.user.role_id!);
 
             if (data.rolesName.error) {
-                return addToast(data.rolesName.message, "error");
+                return addToast(data.rolesName.code, "error");
             }
 
             setRolesName(data.rolesName.roles!);

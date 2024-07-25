@@ -26,8 +26,8 @@ export default function RouteUsers() {
     const rolesApi = useRolesApi();
     const usersApi = useUsersApi();
 
-    const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    const addToast = (errorCode: number, type: ToastType) => {
+        setToasts((prevToasts) => [{ errorCode, type }, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -53,7 +53,7 @@ export default function RouteUsers() {
         }) => authApi.register(variables.username, variables.password, variables.roleId),
         onSuccess: async (data) => {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setNewUserName("");
@@ -68,7 +68,7 @@ export default function RouteUsers() {
         mutationFn: usersApi.deleteUser,
         onSuccess: async (data, variables) => {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setUsers((prevState) => prevState.filter((user) => user.id !== variables));
@@ -101,14 +101,14 @@ export default function RouteUsers() {
     useEffect(() => {
         if (data) {
             if (data.users.error) {
-                return addToast(data.users.message, "error");
+                return addToast(data.users.code, "error");
             }
 
             setUsers(data.users.users!);
             setTotalCount(data.users.total_count!);
 
             if (data.rolesName.error) {
-                return addToast(data.rolesName.message, "error");
+                return addToast(data.rolesName.code, "error");
             }
 
             setRolesName(data.rolesName.roles!);
