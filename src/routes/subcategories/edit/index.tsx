@@ -3,6 +3,7 @@ import {useParams} from "react-router-dom";
 import {useMutation, useQuery} from "@tanstack/react-query";
 
 import BaseResponse from "../../../models/base.model";
+import {ErrorCodes} from "../../../errors/ErrorCodes.ts";
 import useSubcategoriesApi from "../../../api/subcategories";
 import SubcategoryEditNameForm from "./SubcategoryEditNameForm";
 import ToastManager from "../../../components/toast-manager.tsx";
@@ -18,8 +19,8 @@ export default function RouteSubcategoryEdit() {
 
     const subcategoriesApi = useSubcategoriesApi();
 
-    const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    const addToast = (errorCode: number, type: ToastType) => {
+        setToasts((prevToasts) => [{ errorCode, type }, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -34,10 +35,10 @@ export default function RouteSubcategoryEdit() {
     });
     const onSuccessMutation = async (data: BaseResponse) => {
         if (data.error) {
-            return addToast(data.message, "error");
+            return addToast(data.code, "error");
         }
 
-        addToast("Done", "success");
+        addToast(ErrorCodes.SUCCESS, "success");
     };
     const updateSubcategoryNameMutation = useMutation({
         mutationFn: (variables: {
@@ -77,7 +78,7 @@ export default function RouteSubcategoryEdit() {
     useEffect(() => {
         if (data) {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setSubcategoryName(data.name!);

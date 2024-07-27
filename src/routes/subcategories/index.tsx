@@ -18,8 +18,8 @@ export default function RouteSubcategories() {
 
     const subcategoriesApi = useSubcategoriesApi();
 
-    const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    const addToast = (errorCode: number, type: ToastType) => {
+        setToasts((prevToasts) => [{ errorCode, type }, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -36,7 +36,7 @@ export default function RouteSubcategories() {
         mutationFn: subcategoriesApi.addSubcategory,
         onSuccess: async (data) => {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setNewSubcategoryName("");
@@ -49,7 +49,7 @@ export default function RouteSubcategories() {
         mutationFn: subcategoriesApi.deleteSubcategory,
         onSuccess: async (data, variables) => {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setSubcategories((prevState) => prevState.filter((subcategory) => subcategory.id !== variables));
@@ -74,7 +74,7 @@ export default function RouteSubcategories() {
     useEffect(() => {
         if (data) {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setSubcategories(data.subcategories!);

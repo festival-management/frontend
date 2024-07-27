@@ -40,6 +40,11 @@ export enum ErrorCodes {
     // Create
     ROLE_ALREADY_EXISTS,
 
+    // Subcategories
+    SUBCATEGORY_NOT_FOUND,
+    // Create
+    SUBCATEGORY_ALREADY_EXISTS,
+
     // Users
     USER_NOT_FOUND,
 
@@ -53,6 +58,7 @@ export enum ErrorCodes {
     // Validation
     ONLY_ONE_STATISTICS_CAN_BE_TRUE,
     PAPER_SIZE_REQUIRED_IF_CAN_ORDER,
+    UNKNOWN_ORDER_BY_PARAMETER,
 
     // Default
     GENERIC_HTTP_EXCEPTION,
