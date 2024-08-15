@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 import {User} from "../../models/users.model";
 
@@ -13,9 +14,9 @@ export default function UsersTable({data, handlerDeleteUser}: UsersTableProps) {
             <th scope="row">{v.id}</th>
             <td>{v.username}</td>
             <td>
-                <a className="btn btn-primary" href={`/users/edit/${v.id}`} role="button">
+                <Link className="btn btn-primary" to={`/users/edit/${v.id}`} role="button">
                     <i className="bi bi-pen"/>
-                </a>
+                </Link>
                 <button
                     type="button"
                     className="btn btn-danger"

@@ -1,5 +1,7 @@
-import {Product} from "../../models/products.model";
 import React from "react";
+import {Link} from "react-router-dom";
+
+import {Product} from "../../models/products.model";
 
 interface ProductsTableProps {
     data: Product[];
@@ -16,9 +18,9 @@ export default function ProductsTable({data, handlerDeleteProduct}: ProductsTabl
             <td>{v.price}</td>
             <td>{v.category}</td>
             <td>
-                <a className="btn btn-primary" href={`/products/edit/${v.id}`} role="button">
+                <Link className="btn btn-primary" to={`/products/edit/${v.id}`} role="button">
                     <i className="bi bi-pen"/>
-                </a>
+                </Link>
                 <button
                     type="button"
                     className="btn btn-danger"

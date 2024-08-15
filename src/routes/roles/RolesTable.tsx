@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 import {Role} from "../../models/roles.model";
 
@@ -13,9 +14,9 @@ export default function RolesTable({data, handlerDeleteRole}: RolesTableProps) {
             <th scope="row">{v.id}</th>
             <td>{v.name}</td>
             <td>
-                <a className="btn btn-primary" href={`/roles/edit/${v.id}`} role="button">
+                <Link className="btn btn-primary" to={`/roles/edit/${v.id}`} role="button">
                     <i className="bi bi-pen"/>
-                </a>
+                </Link>
                 <button
                     type="button"
                     className="btn btn-danger"
