@@ -27,8 +27,8 @@ export default function RouteProducts() {
     const subcategoriesApi = useSubcategoriesApi();
     const productsApi = useProductsApi();
 
-    const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    const addToast = (errorCode: number, type: ToastType) => {
+        setToasts((prevToasts) => [{ errorCode, type }, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -51,7 +51,7 @@ export default function RouteProducts() {
         }) => productsApi.addProduct(variables.name, variables.shortName, variables.price, variables.category, variables.subcategoryId),
         onSuccess: async (data) => {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setNewProductName("");
@@ -71,7 +71,7 @@ export default function RouteProducts() {
         }) => productsApi.getProducts(variables.page, variables.selectedSubcategoryId, variables.orderBy),
         onSuccess: async (data) => {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setProducts(data.products!);
@@ -82,7 +82,7 @@ export default function RouteProducts() {
         mutationFn: productsApi.deleteProduct,
         onSuccess: async (data, variables) => {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             if (products.length === 1)
@@ -136,7 +136,7 @@ export default function RouteProducts() {
     useEffect(() => {
         if (dataSubcategories) {
             if (dataSubcategories.error) {
-                return addToast(dataSubcategories.message, "error");
+                return addToast(dataSubcategories.code, "error");
             }
 
             setSubcategoriesName(dataSubcategories.subcategories!);

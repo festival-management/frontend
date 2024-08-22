@@ -11,6 +11,7 @@ import useProductsApi from "../../../api/products";
 import BaseResponse from "../../../models/base.model";
 import ProductEditNameForm from "./ProductEditNameForm";
 import {RoleName} from "../../../models/roles.model.ts";
+import {ErrorCodes} from "../../../errors/ErrorCodes.ts";
 import ProductEditPriceForm from "./ProductEditPriceForm";
 import useSubcategoriesApi from "../../../api/subcategories";
 import ProductEditPriorityForm from "./ProductEditPriorityForm";
@@ -52,8 +53,8 @@ export default function RouteProductEdit() {
     const subcategoriesApi = useSubcategoriesApi();
     const rolesApi = useRolesApi();
 
-    const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    const addToast = (errorCode: number, type: ToastType) => {
+        setToasts((prevToasts) => [{ errorCode, type }, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -74,10 +75,10 @@ export default function RouteProductEdit() {
     });
     const onSuccessMutation = async (data: BaseResponse) => {
         if (data.error) {
-            return addToast(data.message, "error");
+            return addToast(data.code, "error");
         }
 
-        addToast("Done", "success");
+        addToast(ErrorCodes.SUCCESS, "success");
     };
     const updateProductNameMutation = useMutation({
         mutationFn: (variables: { id: number, name: string }) => productsApi.updateProductName(variables.id, variables.name),
@@ -302,7 +303,7 @@ export default function RouteProductEdit() {
     useEffect(() => {
         if (data) {
             if (data.product.error) {
-                return addToast(data.product.message, "error");
+                return addToast(data.product.code, "error");
             }
 
             setProductName(data.product.name!);
@@ -317,13 +318,13 @@ export default function RouteProductEdit() {
             setProductVariants(data.product.variants || []);
 
             if (data.subcategoriesName.error) {
-                return addToast(data.subcategoriesName.message, "error");
+                return addToast(data.subcategoriesName.code, "error");
             }
 
             setSubcategoriesName(data.subcategoriesName.subcategories!);
 
             if (data.rolesName.error) {
-                return addToast(data.rolesName.message, "error");
+                return addToast(data.rolesName.code, "error");
             }
 
             setRolesName(data.rolesName.roles!);

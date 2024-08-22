@@ -35,7 +35,31 @@ export enum ErrorCodes {
     PRODUCT_VARIANT_NOT_EXIST,
     SET_GUESTS_NUMBER,
 
+    // Products
+    PRODUCT_ALREADY_EXISTS,
+    PRODUCT_NOT_FOUND,
+    PRODUCT_SHORT_NAME_ALREADY_EXISTS,
+    // Add product date
+    DATE_RANGE_INVALID,
+    DUPLICATE_DATE,
+    PRODUCT_DATE_ALREADY_EXISTS,
+    // Add product ingredient
+    PRODUCT_INGREDIENT_ALREADY_EXISTS,
+    // Add product role
+    PRODUCT_ROLE_ALREADY_EXISTS,
+    // Add product variant
+    PRODUCT_VARIANT_ALREADY_EXISTS,
+    // Delete product date
+    PRODUCT_DATE_NOT_FOUND,
+    // Delete product ingredient
+    PRODUCT_INGREDIENT_NOT_FOUND,
+    // Delete product role
+    PRODUCT_ROLE_NOT_FOUND,
+    // Delete product variant
+    PRODUCT_VARIANT_NOT_FOUND,
+
     // Roles
+    ROLE_CANNOT_ORDER,
     ROLE_NOT_FOUND,
     // Create
     ROLE_ALREADY_EXISTS,
@@ -52,6 +76,7 @@ export enum ErrorCodes {
     INVALID_JWT_TOKEN,
 
     // Permission
+    ADMIN_OPTION_REQUIRED,
     NOT_ALLOWED,
     NOT_AUTHENTICATED,
 
