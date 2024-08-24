@@ -12,6 +12,7 @@ import MenuEditNameForm from "./MenuEditNameForm.tsx";
 import MenuEditPriceForm from "./MenuEditPriceForm.tsx";
 import {RoleName} from "../../../models/roles.model.ts";
 import BaseResponse from "../../../models/base.model.ts";
+import {ErrorCodes} from "../../../errors/ErrorCodes.ts";
 import {ProductName} from "../../../models/products.model.ts";
 import MenuEditShortNameForm from "./MenuEditShortNameForm.tsx";
 import ToastManager from "../../../components/toast-manager.tsx";
@@ -44,8 +45,8 @@ export default function RouteMenuEdit() {
     const rolesApi = useRolesApi();
     const productsApi = useProductsApi();
 
-    const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{message, type}, ...prevToasts]);
+    const addToast = (errorCode: number, type: ToastType) => {
+        setToasts((prevToasts) => [{errorCode, type}, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -66,10 +67,10 @@ export default function RouteMenuEdit() {
     });
     const onSuccessMutation = async (data: BaseResponse) => {
         if (data.error) {
-            return addToast(data.message, "error");
+            return addToast(data.code, "error");
         }
 
-        addToast("Done", "success");
+        addToast(ErrorCodes.SUCCESS, "success");
     };
     const updateMenuNameMutation = useMutation({
         mutationFn: (variables: { id: number, name: string }) => menusApi.updateMenuName(variables.id, variables.name),
@@ -315,7 +316,7 @@ export default function RouteMenuEdit() {
     useEffect(() => {
         if (data) {
             if (data.menu.error) {
-                return addToast(data.menu.message, "error");
+                return addToast(data.menu.code, "error");
             }
 
             setMenuName(data.menu.name!);
@@ -326,13 +327,13 @@ export default function RouteMenuEdit() {
             setMenuRoles(data.menu.roles!);
 
             if (data.rolesName.error) {
-                return addToast(data.rolesName.message, "error");
+                return addToast(data.rolesName.code, "error");
             }
 
             setRolesName(data.rolesName.roles!);
 
             if (data.productsName.error) {
-                return addToast(data.productsName.message, "error");
+                return addToast(data.productsName.code, "error");
             }
 
             setProductsName(data.productsName.products!);

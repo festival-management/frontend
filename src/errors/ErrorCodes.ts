@@ -7,10 +7,30 @@ export enum ErrorCodes {
     // Login
     INVALID_USERNAME_OR_PASSWORD,
     USERNAME_TOO_LONG,
-
     // Register
     CANNOT_CREATE_ADMIN_USER,
     USER_ALREADY_EXISTS,
+
+    // Menus
+    MENU_ALREADY_EXISTS,
+    MENU_NOT_FOUND,
+    MENU_SHORT_NAME_ALREADY_EXISTS,
+    // Add menu date
+    MENU_DATE_ALREADY_EXISTS,
+    // Add menu field
+    MENU_FIELD_ALREADY_EXISTS,
+    // Add menu field product
+    MENU_FIELD_PRODUCT_ALREADY_EXISTS,
+    // Add menu role
+    MENU_ROLE_ALREADY_EXISTS,
+    // Delete menu date
+    MENU_DATE_NOT_FOUND,
+    // Delete menu field
+    MENU_FIELD_NOT_FOUND,
+    // Delete menu field product
+    MENU_FIELD_PRODUCT_NOT_FOUND,
+    // Delete menu role
+    MENU_ROLE_NOT_FOUND,
 
     // Orders
     // Create
@@ -40,8 +60,6 @@ export enum ErrorCodes {
     PRODUCT_NOT_FOUND,
     PRODUCT_SHORT_NAME_ALREADY_EXISTS,
     // Add product date
-    DATE_RANGE_INVALID,
-    DUPLICATE_DATE,
     PRODUCT_DATE_ALREADY_EXISTS,
     // Add product ingredient
     PRODUCT_INGREDIENT_ALREADY_EXISTS,
@@ -81,6 +99,8 @@ export enum ErrorCodes {
     NOT_AUTHENTICATED,
 
     // Validation
+    DATE_RANGE_INVALID,
+    DUPLICATE_DATE,
     ONLY_ONE_STATISTICS_CAN_BE_TRUE,
     PAPER_SIZE_REQUIRED_IF_CAN_ORDER,
     UNKNOWN_ORDER_BY_PARAMETER,

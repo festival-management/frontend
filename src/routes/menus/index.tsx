@@ -21,8 +21,8 @@ export default function RouteMenus() {
 
     const menusApi = useMenusApi();
 
-    const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{message, type}, ...prevToasts]);
+    const addToast = (errorCode: number, type: ToastType) => {
+        setToasts((prevToasts) => [{errorCode, type}, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -43,7 +43,7 @@ export default function RouteMenus() {
         }) => menusApi.addMenu(variables.name, variables.shortName, variables.price),
         onSuccess: async (data: CreateMenuResponse) => {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setNewMenuName("");
@@ -58,7 +58,7 @@ export default function RouteMenus() {
         mutationFn: menusApi.deleteMenu,
         onSuccess: async (data, variables) => {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setMenus((prevState) => prevState.filter((menu) => menu.id !== variables));
@@ -91,7 +91,7 @@ export default function RouteMenus() {
     useEffect(() => {
         if (data) {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setMenus(data.menus!);

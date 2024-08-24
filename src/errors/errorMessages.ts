@@ -6,10 +6,21 @@ const errorMessagesEn: { [key in number]: string } = {
     // Auth
     [ErrorCodes.INVALID_USERNAME_OR_PASSWORD]: "Invalid username or password.",
     [ErrorCodes.USERNAME_TOO_LONG]: "The username is too long.",
-
-    // Register
     [ErrorCodes.CANNOT_CREATE_ADMIN_USER]: "Cannot create admin user.",
     [ErrorCodes.USER_ALREADY_EXISTS]: "User already exists.",
+
+    // Menus
+    [ErrorCodes.MENU_ALREADY_EXISTS]: "Menu already exists.",
+    [ErrorCodes.MENU_NOT_FOUND]: "Menu not found.",
+    [ErrorCodes.MENU_SHORT_NAME_ALREADY_EXISTS]: "Menu short name already exists.",
+    [ErrorCodes.MENU_DATE_ALREADY_EXISTS]: "Menu date already exists.",
+    [ErrorCodes.MENU_FIELD_ALREADY_EXISTS]: "Menu field already exists.",
+    [ErrorCodes.MENU_FIELD_PRODUCT_ALREADY_EXISTS]: "Menu field product already exists.",
+    [ErrorCodes.MENU_ROLE_ALREADY_EXISTS]: "Menu role already exists.",
+    [ErrorCodes.MENU_DATE_NOT_FOUND]: "Menu date not found.",
+    [ErrorCodes.MENU_FIELD_NOT_FOUND]: "Menu field not found.",
+    [ErrorCodes.MENU_FIELD_PRODUCT_NOT_FOUND]: "Menu field product not found.",
+    [ErrorCodes.MENU_ROLE_NOT_FOUND]: "Menu role not found.",
 
     // Orders
     [ErrorCodes.INPUT_MENU_FIELD_PRODUCT_VARIANT]: "Input menu field product variant.",
@@ -37,8 +48,6 @@ const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.PRODUCT_ALREADY_EXISTS]: "Product already exists.",
     [ErrorCodes.PRODUCT_NOT_FOUND]: "Product not found.",
     [ErrorCodes.PRODUCT_SHORT_NAME_ALREADY_EXISTS]: "Product short name already exists.",
-    [ErrorCodes.DATE_RANGE_INVALID]: "Date range is invalid.",
-    [ErrorCodes.DUPLICATE_DATE]: "Duplicate date.",
     [ErrorCodes.PRODUCT_DATE_ALREADY_EXISTS]: "Product date already exists.",
     [ErrorCodes.PRODUCT_INGREDIENT_ALREADY_EXISTS]: "Product ingredient already exists.",
     [ErrorCodes.PRODUCT_ROLE_ALREADY_EXISTS]: "Product role already exists.",
@@ -69,6 +78,8 @@ const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.NOT_AUTHENTICATED]: "Not authenticated.",
 
     // Validation
+    [ErrorCodes.DATE_RANGE_INVALID]: "Date range is invalid.",
+    [ErrorCodes.DUPLICATE_DATE]: "Duplicate date.",
     [ErrorCodes.ONLY_ONE_STATISTICS_CAN_BE_TRUE]: "Only one of `can_statistics` and `can_priority_statistics` can be true.",
     [ErrorCodes.PAPER_SIZE_REQUIRED_IF_CAN_ORDER]: "If `can_order` is `True` then `paper_size` is required.",
     [ErrorCodes.UNKNOWN_ORDER_BY_PARAMETER]: "Unknown order_by parameter.",
