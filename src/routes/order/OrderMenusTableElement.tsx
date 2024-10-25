@@ -184,7 +184,7 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
         });
 
         setPrice(basePrice * selectedQuantity);
-    }, [selectedQuantity, selectedFields, menu]);
+    }, [selectedQuantity, selectedFields, menu, getProductDetails]);
 
     return (
         <div className="card mb-2">
