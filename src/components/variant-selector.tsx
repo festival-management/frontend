@@ -1,5 +1,3 @@
-import React from "react";
-
 import {ProductVariant} from "../models/products.model.ts";
 
 type VariantSelectorProps = {

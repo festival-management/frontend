@@ -86,7 +86,7 @@ export default function OrderDetails({orderProducts, orderMenus, products, menus
                 <div key={menuIndex} className="row mb-2">
                     <div className="col-12 col-md-6 col-lg-7 d-flex align-items-center">
                         <div className="d-flex flex-column">
-                            <strong>{menuDetails.name}</strong>
+                            <strong>{menuDetails!.name}</strong>
                             {menu.fields.map((field, fieldIndex) => (
                                 <div key={fieldIndex} className="ms-3">
                                     {field.products.map((product, productIndex) => {

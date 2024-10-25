@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 
+import {ErrorCodes} from "../../errors/ErrorCodes.ts";
 import {Product} from "../../models/products.model.ts";
 import {OrderProduct} from "../../models/order.model.ts";
 import {ToastType} from "../../models/toast-message.model.ts";
@@ -9,7 +10,7 @@ import IngredientsSelector from "../../components/ingredients-selector.tsx";
 
 type OrderProductsTableElementProps = {
     product: Product;
-    addToast: (message: string, type: ToastType) => void;
+    addToast: (errorCode: number, type: ToastType) => void;
     handleSubmitAddProduct: (product: OrderProduct) => Promise<void>;
 }
 
@@ -37,7 +38,8 @@ export default function OrderProductsTableElement({product, addToast, handleSubm
 
     const handleSubmit = async () => {
         if (product.variants && product.variants.length > 0 && selectedVariantId === -1) {
-            return addToast("Variant not exist", "error");
+            // TODO: update error code
+            return addToast(ErrorCodes.GENERIC_HTTP_EXCEPTION, "error");
         }
 
         await handleSubmitAddProduct({

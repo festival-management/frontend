@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useMutation, useQuery} from "@tanstack/react-query";
 
 import useUsersApi from "../../api/users";
+import {ErrorCodes} from "../../errors/ErrorCodes.ts";
 import ToastManager from "../../components/toast-manager.tsx";
 import ProfileEditPasswordForm from "./ProfileEditPasswordForm";
 import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
@@ -13,8 +14,8 @@ export default function RouteProfile() {
 
     const usersApi = useUsersApi();
 
-    const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    const addToast = (errorCode: number, type: ToastType) => {
+        setToasts((prevToasts) => [{ errorCode, type }, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -31,10 +32,10 @@ export default function RouteProfile() {
         mutationFn: usersApi.updateUserPassword,
         onSuccess: async (data) => {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
-            addToast("Done", "success");
+            addToast(ErrorCodes.SUCCESS, "success");
         }
     });
 
@@ -51,7 +52,7 @@ export default function RouteProfile() {
     useEffect(() => {
         if (data) {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setUserName(data.username!);

@@ -22,9 +22,9 @@ export default function RoleEditPermissionsForm({
                         <div className="form-check" key={permission}>
                             <input className="form-check-input" type="checkbox" id={permission}
                                    checked={selectedPermissions[permission]}
-                                   onChange={() => handlePermissionToggle(permission)}/>
+                                   onChange={() => handlePermissionToggle(permission as Permission)}/>
                             <label className="form-check-label" htmlFor={permission}>
-                                {permission.replaceAll("_", " ")}
+                                {permission.replace("_", " ")}
                             </label>
                         </div>
                     ))}

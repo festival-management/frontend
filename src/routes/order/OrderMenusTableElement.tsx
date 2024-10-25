@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 
+import {ErrorCodes} from "../../errors/ErrorCodes.ts";
 import {Product} from "../../models/products.model.ts";
 import {ToastType} from "../../models/toast-message.model.ts";
 import {Menu, MenuFieldProduct} from "../../models/menus.model.ts";
@@ -11,7 +12,7 @@ import IngredientsSelector from "../../components/ingredients-selector.tsx";
 type OrderMenusTableElementProps = {
     menu: Menu;
     products: Product[];
-    addToast: (message: string, type: ToastType) => void;
+    addToast: (errorCode: number, type: ToastType) => void;
     handleSubmitAddMenu: (menu: OrderMenu) => Promise<void>;
 }
 
@@ -75,7 +76,9 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
                 if (field.products.length < maxElements) {
                     field.products.push({product_id: product.product_id, price: product.price});
                 } else {
-                    return addToast(`You can select up to ${maxElements} products for this field`, "error");
+                    // `You can select up to ${maxElements} products for this field`
+                    // TODO: update error code
+                    return addToast(ErrorCodes.GENERIC_HTTP_EXCEPTION, "error");
                 }
             } else {
                 field.products = field.products.filter(p => p.product_id !== product.product_id);
@@ -132,15 +135,19 @@ export default function OrderMenusTableElement({menu, products, addToast, handle
         });
 
         if (!allRequiredFieldsSelected) {
-            return addToast("Please select at least one product for all required fields", "error");
+            // "Please select at least one product for all required fields"
+            // TODO: update error code
+            return addToast(ErrorCodes.GENERIC_HTTP_EXCEPTION, "error");
         }
 
         for (const field of selectedFields) {
             for (const product of field.products) {
                 const productDetails = getProductDetails(product.product_id);
 
-                if (productDetails.variants && productDetails.variants.length > 0 && (!product.variant_id || product.variant_id === -1)) {
-                    return addToast("Select a variant", "error");
+                if (productDetails!.variants && productDetails!.variants.length > 0 && (!product.variant_id || product.variant_id === -1)) {
+                    // "Select a variant"
+                    // TODO: update error code
+                    return addToast(ErrorCodes.GENERIC_HTTP_EXCEPTION, "error");
                 }
             }
         }

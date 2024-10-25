@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 import {ToastType} from "../models/toast-message.model.ts";
 import getErrorMessage from "../errors/errorMessages.ts";

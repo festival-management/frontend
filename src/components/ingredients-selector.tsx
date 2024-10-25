@@ -1,5 +1,3 @@
-import React from "react";
-
 import {ProductIngredient} from "../models/products.model.ts";
 
 type IngredientsSelectorProps = {

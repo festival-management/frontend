@@ -10,7 +10,7 @@ import SelectProductSubcategoryId from "../../components/select-product-subcateg
 type OrderProductsTableProps = {
     subcategoriesName: SubcategoryName[];
     products: Product[];
-    addToast: (message: string, type: ToastType) => void;
+    addToast: (errorCode: number, type: ToastType) => void;
     handleSubmitAddProduct: (product: OrderProduct) => Promise<void>;
 }
 

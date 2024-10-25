@@ -37,8 +37,8 @@ export default function RouteOrder() {
     const menusApi = useMenusApi();
     const ordersApi = useOrdersApi();
 
-    const addToast = (message: string, type: ToastType) => {
-        setToasts((prevToasts) => [{ message, type }, ...prevToasts]);
+    const addToast = (errorCode: number, type: ToastType) => {
+        setToasts((prevToasts) => [{errorCode, type}, ...prevToasts]);
     };
 
     const removeToast = (index: number) => {
@@ -68,7 +68,7 @@ export default function RouteOrder() {
         }) => ordersApi.addOrder(variables.customer, variables.guests, variables.isTakeAway, variables.table, variables.products, variables.menus),
         onSuccess: async (data: CreateMenuResponse) => {
             if (data.error) {
-                return addToast(data.message, "error");
+                return addToast(data.code, "error");
             }
 
             setOrderCustomer("");
@@ -128,7 +128,7 @@ export default function RouteOrder() {
 
     useEffect(() => {
         const handleResize = () => {
-            setNavbarHeight(document.getElementById('navbar').offsetHeight);
+            setNavbarHeight(document.getElementById('navbar')!.offsetHeight);
         };
 
         window.addEventListener('resize', handleResize);
@@ -137,19 +137,19 @@ export default function RouteOrder() {
 
         if (data) {
             if (data.subcategoriesName.error) {
-                return addToast(data.subcategoriesName.message, "error");
+                return addToast(data.subcategoriesName.code, "error");
             }
 
             setSubcategoriesName(data.subcategoriesName.subcategories!);
 
             if (data.products.error) {
-                return addToast(data.products.message, "error");
+                return addToast(data.products.code, "error");
             }
 
             setProducts(data.products.products!);
 
             if (data.menus.error) {
-                return addToast(data.menus.message, "error");
+                return addToast(data.menus.code, "error");
             }
 
             setMenus(data.menus.menus!);

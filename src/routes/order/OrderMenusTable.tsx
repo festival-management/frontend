@@ -9,7 +9,7 @@ import OrderMenusTableElement from "./OrderMenusTableElement.tsx";
 type OrderMenusTableProps = {
     menus: Menu[];
     products: Product[];
-    addToast: (message: string, type: ToastType) => void;
+    addToast: (errorCode: number, type: ToastType) => void;
     handleSubmitAddMenu: (menu: OrderMenu) => Promise<void>;
 }
 
