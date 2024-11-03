@@ -6,7 +6,7 @@ ENV VITE_DEFAULT_LIMIT_VALUE=$VITE_DEFAULT_LIMIT_VALUE
 WORKDIR /app
 COPY . .
 RUN yarn
-RUN yarn build
+RUN VITE_BASE_URL=$VITE_BASE_URL VITE_DEFAULT_LIMIT_VALUE=$VITE_DEFAULT_LIMIT_VALUE yarn build
 
 FROM nginx:stable-alpine
 COPY --from=build /app/dist /usr/share/nginx/html
