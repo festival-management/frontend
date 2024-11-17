@@ -221,7 +221,7 @@ export default function RouteProductEdit() {
     };
 
     const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setProductPrice(parseInt(event.target.value));
+        setProductPrice(parseFloat(event.target.value));
     };
 
     const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

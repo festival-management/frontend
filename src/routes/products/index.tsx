@@ -112,7 +112,7 @@ export default function RouteProducts() {
     };
 
     const handleNewProductPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewProductPrice(parseInt(event.target.value));
+        setNewProductPrice(parseFloat(event.target.value));
     };
 
     const handleNewProductCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

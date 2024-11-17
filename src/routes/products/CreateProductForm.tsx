@@ -57,6 +57,7 @@ export default function CreateProductForm({
                                 <div className="mb-3">
                                     <label htmlFor="newProductName" className="col-form-label">Price:</label>
                                     <input type="number" id="newProductPrice" className="form-control" value={price}
+                                           step='0.01'
                                            onChange={handlePriceChange}
                                            required/>
                                 </div>

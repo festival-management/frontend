@@ -18,6 +18,7 @@ export default function ProductEditPriceForm({price, handlePriceChange, handleSu
                         id="formInputPrice"
                         placeholder="Input the price of product"
                         min="0"
+                        step="0.01"
                         value={price}
                         onChange={handlePriceChange}
                         required
