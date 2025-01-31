@@ -11,10 +11,11 @@ import {
     CreateProductResponse,
     GetProductResponse,
     GetProductsNameResponse,
-    GetProductsResponse
+    GetProductsResponse,
+    UseProductsApiInterface
 } from "../models/products.model";
 
-const useProductsApi = () => {
+const useProductsApi = (): UseProductsApiInterface => {
     const {http} = useHttpClient(API.PRODUCTS.toString());
 
     const addProduct = async (name: string, shortName: string, price: number, category: string, subcategoryId: number) => {

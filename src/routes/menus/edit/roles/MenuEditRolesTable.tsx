@@ -1,22 +1,32 @@
 import React from "react";
 
 import {RoleName} from "../../../../models/roles.model.ts";
-import {MenuRole} from "../../../../models/menus.model.ts";
+import {useMenuEditContext} from "../../../../contexts/MenuEditContext.tsx";
+import useMenuMutations from "../../../../hooks/mutations/use-menu-mutations.ts";
 
 type MenuEditRolesTableProps = {
-    data: MenuRole[];
     rolesName: RoleName[];
-    handleDelete: (menuRoleId: number) => Promise<void>;
 }
 
-export default function MenuEditRolesTable({data, rolesName, handleDelete}: MenuEditRolesTableProps) {
+export default function MenuEditRolesTable({rolesName}: MenuEditRolesTableProps) {
+    const {menusApi, menuId, menuRoles, setMenuRoles} = useMenuEditContext();
+    const {deleteMenuRoleMutation} = useMenuMutations(menusApi);
+
     const rolesIdName: Map<number, string> = new Map();
 
     rolesName.map((roleName) => {
         rolesIdName.set(roleName.id, roleName.name);
     });
 
-    const menuRoles: React.JSX.Element[] = data.map(v => (
+    const handleDeleteMenuRole = async (menuRoleId: number) => {
+        const response = await deleteMenuRoleMutation.mutateAsync({id: menuId, menuRoleId});
+
+        if (!response.error) {
+            setMenuRoles((prevState) => prevState.filter((menuRole) => menuRole.id !== menuRoleId));
+        }
+    };
+
+    const tableBody: React.JSX.Element[] = menuRoles.map(v => (
         <tr key={v.id}>
             <th scope="row">{v.id}</th>
             <td>{rolesIdName.get(v.role_id)}</td>
@@ -24,7 +34,7 @@ export default function MenuEditRolesTable({data, rolesName, handleDelete}: Menu
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => handleDelete(v.id)}
+                    onClick={() => handleDeleteMenuRole(v.id)}
                 >
                     <i className="bi bi-trash"/>
                 </button>
@@ -43,7 +53,7 @@ export default function MenuEditRolesTable({data, rolesName, handleDelete}: Menu
                 </tr>
                 </thead>
                 <tbody>
-                {menuRoles}
+                {tableBody}
                 </tbody>
             </table>
         </>

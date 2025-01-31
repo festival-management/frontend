@@ -10,10 +10,11 @@ import {
     AddMenuRoleResponse,
     CreateMenuResponse,
     GetMenuResponse,
-    GetMenusResponse
+    GetMenusResponse,
+    UseMenusApiInterface
 } from "../models/menus.model.ts";
 
-const useMenusApi = () => {
+const useMenusApi = (): UseMenusApiInterface => {
     const {http} = useHttpClient(API.MENUS.toString());
 
     const addMenu = async (name: string, shortName: string, price: number) => {
@@ -34,10 +35,10 @@ const useMenusApi = () => {
         return response.data;
     };
 
-    const addMenuField = async (id: number, name: string, maxSortableElements: number) => {
+    const addMenuField = async (id: number, name: string, maxSortableElements: number, additionalCost: number) => {
         const response: AxiosResponse<AddMenuFieldResponse> = await http.post(
             `/${id}/field`,
-            {name, max_sortable_elements: maxSortableElements}
+            {name, max_sortable_elements: maxSortableElements, additional_cost: additionalCost}
         );
 
         return response.data;
@@ -135,6 +136,15 @@ const useMenusApi = () => {
         return response.data;
     };
 
+    const updateMenuFieldName = async (id: number, menuFieldId: number, name: string) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/field/${menuFieldId}/name`,
+            {name}
+        );
+
+        return response.data;
+    };
+
     const updateMenuFieldIsOptional = async (id: number, menuFieldId: number, isOptional: boolean) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/field/${menuFieldId}/is_optional`,
@@ -153,10 +163,10 @@ const useMenusApi = () => {
         return response.data;
     };
 
-    const updateMenuFieldName = async (id: number, menuFieldId: number, name: string) => {
+    const updateMenuFieldAdditionalCost = async (id: number, menuFieldId: number, additionalCost: number) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
-            `/${id}/field/${menuFieldId}/name`,
-            {name}
+            `/${id}/field/${menuFieldId}/additional_cost`,
+            {additional_cost: additionalCost}
         );
 
         return response.data;
@@ -203,9 +213,10 @@ const useMenusApi = () => {
         getMenuById,
         getMenus,
         getAllMenusUser,
+        updateMenuFieldName,
         updateMenuFieldIsOptional,
         updateMenuFieldMaxSortableElements,
-        updateMenuFieldName,
+        updateMenuFieldAdditionalCost,
         updateMenuName,
         updateMenuPrice,
         updateMenuShortName

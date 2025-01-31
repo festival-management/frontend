@@ -4,9 +4,15 @@ import API from "../env/api";
 import useHttpClient from "./utils";
 import {Permission} from "../enums/permission";
 import BaseResponse from "../models/base.model";
-import {CreateRoleResponse, GetRoleResponse, GetRolesNameResponse, GetRolesResponse} from "../models/roles.model";
+import {
+    CreateRoleResponse,
+    GetRoleResponse,
+    GetRolesNameResponse,
+    GetRolesResponse,
+    UseRolesApiInterface
+} from "../models/roles.model";
 
-const useRolesApi = () => {
+const useRolesApi = (): UseRolesApiInterface => {
     const {http} = useHttpClient(API.ROLES.toString());
 
     const addRole = async (name: string) => {

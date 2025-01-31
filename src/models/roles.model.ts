@@ -30,3 +30,15 @@ export interface GetRolesNameResponse extends BaseResponse {
     total_count?: number;
     roles?: RoleName[];
 }
+
+// Interface for the useRolesApi hook
+export interface UseRolesApiInterface {
+    addRole(name: string): Promise<CreateRoleResponse>;
+    deleteRole(id: number): Promise<BaseResponse>;
+    getRoles(page: number): Promise<GetRolesResponse>;
+    getRolesById(id: number): Promise<GetRoleResponse>;
+    getRolesName(can_order?: boolean): Promise<GetRolesNameResponse>;
+    updateRoleName(id: number, name: string): Promise<BaseResponse>;
+    updateRolePermissions(id: number, permissions: { [permission in Permission]: boolean }): Promise<BaseResponse>;
+    updateRolePaperSize(id: number, paperSize: string): Promise<BaseResponse>;
+}

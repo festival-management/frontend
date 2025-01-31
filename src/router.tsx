@@ -14,12 +14,14 @@ import RouteUserEdit from "./routes/users/edit";
 import RouteProductEdit from "./routes/products/edit";
 import RouteSubcategories from "./routes/subcategories";
 import RouteSubcategoryEdit from "./routes/subcategories/edit";
+import {ToastProvider} from "./contexts/ToastContext.tsx";
+import {MenuEditProvider} from "./contexts/MenuEditContext.tsx";
 
 const routers = createBrowserRouter(
     [
         {
             path: "/",
-            element: <RouteHome/>,
+            element: <ToastProvider><RouteHome/></ToastProvider>,
             children: [
                 {
                     path: "/login",
@@ -31,7 +33,7 @@ const routers = createBrowserRouter(
                 },
                 {
                     path: "/menus/edit/:id",
-                    element: <RouteMenuEdit/>
+                    element: <MenuEditProvider><RouteMenuEdit/></MenuEditProvider>
                 },
                 {
                     path: "/order",

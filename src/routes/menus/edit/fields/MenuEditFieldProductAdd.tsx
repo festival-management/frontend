@@ -1,20 +1,21 @@
 import React, {useState} from "react";
 
+import {MenuField} from "../../../../models/menus.model.ts";
 import {ProductName} from "../../../../models/products.model.ts";
+import {useMenuEditContext} from "../../../../contexts/MenuEditContext.tsx";
+import useMenuMutations from "../../../../hooks/mutations/use-menu-mutations.ts";
 
 type MenuEditFieldProductAddProps = {
-    menuFieldId: number;
+    menuField: MenuField;
     productsName: ProductName[];
-    handleSubmit: (menuFieldId: number, price: number, productId: number) => void;
 }
 
-export default function MenuEditFieldProductAdd({
-                                                    menuFieldId,
-                                                    productsName,
-                                                    handleSubmit
-                                                }: MenuEditFieldProductAddProps) {
+export default function MenuEditFieldProductAdd({menuField, productsName}: MenuEditFieldProductAddProps) {
     const [newMenuFieldProductId, setNewMenuFieldProductId] = useState(-1);
     const [newMenuFieldPrice, setNewMenuFieldPrice] = useState(0);
+
+    const {menusApi, menuId, setMenuFields} = useMenuEditContext();
+    const {addMenuFieldProductMutation} = useMenuMutations(menusApi);
 
     const handleNewMenuFieldProductIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setNewMenuFieldProductId(parseInt(event.target.value));
@@ -27,7 +28,19 @@ export default function MenuEditFieldProductAdd({
     const handleSubmitAddFieldProduct = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        await handleSubmit(menuFieldId, newMenuFieldPrice, newMenuFieldProductId);
+        const response = await addMenuFieldProductMutation.mutateAsync({
+            id: menuId,
+            menuFieldId: menuField.id,
+            price: newMenuFieldPrice,
+            productId: newMenuFieldProductId
+        });
+
+        if (!response.error) {
+            setMenuFields((prevState) => prevState.map((menuField) => menuField.id === menuField.id ? {
+                ...menuField,
+                products: [...(menuField.products || []), response.field_product!]
+            } : menuField));
+        }
 
         setNewMenuFieldProductId(-1);
         setNewMenuFieldPrice(0);

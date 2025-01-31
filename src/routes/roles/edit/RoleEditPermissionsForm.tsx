@@ -19,7 +19,7 @@ export default function RoleEditPermissionsForm({
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     {Object.values(Permission).map(permission => (
-                        <div className="form-check" key={permission}>
+                        <div className="form-check form-switch" key={permission}>
                             <input className="form-check-input" type="checkbox" id={permission}
                                    checked={selectedPermissions[permission]}
                                    onChange={() => handlePermissionToggle(permission as Permission)}/>

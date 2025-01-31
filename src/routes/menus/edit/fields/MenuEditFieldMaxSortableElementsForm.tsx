@@ -1,30 +1,35 @@
 import React, {useState} from "react";
 
+import {MenuField} from "../../../../models/menus.model.ts";
+import {useMenuEditContext} from "../../../../contexts/MenuEditContext.tsx";
+import useMenuMutations from "../../../../hooks/mutations/use-menu-mutations.ts";
+
 type MenuEditFieldMaxSortableElementsFormProps = {
-    menuFieldId: number;
-    menuFieldMaxSortableElements: number;
-    handleChangeFieldMaxSortableElements: (menuFieldId: number, maxSortableElements: number) => Promise<void>;
+    menuField: MenuField;
 }
 
-export default function MenuEditFieldMaxSortableElementsForm({
-                                                                 menuFieldId,
-                                                                 menuFieldMaxSortableElements,
-                                                                 handleChangeFieldMaxSortableElements
-                                                             }: MenuEditFieldMaxSortableElementsFormProps) {
-    const [newMenuFieldMaxSortableElements, setNewMenuFieldMaxSortableElements] = useState(menuFieldMaxSortableElements);
+export default function MenuEditFieldMaxSortableElementsForm({menuField}: MenuEditFieldMaxSortableElementsFormProps) {
+    const [newMenuFieldMaxSortableElements, setNewMenuFieldMaxSortableElements] = useState(menuField.max_sortable_elements);
 
-    const handleMenuFieldMaxSortableElementsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {menusApi, menuId} = useMenuEditContext();
+    const {updateMenuFieldMaxSortableElementsMutation} = useMenuMutations(menusApi);
+
+    const handleNewMenuFieldMaxSortableElementsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewMenuFieldMaxSortableElements(parseInt(event.target.value));
     };
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmitChangeFieldMaxSortableElements = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        await handleChangeFieldMaxSortableElements(menuFieldId, newMenuFieldMaxSortableElements);
+        updateMenuFieldMaxSortableElementsMutation.mutate({
+            id: menuId,
+            menuFieldId: menuField.id,
+            maxSortableElements: newMenuFieldMaxSortableElements
+        });
     };
 
     return (
-        <form className="mb-3" onSubmit={handleSubmit}>
+        <form className="mb-3" onSubmit={handleSubmitChangeFieldMaxSortableElements}>
             <div className="input-group mb-3">
                 <span className="input-group-text">Max sortable elements</span>
                 <input
@@ -33,7 +38,7 @@ export default function MenuEditFieldMaxSortableElementsForm({
                     id="menuFieldMaxSortableElements"
                     placeholder="Input the max sortable elements of menu field"
                     value={newMenuFieldMaxSortableElements}
-                    onChange={handleMenuFieldMaxSortableElementsChange}
+                    onChange={handleNewMenuFieldMaxSortableElementsChange}
                     required
                 />
                 <button className="btn btn-success">Change</button>

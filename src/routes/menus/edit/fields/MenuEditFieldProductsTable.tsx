@@ -1,28 +1,41 @@
 import React from "react";
 
+import {MenuField} from "../../../../models/menus.model.ts";
 import {ProductName} from "../../../../models/products.model.ts";
-import {MenuFieldProduct} from "../../../../models/menus.model.ts";
+import {useMenuEditContext} from "../../../../contexts/MenuEditContext.tsx";
+import useMenuMutations from "../../../../hooks/mutations/use-menu-mutations.ts";
 
 type MenuEditFieldProductsTableProps = {
-    menuFieldId: number;
+    menuField: MenuField;
     productsName: ProductName[];
-    data: MenuFieldProduct[];
-    handleDeleteMenuFieldProduct: (menuFieldId: number, menuFieldProductId: number) => void;
 }
 
-export default function MenuEditFieldProductsTable({
-                                                       menuFieldId,
-                                                       productsName,
-                                                       data,
-                                                       handleDeleteMenuFieldProduct
-                                                   }: MenuEditFieldProductsTableProps) {
+export default function MenuEditFieldProductsTable({menuField, productsName}: MenuEditFieldProductsTableProps) {
+    const {menusApi, menuId, setMenuFields} = useMenuEditContext();
+    const {deleteMenuFieldProductMutation} = useMenuMutations(menusApi);
+
     const productsIdName: Map<number, string> = new Map();
 
     productsName.map((productName) => {
         productsIdName.set(productName.id, productName.name);
     });
 
-    const menuFields: React.JSX.Element[] = data.map(v => (
+    const handleDeleteMenuFieldProduct = async (menuFieldProductId: number) => {
+        const response = await deleteMenuFieldProductMutation.mutateAsync({
+            id: menuId,
+            menuFieldId: menuField.id,
+            menuFieldProductId
+        });
+
+        if (!response.error) {
+            setMenuFields((prevState) => prevState.map((menuField) => menuField.id === menuField.id ? {
+                ...menuField,
+                products: (menuField.products || []).filter((menuFieldProduct) => menuFieldProduct.id !== menuFieldProductId)
+            } : menuField));
+        }
+    };
+
+    const menuFields: React.JSX.Element[] = (menuField.products || []).map(v => (
         <tr key={v.id}>
             <th scope="row">{v.id}</th>
             <td>{productsIdName.get(v.product_id)}</td>
@@ -31,7 +44,7 @@ export default function MenuEditFieldProductsTable({
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => handleDeleteMenuFieldProduct(menuFieldId, v.id)}
+                    onClick={() => handleDeleteMenuFieldProduct(v.id)}
                 >
                     <i className="bi bi-trash"/>
                 </button>

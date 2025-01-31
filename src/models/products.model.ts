@@ -76,3 +76,27 @@ export interface GetProductsNameResponse extends BaseResponse {
     total_count?: number;
     products?: ProductName[];
 }
+
+// Interface for the useProductsApi hook
+export interface UseProductsApiInterface {
+    addProduct(name: string, shortName: string, price: number, category: string, subcategoryId: number): Promise<CreateProductResponse>;
+    addProductDate(id: number, startDate: string, endDate: string): Promise<AddProductDateResponse>;
+    addProductIngredient(id: number, name: string, price: number): Promise<AddProductIngredientResponse>;
+    addProductRole(id: number, roleId: number): Promise<AddProductRoleResponse>;
+    addProductVariant(id: number, name: string, price: number): Promise<AddProductVariantResponse>;
+    deleteProduct(id: number): Promise<BaseResponse>;
+    deleteProductDate(id: number, productDateId: number): Promise<BaseResponse>;
+    deleteProductIngredient(id: number, productIngredientId: number): Promise<BaseResponse>;
+    deleteProductRole(id: number, productRoleId: number): Promise<BaseResponse>;
+    deleteProductVariant(id: number, productVariantId: number): Promise<BaseResponse>;
+    getProductById(id: number, includeDates?: boolean, includeIngredients?: boolean, includeRoles?: boolean, includeVariants?: boolean): Promise<GetProductResponse>;
+    getProducts(page: number, subcategoryId?: number, orderBy?: string): Promise<GetProductsResponse>;
+    getAllProductsUser(orderBy?: string, includeIngredients?: boolean, includeVariants?: boolean): Promise<GetProductsResponse>;
+    getProductsName(orderBy?: string): Promise<GetProductsNameResponse>;
+    updateProductCategory(id: number, category: string): Promise<BaseResponse>;
+    updateProductIsPriority(id: number, isPriority: boolean): Promise<BaseResponse>;
+    updateProductName(id: number, name: string): Promise<BaseResponse>;
+    updateProductPrice(id: number, price: number): Promise<BaseResponse>;
+    updateProductShortName(id: number, shortName: string): Promise<BaseResponse>;
+    updateProductSubcategory(id: number, subcategoryId: number): Promise<BaseResponse>;
+}
