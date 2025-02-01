@@ -15,6 +15,16 @@ const useMenuMutations = (menusApi: UseMenusApiInterface) => {
         addToast(ErrorCodes.SUCCESS, "success");
     };
 
+    // Create
+    const addMenuMutation = useMutation({
+        mutationFn: (variables: {
+            name: string,
+            shortName: string,
+            price: number,
+        }) => menusApi.addMenu(variables.name, variables.shortName, variables.price),
+        onSuccess: onSuccessMutation
+    });
+
     // Updates
     const updateMenuNameMutation = useMutation({
         mutationFn: (variables: { id: number, name: string }) => menusApi.updateMenuName(variables.id, variables.name),
@@ -64,6 +74,12 @@ const useMenuMutations = (menusApi: UseMenusApiInterface) => {
             menuFieldId: number,
             additionalCost: number
         }) => menusApi.updateMenuFieldAdditionalCost(variables.id, variables.menuFieldId, variables.additionalCost),
+        onSuccess: onSuccessMutation
+    });
+
+    // Delete
+    const deleteMenuMutation = useMutation({
+        mutationFn: menusApi.deleteMenu,
         onSuccess: onSuccessMutation
     });
 
@@ -136,6 +152,7 @@ const useMenuMutations = (menusApi: UseMenusApiInterface) => {
     });
 
     return {
+        addMenuMutation,
         updateMenuNameMutation,
         updateMenuShortNameMutation,
         updateMenuPriceMutation,
@@ -143,6 +160,7 @@ const useMenuMutations = (menusApi: UseMenusApiInterface) => {
         updateMenuFieldIsOptionalMutation,
         updateMenuFieldMaxSortableElementsMutation,
         updateMenuFieldAdditionalCostMutation,
+        deleteMenuMutation,
         addMenuDateMutation,
         deleteMenuDateMutation,
         addMenuFieldMutation,
