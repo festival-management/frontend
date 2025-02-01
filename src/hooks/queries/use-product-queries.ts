@@ -30,7 +30,18 @@ const useProductQueries = (productsApi: UseProductsApiInterface) => {
         return data;
     };
 
-    return {fetchProductDetails};
+    const fetchProductsBySubcategoryId = (page: number, subcategoryId: number, orderBy: string) => {
+        const {data} = useQuery({
+            queryKey: ["product-details", page, subcategoryId, orderBy],
+            queryFn: async () => productsApi.getProducts(page, subcategoryId, orderBy),
+            enabled: subcategoryId !== -1,
+            staleTime: 0,
+        });
+
+        return data;
+    };
+
+    return {fetchProductDetails, fetchProductsBySubcategoryId};
 };
 
 export default useProductQueries;

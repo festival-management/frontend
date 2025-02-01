@@ -1,15 +1,29 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-import {Product} from "../../models/products.model";
+import {Product, UseProductsApiInterface} from "../../models/products.model";
+import {useProductMutations} from "../../hooks/mutations/use-product-mutations.ts";
 
 interface ProductsTableProps {
-    data: Product[];
-    handlerDeleteProduct: (id: number) => void;
+    productsApi: UseProductsApiInterface;
+    products: Product[];
+    setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+    setTotalCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function ProductsTable({data, handlerDeleteProduct}: ProductsTableProps) {
-    const products: React.JSX.Element[] = data.map(v => (
+export default function ProductsTable({productsApi, products, setProducts, setTotalCount}: ProductsTableProps) {
+    const {deleteProductMutation} = useProductMutations(productsApi);
+
+    const handleDeleteProduct = async (id: number) => {
+        const response = await deleteProductMutation.mutateAsync(id);
+
+        if (!response.error) {
+            setProducts((prevState) => prevState.filter((product) => product.id !== id));
+            setTotalCount((prevState) => prevState - 1);
+        }
+    };
+
+    const tableBody: React.JSX.Element[] = products.map(v => (
         <tr key={v.id}>
             <th scope="row">{v.id}</th>
             <td>{v.name}</td>
@@ -24,7 +38,7 @@ export default function ProductsTable({data, handlerDeleteProduct}: ProductsTabl
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => handlerDeleteProduct(v.id)}
+                    onClick={() => handleDeleteProduct(v.id)}
                 >
                     <i className="bi bi-trash"/>
                 </button>
@@ -48,7 +62,7 @@ export default function ProductsTable({data, handlerDeleteProduct}: ProductsTabl
                 </tr>
                 </thead>
                 <tbody>
-                {products}
+                {tableBody}
                 </tbody>
             </table>
         </>

@@ -1,29 +1,65 @@
-import React from "react";
+import React, {useState} from "react";
+
 import {Category} from "../../enums/category";
+import {Product, UseProductsApiInterface} from "../../models/products.model.ts";
+import {useProductMutations} from "../../hooks/mutations/use-product-mutations.ts";
 
 type CreateProductFormProps = {
-    name: string;
-    handleNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    shortName: string;
-    handleShortNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    price: number;
-    handlePriceChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    category: string;
-    handleCategoryChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-    handleSubmit: () => void;
+    productsApi: UseProductsApiInterface;
+    subcategoryId: number;
+    setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+    setTotalCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function CreateProductForm({
-                                              name,
-                                              handleNameChange,
-                                              shortName,
-                                              handleShortNameChange,
-                                              price,
-                                              handlePriceChange,
-                                              category,
-                                              handleCategoryChange,
-                                              handleSubmit
+                                              productsApi,
+                                              subcategoryId,
+                                              setProducts,
+                                              setTotalCount
                                           }: CreateProductFormProps) {
+    const [newProductName, setNewProductName] = useState("");
+    const [newProductShortName, setNewProductShortName] = useState("");
+    const [newProductPrice, setNewProductPrice] = useState(0);
+    const [newProductCategory, setNewProductCategory] = useState("-1");
+
+    const {addProductMutation} = useProductMutations(productsApi);
+
+    const handleNewProductNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewProductName(event.target.value);
+    };
+
+    const handleNewProductShortNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewProductShortName(event.target.value);
+    };
+
+    const handleNewProductPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewProductPrice(parseFloat(event.target.value));
+    };
+
+    const handleNewProductCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setNewProductCategory(event.target.value);
+    };
+
+    const handleAddProduct = async () => {
+        const response = await addProductMutation.mutateAsync({
+            name: newProductName,
+            shortName: newProductShortName,
+            price: newProductPrice,
+            category: newProductCategory,
+            subcategoryId: subcategoryId
+        });
+
+        if (!response.error) {
+            setProducts((prevState) => [...prevState, response.product!]);
+            setTotalCount((prevState) => prevState + 1);
+        }
+
+        setNewProductName("");
+        setNewProductShortName("");
+        setNewProductPrice(0);
+        setNewProductCategory("-1");
+    };
+
     return (
         <>
             <button type="button" className="btn btn-primary" data-bs-toggle="modal"
@@ -43,29 +79,31 @@ export default function CreateProductForm({
                             <form>
                                 <div className="mb-3">
                                     <label htmlFor="newProductName" className="col-form-label">Name:</label>
-                                    <input type="text" id="newProductName" className="form-control" value={name}
-                                           onChange={handleNameChange}
+                                    <input type="text" id="newProductName" className="form-control"
+                                           value={newProductName}
+                                           onChange={handleNewProductNameChange}
                                            required/>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="newProductShortName" className="col-form-label">Short name:</label>
                                     <input type="text" id="newProductShortName" className="form-control"
-                                           value={shortName}
-                                           onChange={handleShortNameChange}
+                                           value={newProductShortName}
+                                           onChange={handleNewProductShortNameChange}
                                            required/>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="newProductName" className="col-form-label">Price:</label>
-                                    <input type="number" id="newProductPrice" className="form-control" value={price}
+                                    <input type="number" id="newProductPrice" className="form-control"
+                                           value={newProductPrice}
                                            step='0.01'
-                                           onChange={handlePriceChange}
+                                           onChange={handleNewProductPriceChange}
                                            required/>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="newProductCategory" className="col-form-label">Category:</label>
                                     <select className="form-select mb-3" id="newProductCategory"
-                                            value={category}
-                                            onChange={handleCategoryChange}>
+                                            value={newProductCategory}
+                                            onChange={handleNewProductCategoryChange}>
                                         <option value="-1">Open this select menu</option>
                                         {Object.values(Category).map(category => (
                                             <option key={category} value={category}>{category}</option>
@@ -76,7 +114,7 @@ export default function CreateProductForm({
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary" onClick={handleSubmit}>Add</button>
+                            <button type="button" className="btn btn-primary" onClick={handleAddProduct}>Add</button>
                         </div>
                     </div>
                 </div>

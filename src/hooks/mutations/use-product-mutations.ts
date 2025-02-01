@@ -8,6 +8,18 @@ export const useProductMutations = (productsApi: UseProductsApiInterface) => {
     const {addToast} = useToastContext();
     const {onSuccessMutation} = baseMutation(addToast);
 
+    // Create
+    const addProductMutation = useMutation({
+        mutationFn: (variables: {
+            name: string,
+            shortName: string,
+            price: number,
+            category: string,
+            subcategoryId: number
+        }) => productsApi.addProduct(variables.name, variables.shortName, variables.price, variables.category, variables.subcategoryId),
+        onSuccess: onSuccessMutation
+    });
+
     // Updates
     const updateProductNameMutation = useMutation({
         mutationFn: (variables: {
@@ -49,6 +61,12 @@ export const useProductMutations = (productsApi: UseProductsApiInterface) => {
             id: number,
             subcategoryId: number
         }) => productsApi.updateProductSubcategory(variables.id, variables.subcategoryId),
+        onSuccess: onSuccessMutation
+    });
+
+    // Delete
+    const deleteProductMutation = useMutation({
+        mutationFn: productsApi.deleteProduct,
         onSuccess: onSuccessMutation
     });
 
@@ -120,12 +138,14 @@ export const useProductMutations = (productsApi: UseProductsApiInterface) => {
     });
 
     return {
+        addProductMutation,
         updateProductNameMutation,
         updateProductShortNameMutation,
         updateProductPriorityMutation,
         updateProductPriceMutation,
         updateProductCategoryMutation,
         updateProductSubcategoryMutation,
+        deleteProductMutation,
         addProductDateMutation,
         deleteProductDateMutation,
         addProductIngredientMutation,
