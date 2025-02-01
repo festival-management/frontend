@@ -7,10 +7,11 @@ import {
     CreateSubcategoryResponse,
     GetSubcategoriesNameResponse,
     GetSubcategoriesResponse,
-    GetSubcategoryResponse
+    GetSubcategoryResponse,
+    UseSubcategoriesApiInterface
 } from "../models/subcategories.model";
 
-const useSubcategoriesApi = () => {
+const useSubcategoriesApi = (): UseSubcategoriesApiInterface => {
     const {http} = useHttpClient(API.SUBCATEGORIES.toString());
 
     const addSubcategory = async (name: string) => {

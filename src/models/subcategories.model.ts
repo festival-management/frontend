@@ -27,3 +27,14 @@ export interface GetSubcategoriesNameResponse extends BaseResponse {
 
 export interface GetSubcategoryResponse extends BaseResponse, Partial<Subcategory> {
 }
+
+// Interface for the useSubcategoriesApi hook
+export interface UseSubcategoriesApiInterface {
+    addSubcategory(name: string): Promise<CreateSubcategoryResponse>;
+    deleteSubcategory(id: number): Promise<BaseResponse>;
+    getSubcategories(page: number, orderBy?: string): Promise<GetSubcategoriesResponse>;
+    getSubcategoriesName(orderBy?: string): Promise<GetSubcategoriesNameResponse>;
+    getSubcategoryById(id: number): Promise<GetSubcategoryResponse>;
+    updateSubcategoryName(id: number, name: string): Promise<BaseResponse>;
+    updateSubcategoryOrder(id: number, order: number): Promise<BaseResponse>;
+}

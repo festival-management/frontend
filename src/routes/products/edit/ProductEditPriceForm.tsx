@@ -1,16 +1,26 @@
 import React from "react";
 
-type ProductEditPriceFormProps = {
-    price: number;
-    handlePriceChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-}
+import {useProductEditContext} from "../../../contexts/ProductEditContext.tsx";
+import {useProductMutations} from "../../../hooks/mutations/use-product-mutations.ts";
 
-export default function ProductEditPriceForm({price, handlePriceChange, handleSubmit}: ProductEditPriceFormProps) {
+export default function ProductEditPriceForm() {
+    const {productId, productPrice, setProductPrice, productsApi} = useProductEditContext();
+    const {updateProductPriceMutation} = useProductMutations(productsApi);
+
+    const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setProductPrice(parseFloat(event.target.value));
+    };
+
+    const handleSubmitChangePrice = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        updateProductPriceMutation.mutate({id: productId, price: productPrice});
+    };
+
     return (
         <>
             <h6>Change price</h6>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmitChangePrice}>
                 <div className="mb-3">
                     <input
                         type="number"
@@ -19,7 +29,7 @@ export default function ProductEditPriceForm({price, handlePriceChange, handleSu
                         placeholder="Input the price of product"
                         min="0"
                         step="0.01"
-                        value={price}
+                        value={productPrice}
                         onChange={handlePriceChange}
                         required
                     />

@@ -1,14 +1,21 @@
 import React from "react";
 
-import {ProductDate} from "../../../../models/products.model.ts";
+import {useProductEditContext} from "../../../../contexts/ProductEditContext.tsx";
+import {useProductMutations} from "../../../../hooks/mutations/use-product-mutations.ts";
 
-type ProductEditDatesTableProps = {
-    data: ProductDate[];
-    handleDelete: (productDateId: number) => Promise<void>;
-}
+export default function ProductEditDatesTable() {
+    const {productId, productDates, setProductDates, productsApi} = useProductEditContext();
+    const {deleteProductDateMutation} = useProductMutations(productsApi);
 
-export default function ProductEditDatesTable({data, handleDelete}: ProductEditDatesTableProps) {
-    const productDates: React.JSX.Element[] = data.map(v => (
+    const handleDeleteProductDate = async (productDateId: number) => {
+        const response = await deleteProductDateMutation.mutateAsync({id: productId, productDateId});
+
+        if (!response.error) {
+            setProductDates((prevState) => prevState.filter((productDate) => productDate.id !== productDateId));
+        }
+    };
+
+    const tableBody: React.JSX.Element[] = productDates.map(v => (
         <tr key={v.id}>
             <th scope="row">{v.id}</th>
             <td>{v.start_date}</td>
@@ -17,7 +24,7 @@ export default function ProductEditDatesTable({data, handleDelete}: ProductEditD
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => handleDelete(v.id)}
+                    onClick={() => handleDeleteProductDate(v.id)}
                 >
                     <i className="bi bi-trash"/>
                 </button>
@@ -37,7 +44,7 @@ export default function ProductEditDatesTable({data, handleDelete}: ProductEditD
                 </tr>
                 </thead>
                 <tbody>
-                {productDates}
+                {tableBody}
                 </tbody>
             </table>
         </>

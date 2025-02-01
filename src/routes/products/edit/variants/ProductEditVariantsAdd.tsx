@@ -1,22 +1,38 @@
-import React from "react";
+import React, {useState} from "react";
 
-type ProductEditVariantAddProps = {
-    newProductVariantName: string;
-    newProductVariantPrice: number;
-    handleProductVariantNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    handleProductVariantPriceChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-}
+import {useProductEditContext} from "../../../../contexts/ProductEditContext.tsx";
+import {useProductMutations} from "../../../../hooks/mutations/use-product-mutations.ts";
 
-export default function ProductEditVariantsAdd({
-                                                  newProductVariantName,
-                                                  newProductVariantPrice,
-                                                  handleProductVariantNameChange,
-                                                  handleProductVariantPriceChange,
-                                                  handleSubmit
-                                              }: ProductEditVariantAddProps) {
+export default function ProductEditVariantsAdd() {
+    const [newProductVariantName, setNewProductVariantName] = useState("");
+    const [newProductVariantPrice, setNewProductVariantPrice] = useState(0);
+
+    const {productId, setProductVariants, productsApi} = useProductEditContext();
+    const {addProductVariantMutation} = useProductMutations(productsApi);
+
+    const handleProductVariantNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewProductVariantName(event.target.value);
+    };
+
+    const handleProductVariantPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewProductVariantPrice(parseFloat(event.target.value));
+    };
+
+    const handleSubmitAddVariant = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const response = await addProductVariantMutation.mutateAsync({id: productId, name: newProductVariantName, price: newProductVariantPrice});
+
+        if (!response.error) {
+            setProductVariants((prevState) => [...prevState, response.variant!]);
+        }
+
+        setNewProductVariantName("");
+        setNewProductVariantPrice(0);
+    };
+
     return (
-        <form className="mb-3" onSubmit={handleSubmit}>
+        <form className="mb-3" onSubmit={handleSubmitAddVariant}>
             <div className="input-group mb-3">
                 <span className="input-group-text">Name</span>
                 <input

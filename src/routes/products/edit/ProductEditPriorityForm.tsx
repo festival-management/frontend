@@ -1,23 +1,29 @@
 import React from "react";
 
-type ProductEditPriorityFormProps = {
-    priority: boolean;
-    handlePriorityChange: () => void;
-    handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-}
+import {useProductEditContext} from "../../../contexts/ProductEditContext.tsx";
+import {useProductMutations} from "../../../hooks/mutations/use-product-mutations.ts";
 
-export default function ProductEditPriorityForm({
-                                                    priority,
-                                                    handlePriorityChange,
-                                                    handleSubmit
-                                                }: ProductEditPriorityFormProps) {
+export default function ProductEditPriorityForm() {
+    const {productId, productPriority, setProductPriority, productsApi} = useProductEditContext();
+    const {updateProductPriorityMutation} = useProductMutations(productsApi);
+
+    const handlePriorityChange = () => {
+        setProductPriority((v) => !v);
+    };
+
+    const handleSubmitChangePriority = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        updateProductPriorityMutation.mutate({id: productId, priority: productPriority});
+    };
+
     return (
         <>
             <h6>Change priority</h6>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmitChangePriority}>
                 <div className="mb-3">
                     <div className="form-check">
-                        <input className="form-check-input" type="checkbox" id="formInputPriority" checked={priority}
+                        <input className="form-check-input" type="checkbox" id="formInputPriority" checked={productPriority}
                                onChange={handlePriorityChange}/>
                         <label className="form-check-label" htmlFor="formInputPriority">
                             Is priority?

@@ -1,27 +1,33 @@
 import React from "react";
 
-type ProductEditShortNameFormProps = {
-    shortName: string;
-    handleShortNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-}
+import {useProductEditContext} from "../../../contexts/ProductEditContext.tsx";
+import {useProductMutations} from "../../../hooks/mutations/use-product-mutations.ts";
 
-export default function ProductEditShortNameForm({
-                                                     shortName,
-                                                     handleShortNameChange,
-                                                     handleSubmit
-                                                 }: ProductEditShortNameFormProps) {
+export default function ProductEditShortNameForm() {
+    const {productId, productShortName, setProductShortName, productsApi} = useProductEditContext();
+    const {updateProductShortNameMutation} = useProductMutations(productsApi);
+
+    const handleShortNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setProductShortName(event.target.value);
+    };
+
+    const handleSubmitChangeShortName = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        updateProductShortNameMutation.mutate({id: productId, shortName: productShortName});
+    };
+
     return (
         <>
             <h6>Change short name</h6>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmitChangeShortName}>
                 <div className="mb-3">
                     <input
                         type="text"
                         className="form-control"
                         id="formInputShortName"
                         placeholder="Input the short name of product"
-                        value={shortName}
+                        value={productShortName}
                         onChange={handleShortNameChange}
                         required
                     />

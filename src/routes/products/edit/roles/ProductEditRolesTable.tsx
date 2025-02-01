@@ -1,22 +1,32 @@
 import React from "react";
 
 import {RoleName} from "../../../../models/roles.model.ts";
-import {ProductRole} from "../../../../models/products.model.ts";
+import {useProductEditContext} from "../../../../contexts/ProductEditContext.tsx";
+import {useProductMutations} from "../../../../hooks/mutations/use-product-mutations.ts";
 
 type ProductEditRoleTableProps = {
-    data: ProductRole[];
     rolesName: RoleName[];
-    handleDelete: (productRoleId: number) => Promise<void>;
 }
 
-export default function ProductEditRolesTable({data, rolesName, handleDelete}: ProductEditRoleTableProps) {
+export default function ProductEditRolesTable({rolesName}: ProductEditRoleTableProps) {
+    const {productId, productRoles, setProductRoles, productsApi} = useProductEditContext();
+    const {deleteProductRoleMutation} = useProductMutations(productsApi);
+
     const rolesIdName: Map<number, string> = new Map();
 
     rolesName.map((roleName) => {
         rolesIdName.set(roleName.id, roleName.name);
     });
 
-    const productRoles: React.JSX.Element[] = data.map(v => (
+    const handleDeleteProductRole = async (productRoleId: number) => {
+        const response = await deleteProductRoleMutation.mutateAsync({id: productId, productRoleId});
+
+        if (!response.error) {
+            setProductRoles((prevState) => prevState.filter((productRole) => productRole.id !== productRoleId));
+        }
+    };
+
+    const tableBody: React.JSX.Element[] = productRoles.map(v => (
         <tr key={v.id}>
             <th scope="row">{v.id}</th>
             <td>{rolesIdName.get(v.role_id)}</td>
@@ -24,7 +34,7 @@ export default function ProductEditRolesTable({data, rolesName, handleDelete}: P
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => handleDelete(v.id)}
+                    onClick={() => handleDeleteProductRole(v.id)}
                 >
                     <i className="bi bi-trash"/>
                 </button>
@@ -43,7 +53,7 @@ export default function ProductEditRolesTable({data, rolesName, handleDelete}: P
                 </tr>
                 </thead>
                 <tbody>
-                {productRoles}
+                {tableBody}
                 </tbody>
             </table>
         </>

@@ -1,14 +1,21 @@
 import React from "react";
 
-import {ProductVariant} from "../../../../models/products.model.ts";
+import {useProductEditContext} from "../../../../contexts/ProductEditContext.tsx";
+import {useProductMutations} from "../../../../hooks/mutations/use-product-mutations.ts";
 
-type ProductEditVariantTableProps = {
-    data: ProductVariant[];
-    handleDelete: (productVariantId: number) => Promise<void>;
-}
+export default function ProductEditVariantsTable() {
+    const {productId, productVariants, setProductVariants, productsApi} = useProductEditContext();
+    const {deleteProductVariantMutation} = useProductMutations(productsApi);
 
-export default function ProductEditVariantsTable({data, handleDelete}: ProductEditVariantTableProps) {
-    const productVariants: React.JSX.Element[] = data.map(v => (
+    const handleDeleteProductVariant = async (productVariantId: number) => {
+        const response = await deleteProductVariantMutation.mutateAsync({id: productId, productVariantId});
+
+        if (!response.error) {
+            setProductVariants((prevState) => prevState.filter((productVariant) => productVariant.id !== productVariantId));
+        }
+    };
+
+    const tableBody: React.JSX.Element[] = productVariants.map(v => (
         <tr key={v.id}>
             <th scope="row">{v.id}</th>
             <td>{v.name}</td>
@@ -17,7 +24,7 @@ export default function ProductEditVariantsTable({data, handleDelete}: ProductEd
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => handleDelete(v.id)}
+                    onClick={() => handleDeleteProductVariant(v.id)}
                 >
                     <i className="bi bi-trash"/>
                 </button>
@@ -37,7 +44,7 @@ export default function ProductEditVariantsTable({data, handleDelete}: ProductEd
                 </tr>
                 </thead>
                 <tbody>
-                {productVariants}
+                {tableBody}
                 </tbody>
             </table>
         </>

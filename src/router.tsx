@@ -13,9 +13,10 @@ import RouteRoleEdit from "./routes/roles/edit";
 import RouteUserEdit from "./routes/users/edit";
 import RouteProductEdit from "./routes/products/edit";
 import RouteSubcategories from "./routes/subcategories";
-import RouteSubcategoryEdit from "./routes/subcategories/edit";
 import {ToastProvider} from "./contexts/ToastContext.tsx";
+import RouteSubcategoryEdit from "./routes/subcategories/edit";
 import {MenuEditProvider} from "./contexts/MenuEditContext.tsx";
+import {ProductEditProvider} from "./contexts/ProductEditContext.tsx";
 
 const routers = createBrowserRouter(
     [
@@ -45,7 +46,7 @@ const routers = createBrowserRouter(
                 },
                 {
                     path: "/products/edit/:id",
-                    element: <RouteProductEdit/>
+                    element: <ProductEditProvider><RouteProductEdit/></ProductEditProvider>
                 },
                 {
                     path: "/profile",

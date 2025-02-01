@@ -1,14 +1,21 @@
 import React from "react";
 
-import {ProductIngredient} from "../../../../models/products.model.ts";
+import {useProductEditContext} from "../../../../contexts/ProductEditContext.tsx";
+import {useProductMutations} from "../../../../hooks/mutations/use-product-mutations.ts";
 
-type ProductEditIngredientsTableProps = {
-    data: ProductIngredient[];
-    handleDelete: (productIngredientId: number) => Promise<void>;
-}
+export default function ProductEditIngredientsTable() {
+    const {productId, productIngredients, setProductIngredients, productsApi} = useProductEditContext();
+    const {deleteProductIngredientMutation} = useProductMutations(productsApi);
 
-export default function ProductEditIngredientsTable({data, handleDelete}: ProductEditIngredientsTableProps) {
-    const productIngredients: React.JSX.Element[] = data.map(v => (
+    const handleDeleteProductIngredient = async (productIngredientId: number) => {
+        const response = await deleteProductIngredientMutation.mutateAsync({id: productId, productIngredientId});
+
+        if (!response.error) {
+            setProductIngredients((prevState) => prevState.filter((productIngredient) => productIngredient.id !== productIngredientId));
+        }
+    };
+
+    const tableBody: React.JSX.Element[] = productIngredients.map(v => (
         <tr key={v.id}>
             <th scope="row">{v.id}</th>
             <td>{v.name}</td>
@@ -17,7 +24,7 @@ export default function ProductEditIngredientsTable({data, handleDelete}: Produc
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => handleDelete(v.id)}
+                    onClick={() => handleDeleteProductIngredient(v.id)}
                 >
                     <i className="bi bi-trash"/>
                 </button>
@@ -37,7 +44,7 @@ export default function ProductEditIngredientsTable({data, handleDelete}: Produc
                 </tr>
                 </thead>
                 <tbody>
-                {productIngredients}
+                {tableBody}
                 </tbody>
             </table>
         </>

@@ -1,19 +1,12 @@
 import {useMutation} from "@tanstack/react-query";
 
-import BaseResponse from "../../models/base.model.ts";
-import {ErrorCodes} from "../../errors/ErrorCodes.ts";
+import {baseMutation} from "./base.ts";
 import {useToastContext} from "../../contexts/ToastContext.tsx";
 import {UseMenusApiInterface} from "../../models/menus.model.ts";
 
 const useMenuMutations = (menusApi: UseMenusApiInterface) => {
     const {addToast} = useToastContext();
-
-    const onSuccessMutation = async (data: BaseResponse) => {
-        if (data.error) {
-            return addToast(data.code, "error");
-        }
-        addToast(ErrorCodes.SUCCESS, "success");
-    };
+    const {onSuccessMutation} = baseMutation(addToast);
 
     // Create
     const addMenuMutation = useMutation({
