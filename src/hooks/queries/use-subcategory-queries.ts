@@ -5,7 +5,7 @@ import {GetSubcategoriesNameResponse, UseSubcategoriesApiInterface} from "../../
 const UseSubcategoryQueries = (subcategoriesApi: UseSubcategoriesApiInterface) => {
     const fetchSubcategoriesName = (orderBy: string): GetSubcategoriesNameResponse | undefined => {
         const {data} = useQuery({
-            queryKey: ["subcategories-name"],
+            queryKey: ["subcategories-name", orderBy],
             queryFn: () => subcategoriesApi.getSubcategoriesName(orderBy),
             enabled: true,
             staleTime: 0,

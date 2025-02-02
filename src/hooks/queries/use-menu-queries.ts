@@ -1,14 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 
 import {GetMenuResponse, GetMenusResponse, UseMenusApiInterface} from "../../models/menus.model.ts";
-import {GetRolesNameResponse, UseRolesApiInterface} from "../../models/roles.model.ts";
-import {GetProductsNameResponse, UseProductsApiInterface} from "../../models/products.model.ts";
-
-interface UseMenuDetailsInterface {
-    menu: GetMenuResponse;
-    rolesName: GetRolesNameResponse;
-    productsName: GetProductsNameResponse;
-}
 
 const useMenuQueries = (menusApi: UseMenusApiInterface) => {
     const fetchMenusData = (page: number, orderBy: string): GetMenusResponse | undefined => {
@@ -22,18 +14,10 @@ const useMenuQueries = (menusApi: UseMenusApiInterface) => {
         return data;
     };
 
-    const fetchMenuDetails = (id: number, rolesApi: UseRolesApiInterface, productsApi: UseProductsApiInterface): UseMenuDetailsInterface | undefined => {
+    const fetchMenuDetails = (id: number, includeDates: boolean, includeFields: boolean, includeRoles: boolean): GetMenuResponse | undefined => {
         const {data} = useQuery({
-            queryKey: ["menu-edit", id],
-            queryFn: async () => {
-                const [menu, rolesName, productsName] = await Promise.all([
-                    menusApi.getMenuById(id, true, true, true),
-                    rolesApi.getRolesName(true),
-                    productsApi.getProductsName("name"),
-                ]);
-
-                return { menu, rolesName, productsName };
-            },
+            queryKey: ["menu-edit", id, includeDates, includeFields, includeRoles],
+            queryFn: async () => menusApi.getMenuById(id, includeDates, includeFields, includeRoles),
             enabled: !!id,
             staleTime: 0,
         });

@@ -5,7 +5,7 @@ import {GetRolesNameResponse, UseRolesApiInterface} from "../../models/roles.mod
 const UseRoleQueries = (rolesApi: UseRolesApiInterface) => {
     const fetchRolesName = (canOrder: boolean): GetRolesNameResponse | undefined => {
         const {data} = useQuery({
-            queryKey: ["roles-name"],
+            queryKey: ["roles-name", canOrder],
             queryFn: () => rolesApi.getRolesName(canOrder),
             enabled: true,
             staleTime: 0,

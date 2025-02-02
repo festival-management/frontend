@@ -1,17 +1,12 @@
 import MenuEditRolesAdd from "./MenuEditRolesAdd.tsx";
 import MenuEditRolesTable from "./MenuEditRolesTable.tsx";
-import {RoleName} from "../../../../models/roles.model.ts";
+import EditRoles from "../../../../components/edit-roles.tsx";
 
-type MenuEditRolesProps = {
-    rolesName: RoleName[];
-}
-
-export default function MenuEditRoles({rolesName}: MenuEditRolesProps) {
+export default function MenuEditRoles() {
     return (
         <>
             <h6 className="mb-3">Roles</h6>
-            <MenuEditRolesAdd rolesName={rolesName}/>
-            <MenuEditRolesTable rolesName={rolesName}/>
+            <EditRoles AddComponent={MenuEditRolesAdd} TableComponent={MenuEditRolesTable}/>
         </>
     );
 }

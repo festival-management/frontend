@@ -1,6 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 
-import {GetProductResponse, UseProductsApiInterface} from "../../models/products.model.ts";
+import {GetProductResponse, GetProductsNameResponse, UseProductsApiInterface} from "../../models/products.model.ts";
 
 const useProductQueries = (productsApi: UseProductsApiInterface) => {
     const fetchProductDetails = (id: number, includeDates: boolean, includeIngredients: boolean, includeRoles: boolean, includeVariants: boolean): GetProductResponse | undefined => {
@@ -8,6 +8,17 @@ const useProductQueries = (productsApi: UseProductsApiInterface) => {
             queryKey: ["product-details", id, includeDates, includeIngredients, includeRoles, includeVariants],
             queryFn: async () => productsApi.getProductById(id, includeDates, includeIngredients, includeRoles, includeVariants),
             enabled: !!id,
+            staleTime: 0,
+        });
+
+        return data;
+    };
+
+    const fetchProductsName = (orderBy: string): GetProductsNameResponse | undefined => {
+        const {data} = useQuery({
+            queryKey: ["products-name", orderBy],
+            queryFn: () => productsApi.getProductsName(orderBy),
+            enabled: true,
             staleTime: 0,
         });
 
@@ -25,7 +36,7 @@ const useProductQueries = (productsApi: UseProductsApiInterface) => {
         return data;
     };
 
-    return {fetchProductDetails, fetchProductsBySubcategoryId};
+    return {fetchProductDetails, fetchProductsName, fetchProductsBySubcategoryId};
 };
 
 export default useProductQueries;
