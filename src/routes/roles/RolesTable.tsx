@@ -1,15 +1,29 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-import {Role} from "../../models/roles.model";
+import {Role, UseRolesApiInterface} from "../../models/roles.model";
+import useRoleMutations from "../../hooks/mutations/use-role-mutations.ts";
 
 interface RolesTableProps {
-    data: Role[];
-    handlerDeleteRole: (id: number) => void;
+    rolesApi: UseRolesApiInterface;
+    roles: Role[];
+    setRoles: React.Dispatch<React.SetStateAction<Role[]>>;
+    setTotalCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function RolesTable({data, handlerDeleteRole}: RolesTableProps) {
-    const roles: React.JSX.Element[] = data.map(v => (
+export default function RolesTable({rolesApi, roles, setRoles, setTotalCount}: RolesTableProps) {
+    const {deleteRoleMutation} = useRoleMutations(rolesApi);
+
+    const handleDeleteRole = async (id: number) => {
+        const response = await deleteRoleMutation.mutateAsync(id);
+
+        if (!response.error) {
+            setRoles((prevState) => prevState.filter((role) => role.id !== id));
+            setTotalCount((prevState) => prevState - 1);
+        }
+    };
+
+    const tableBody: React.JSX.Element[] = roles.map(v => (
         <tr key={v.id}>
             <th scope="row">{v.id}</th>
             <td>{v.name}</td>
@@ -20,7 +34,7 @@ export default function RolesTable({data, handlerDeleteRole}: RolesTableProps) {
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => handlerDeleteRole(v.id)}
+                    onClick={() => handleDeleteRole(v.id)}
                 >
                     <i className="bi bi-trash"/>
                 </button>
@@ -40,7 +54,7 @@ export default function RolesTable({data, handlerDeleteRole}: RolesTableProps) {
                 </tr>
                 </thead>
                 <tbody>
-                {roles}
+                {tableBody}
                 </tbody>
             </table>
         </>

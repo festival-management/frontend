@@ -1,99 +1,43 @@
-import React, {useEffect, useState} from 'react';
-import {useMutation, useQuery} from "@tanstack/react-query";
+import {useEffect, useState} from 'react';
 
 import RolesTable from "./RolesTable";
 import useRolesApi from "../../api/roles";
 import CreateRoleForm from "./CreateRoleForm";
 import {Role} from "../../models/roles.model";
-import ToastManager from "../../components/toast-manager.tsx";
+import {useToastContext} from "../../contexts/ToastContext.tsx";
+import useRoleQueries from "../../hooks/queries/use-role-queries.ts";
 import PaginationControls from "../../components/pagination-controls";
-import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
-
 
 export default function RouteRoles() {
-    const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [page, setPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
     const [roles, setRoles] = useState<Role[]>([]);
-    const [newRoleName, setNewRoleName] = useState("");
 
     const rolesApi = useRolesApi();
 
-    const addToast = (errorCode: number, type: ToastType) => {
-        setToasts((prevToasts) => [{ errorCode, type }, ...prevToasts]);
-    };
+    const {addToast} = useToastContext();
+    const {fetchRolesData} = useRoleQueries(rolesApi);
 
-    const removeToast = (index: number) => {
-        setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
-    };
-
-    const {data} = useQuery({
-        queryKey: ["roles", page],
-        queryFn: () => rolesApi.getRoles(page),
-        enabled: true,
-        staleTime: 0,
-    });
-    const addRoleMutation = useMutation({
-        mutationFn: rolesApi.addRole,
-        onSuccess: async (data) => {
-            if (data.error) {
-                return addToast(data.code, "error");
-            }
-
-            setNewRoleName("");
-
-            setRoles((prevState) => [...prevState, data.role!]);
-            setTotalCount((prevState) => prevState + 1);
-        }
-    });
-    const deleteRoleMutation = useMutation({
-        mutationFn: rolesApi.deleteRole,
-        onSuccess: async (data, variables) => {
-            if (data.error) {
-                return addToast(data.code, "error");
-            }
-
-            setRoles((prevState) => prevState.filter((role) => role.id !== variables));
-            setTotalCount((prevState) => prevState - 1);
-        }
-    });
-
-    const handleNewRoleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewRoleName(event.target.value);
-    };
-
-    const handleSubmitAddRole = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        addRoleMutation.mutate(newRoleName);
-    }
-
-    const handleDeleteRole = async (id: number) => {
-        deleteRoleMutation.mutate(id);
-    };
+    const rolesData = fetchRolesData(page);
 
     useEffect(() => {
-        if (data) {
-            if (data.error) {
-                return addToast(data.code, "error");
-            }
+        if (!rolesData) return;
 
-            setRoles(data.roles!);
-            setTotalCount(data.total_count!);
-        }
-    }, [data]);
+        if (rolesData.error) return addToast(rolesData.code, "error");
+
+        setRoles(rolesData.roles!);
+        setTotalCount(rolesData.total_count!);
+    }, [rolesData]);
 
     return (
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <CreateRoleForm name={newRoleName} handleNameChange={handleNewRoleNameChange}
-                                    handleSubmit={handleSubmitAddRole}/>
-                    <RolesTable data={roles} handlerDeleteRole={handleDeleteRole}/>
+                    <CreateRoleForm rolesApi={rolesApi} setRoles={setRoles} setTotalCount={setTotalCount}/>
+                    <RolesTable rolesApi={rolesApi} roles={roles} setRoles={setRoles} setTotalCount={setTotalCount}/>
                     <PaginationControls page={page} setPage={setPage} totalCount={totalCount}/>
                 </div>
             </div>
-            <ToastManager toasts={toasts} removeToast={removeToast}/>
         </div>
     );
 }

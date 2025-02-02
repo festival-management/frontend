@@ -1,6 +1,11 @@
 import {useQuery} from "@tanstack/react-query";
 
-import {GetRoleResponse, GetRolesNameResponse, UseRolesApiInterface} from "../../models/roles.model.ts";
+import {
+    GetRoleResponse,
+    GetRolesNameResponse,
+    GetRolesResponse,
+    UseRolesApiInterface
+} from "../../models/roles.model.ts";
 
 const UseRoleQueries = (rolesApi: UseRolesApiInterface) => {
     const fetchRoleDetails = (id: number): GetRoleResponse | undefined => {
@@ -25,7 +30,18 @@ const UseRoleQueries = (rolesApi: UseRolesApiInterface) => {
         return data;
     };
 
-    return {fetchRoleDetails, fetchRolesName};
+    const fetchRolesData = (page: number): GetRolesResponse | undefined => {
+        const {data} = useQuery({
+            queryKey: ["roles", page],
+            queryFn: () => rolesApi.getRoles(page),
+            enabled: true,
+            staleTime: 0,
+        });
+
+        return data;
+    };
+
+    return {fetchRoleDetails, fetchRolesName, fetchRolesData};
 };
 
 export default UseRoleQueries;

@@ -9,6 +9,12 @@ const useRoleMutations = (rolesApi: UseRolesApiInterface) => {
     const {addToast} = useToastContext();
     const {onSuccessMutation} = baseMutation(addToast);
 
+    // Create
+    const addRoleMutation = useMutation({
+        mutationFn: rolesApi.addRole,
+        onSuccess: onSuccessMutation
+    });
+
     // Updates
     const updateRoleNameMutation = useMutation({
         mutationFn: (variables: { id: number, name: string }) => rolesApi.updateRoleName(variables.id, variables.name),
@@ -29,7 +35,19 @@ const useRoleMutations = (rolesApi: UseRolesApiInterface) => {
         onSuccess: onSuccessMutation
     });
 
-    return {updateRoleNameMutation, updateRolePermissionsMutation, updateRolePaperSizeMutation};
+    // Delete
+    const deleteRoleMutation = useMutation({
+        mutationFn: rolesApi.deleteRole,
+        onSuccess: onSuccessMutation
+    });
+
+    return {
+        addRoleMutation,
+        updateRoleNameMutation,
+        updateRolePermissionsMutation,
+        updateRolePaperSizeMutation,
+        deleteRoleMutation
+    };
 };
 
 export default useRoleMutations;
