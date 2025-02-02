@@ -27,7 +27,7 @@ const useProductQueries = (productsApi: UseProductsApiInterface) => {
 
     const fetchProductsBySubcategoryId = (page: number, subcategoryId: number, orderBy: string) => {
         const {data} = useQuery({
-            queryKey: ["product-details", page, subcategoryId, orderBy],
+            queryKey: ["products-by-subcategory-id", page, subcategoryId, orderBy],
             queryFn: async () => productsApi.getProducts(page, subcategoryId, orderBy),
             enabled: subcategoryId !== -1,
             staleTime: 0,

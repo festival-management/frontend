@@ -1,22 +1,36 @@
-import React from "react";
+import React, {useState} from "react";
+
 import {PaperSize} from "../../../enums/paper-size";
+import {UseRolesApiInterface} from "../../../models/roles.model.ts";
+import useRoleMutations from "../../../hooks/mutations/use-role-mutations.ts";
 
 type RoleEditPaperSizeFormProps = {
-    paperSize: string;
-    handlePaperSizeChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-    handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+    rolesApi: UseRolesApiInterface;
+    roleId: number;
+    rolePaperSize: string | undefined;
 }
 
-export default function RoleEditPaperSizeForm({
-                                                  paperSize,
-                                                  handlePaperSizeChange,
-                                                  handleSubmit
-                                              }: RoleEditPaperSizeFormProps) {
+export default function RoleEditPaperSizeForm({rolesApi, roleId, rolePaperSize}: RoleEditPaperSizeFormProps) {
+    const [newRolePaperSize, setNewRolePaperSize] = useState(rolePaperSize || PaperSize.UNDEFINED);
+
+    const {updateRolePaperSizeMutation} = useRoleMutations(rolesApi);
+
+    const handlePaperSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setNewRolePaperSize(event.target.value);
+    };
+
+    const handleSubmitChangePaperSize = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        updateRolePaperSizeMutation.mutate({id: roleId, paperSize: newRolePaperSize});
+    };
+
     return (
         <>
             <h6>Change paper size</h6>
-            <form onSubmit={handleSubmit}>
-                <select id="formInputPaperSize" className="form-select mb-3" aria-label="Default select example" value={paperSize}
+            <form onSubmit={handleSubmitChangePaperSize}>
+                <select id="formInputPaperSize" className="form-select mb-3" aria-label="Default select example"
+                        value={newRolePaperSize}
                         onChange={handlePaperSizeChange}>
                     <option value={PaperSize.UNDEFINED}>Open this select menu</option>
                     {Object.values(PaperSize).filter((paperSize) => paperSize !== PaperSize.UNDEFINED).map(paperSize => (
