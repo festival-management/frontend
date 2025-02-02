@@ -1,32 +1,22 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useParams} from "react-router-dom";
 
 import ProductEditDates from "./dates";
 import ProductEditRoles from "./roles";
 import ProductEditVariants from "./variants";
-import useRolesApi from "../../../api/roles.ts";
 import ProductEditIngredients from "./ingredients";
 import ProductEditNameForm from "./ProductEditNameForm";
-import {RoleName} from "../../../models/roles.model.ts";
 import ProductEditPriceForm from "./ProductEditPriceForm";
-import useSubcategoriesApi from "../../../api/subcategories";
 import ProductEditPriorityForm from "./ProductEditPriorityForm";
 import ProductEditCategoryForm from "./ProductEditCategoryForm";
 import ProductEditShortNameForm from "./ProductEditShortNameForm";
 import {useToastContext} from "../../../contexts/ToastContext.tsx";
-import {SubcategoryName} from "../../../models/subcategories.model";
 import ProductEditSubcategoryIdForm from "./ProductEditSubcategoryIdForm";
 import useProductQueries from "../../../hooks/queries/use-product-queries.ts";
 import {useProductEditContext} from "../../../contexts/ProductEditContext.tsx";
 
 export default function RouteProductEdit() {
     const {id} = useParams();
-
-    const [rolesName, setRolesName] = useState<RoleName[]>([]);
-    const [subcategoriesName, setSubcategoriesName] = useState<SubcategoryName[]>([]);
-
-    const subcategoriesApi = useSubcategoriesApi();
-    const rolesApi = useRolesApi();
 
     const {addToast} = useToastContext();
     const {
@@ -45,29 +35,25 @@ export default function RouteProductEdit() {
     } = useProductEditContext();
     const {fetchProductDetails} = useProductQueries(productsApi);
 
-    const data = fetchProductDetails(parseInt(id || "-1"), subcategoriesApi, rolesApi);
+    const productsData = fetchProductDetails(parseInt(id || "-1"), true, true, true, true);
 
     useEffect(() => {
-        if (!data) return;
+        if (!productsData) return;
 
-        if (data.product.error) return addToast(data.product.code, "error");
-        if (data.subcategoriesName.error) return addToast(data.subcategoriesName.code, "error");
-        if (data.rolesName.error) return addToast(data.rolesName.code, "error");
+        if (productsData.error) return addToast(productsData.code, "error");
 
-        setProductId(data.product.id!);
-        setProductName(data.product.name!);
-        setProductShortName(data.product.short_name!);
-        setProductPriority(data.product.is_priority!);
-        setProductPrice(data.product.price!);
-        setProductCategory(data.product.category!);
-        setProductSubcategoryId(data.product.subcategory_id!);
-        setProductDates(data.product.dates!);
-        setProductIngredients(data.product.ingredients!);
-        setProductRoles(data.product.roles!);
-        setProductVariants(data.product.variants!);
-        setSubcategoriesName(data.subcategoriesName.subcategories!);
-        setRolesName(data.rolesName.roles!);
-    }, [data]);
+        setProductId(productsData.id!);
+        setProductName(productsData.name!);
+        setProductShortName(productsData.short_name!);
+        setProductPriority(productsData.is_priority!);
+        setProductPrice(productsData.price!);
+        setProductCategory(productsData.category!);
+        setProductSubcategoryId(productsData.subcategory_id!);
+        setProductDates(productsData.dates!);
+        setProductIngredients(productsData.ingredients!);
+        setProductRoles(productsData.roles!);
+        setProductVariants(productsData.variants!);
+    }, [productsData]);
 
     return (
         <div className="container mt-4">
@@ -78,10 +64,10 @@ export default function RouteProductEdit() {
                     <ProductEditPriorityForm/>
                     <ProductEditPriceForm/>
                     <ProductEditCategoryForm/>
-                    <ProductEditSubcategoryIdForm subcategoriesName={subcategoriesName}/>
+                    <ProductEditSubcategoryIdForm/>
                     <ProductEditDates/>
                     <ProductEditIngredients/>
-                    <ProductEditRoles rolesName={rolesName}/>
+                    <ProductEditRoles/>
                     <ProductEditVariants/>
                 </div>
             </div>

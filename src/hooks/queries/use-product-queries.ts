@@ -1,28 +1,12 @@
 import {useQuery} from "@tanstack/react-query";
 
-import {GetRolesNameResponse, UseRolesApiInterface} from "../../models/roles.model.ts";
 import {GetProductResponse, UseProductsApiInterface} from "../../models/products.model.ts";
-import {GetSubcategoriesNameResponse, UseSubcategoriesApiInterface} from "../../models/subcategories.model.ts";
-
-interface UseProductDetailsInterface {
-    product: GetProductResponse;
-    subcategoriesName: GetSubcategoriesNameResponse;
-    rolesName: GetRolesNameResponse;
-}
 
 const useProductQueries = (productsApi: UseProductsApiInterface) => {
-    const fetchProductDetails = (id: number, subcategoriesApi: UseSubcategoriesApiInterface, rolesApi: UseRolesApiInterface): UseProductDetailsInterface | undefined => {
+    const fetchProductDetails = (id: number, includeDates: boolean, includeIngredients: boolean, includeRoles: boolean, includeVariants: boolean): GetProductResponse | undefined => {
         const {data} = useQuery({
-            queryKey: ["product-details", id],
-            queryFn: async () => {
-                const [product, subcategoriesName, rolesName] = await Promise.all([
-                    productsApi.getProductById(id, true, true, true, true),
-                    subcategoriesApi.getSubcategoriesName("order"),
-                    rolesApi.getRolesName(true)
-                ]);
-
-                return {product, subcategoriesName, rolesName};
-            },
+            queryKey: ["product-details", id, includeDates, includeIngredients, includeRoles, includeVariants],
+            queryFn: async () => productsApi.getProductById(id, includeDates, includeIngredients, includeRoles, includeVariants),
             enabled: !!id,
             staleTime: 0,
         });
