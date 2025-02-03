@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import {Permission} from "../../../enums/permission";
 import {UseRolesApiInterface} from "../../../models/roles.model.ts";
@@ -27,6 +27,10 @@ export default function RoleEditPermissionsForm({rolesApi, roleId, rolePermissio
 
         updateRolePermissionsMutation.mutate({id: roleId, permissions: newRolePermissions});
     };
+
+    useEffect(() => {
+        setNewRolePermissions(rolePermissions);
+    }, [rolePermissions]);
 
     return (
         <>

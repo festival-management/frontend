@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import {PaperSize} from "../../../enums/paper-size";
 import {UseRolesApiInterface} from "../../../models/roles.model.ts";
@@ -24,6 +24,10 @@ export default function RoleEditPaperSizeForm({rolesApi, roleId, rolePaperSize}:
 
         updateRolePaperSizeMutation.mutate({id: roleId, paperSize: newRolePaperSize});
     };
+
+    useEffect(() => {
+        setNewRolePaperSize(rolePaperSize || PaperSize.UNDEFINED);
+    }, [rolePaperSize]);
 
     return (
         <>

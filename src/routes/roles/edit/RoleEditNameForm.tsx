@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import {UseRolesApiInterface} from "../../../models/roles.model.ts";
 import useRoleMutations from "../../../hooks/mutations/use-role-mutations.ts";
@@ -23,6 +23,10 @@ export default function RoleEditNameForm({rolesApi, roleId, roleName}: RoleEditN
 
         updateRoleNameMutation.mutate({id: roleId, name: newRoleName});
     };
+
+    useEffect(() => {
+        setNewRoleName(roleName);
+    }, [roleName]);
 
     return (
         <>

@@ -1,4 +1,4 @@
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {useMutation} from "@tanstack/react-query";
 
 import {baseMutation} from "./base.ts";
 import {useToastContext} from "../../contexts/ToastContext.tsx";
@@ -6,8 +6,7 @@ import {UseSubcategoriesApiInterface} from "../../models/subcategories.model.ts"
 
 const useSubcategoryMutations = (subcategoriesApi: UseSubcategoriesApiInterface) => {
     const {addToast} = useToastContext();
-    const queryClient = useQueryClient();
-    const {onSuccessMutation} = baseMutation(addToast, queryClient, "subcategories");
+    const {onSuccessMutation} = baseMutation(addToast);
 
     // Updates
     const updateSubcategoryNameMutation = useMutation({
@@ -15,14 +14,14 @@ const useSubcategoryMutations = (subcategoriesApi: UseSubcategoriesApiInterface)
             id: number,
             name: string
         }) => subcategoriesApi.updateSubcategoryName(variables.id, variables.name),
-        onSuccess: (data) => onSuccessMutation(data, true)
+        onSuccess: onSuccessMutation
     });
     const updateSubcategoryOrderMutation = useMutation({
         mutationFn: (variables: {
             id: number,
             order: number
         }) => subcategoriesApi.updateSubcategoryOrder(variables.id, variables.order),
-        onSuccess: (data) => onSuccessMutation(data, true)
+        onSuccess: onSuccessMutation
     });
 
     return {updateSubcategoryNameMutation, updateSubcategoryOrderMutation};

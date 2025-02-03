@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import {UseSubcategoriesApiInterface} from "../../../models/subcategories.model.ts";
 import useSubcategoryMutations from "../../../hooks/mutations/use-subcategory-mutations.ts";
@@ -27,6 +27,10 @@ export default function SubcategoryEditOrderForm({
 
         updateSubcategoryOrderMutation.mutate({id: subcategoryId, order: newSubcategoryOrder});
     };
+
+    useEffect(() => {
+        setNewSubcategoryOrder(subcategoryOrder);
+    }, [subcategoryOrder]);
 
     return (
         <>
