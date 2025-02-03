@@ -1,8 +1,23 @@
 import {useQuery} from "@tanstack/react-query";
 
-import {GetSubcategoriesNameResponse, UseSubcategoriesApiInterface} from "../../models/subcategories.model.ts";
+import {
+    GetSubcategoriesNameResponse,
+    GetSubcategoryResponse,
+    UseSubcategoriesApiInterface
+} from "../../models/subcategories.model.ts";
 
 const UseSubcategoryQueries = (subcategoriesApi: UseSubcategoriesApiInterface) => {
+    const fetchSubcategoryDetails = (id: number): GetSubcategoryResponse | undefined => {
+        const {data} = useQuery({
+            queryKey: ["subcategories-details", id],
+            queryFn: () => subcategoriesApi.getSubcategoryById(id),
+            enabled: !!id,
+            staleTime: 0,
+        });
+
+        return data;
+    };
+
     const fetchSubcategoriesName = (orderBy: string): GetSubcategoriesNameResponse | undefined => {
         const {data} = useQuery({
             queryKey: ["subcategories-name", orderBy],
@@ -14,7 +29,7 @@ const UseSubcategoryQueries = (subcategoriesApi: UseSubcategoriesApiInterface) =
         return data;
     };
 
-    return {fetchSubcategoriesName};
+    return {fetchSubcategoryDetails, fetchSubcategoriesName};
 };
 
 export default UseSubcategoryQueries;

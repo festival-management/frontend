@@ -1,24 +1,45 @@
-import React from "react";
+import React, {useState} from "react";
+
+import {UseSubcategoriesApiInterface} from "../../../models/subcategories.model.ts";
+import useSubcategoryMutations from "../../../hooks/mutations/use-subcategory-mutations.ts";
 
 type SubcategoryEditNameProps = {
-    name: string;
-    handleNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+    subcategoriesApi: UseSubcategoriesApiInterface;
+    subcategoryId: number;
+    subcategoryName: string;
 }
 
-export default function SubcategoryEditNameForm({name, handleNameChange, handleSubmit}: SubcategoryEditNameProps) {
+export default function SubcategoryEditNameForm({
+                                                    subcategoriesApi,
+                                                    subcategoryId,
+                                                    subcategoryName
+                                                }: SubcategoryEditNameProps) {
+    const [newSubcategoryName, setNewSubcategoryName] = useState(subcategoryName);
+
+    const {updateSubcategoryNameMutation} = useSubcategoryMutations(subcategoriesApi);
+
+    const handleNewNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewSubcategoryName(event.target.value);
+    };
+
+    const handleSubmitChangeName = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        updateSubcategoryNameMutation.mutate({id: subcategoryId, name: newSubcategoryName});
+    };
+
     return (
         <>
             <h6>Change name</h6>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmitChangeName}>
                 <div className="mb-3">
                     <input
                         type="text"
                         className="form-control"
                         id="formInputName"
                         placeholder="Input the name of subcategory"
-                        value={name}
-                        onChange={handleNameChange}
+                        value={newSubcategoryName}
+                        onChange={handleNewNameChange}
                         required
                     />
                 </div>
