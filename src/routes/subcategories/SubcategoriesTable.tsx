@@ -1,15 +1,34 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-import {Subcategory} from "../../models/subcategories.model";
+import useSubcategoryMutations from "../../hooks/mutations/use-subcategory-mutations.ts";
+import {Subcategory, UseSubcategoriesApiInterface} from "../../models/subcategories.model";
 
 interface SubcategoriesTableProps {
-    data: Subcategory[];
-    handlerDeleteSubcategory: (id: number) => void;
+    subcategoriesApi: UseSubcategoriesApiInterface;
+    subcategories: Subcategory[];
+    setSubcategories: React.Dispatch<React.SetStateAction<Subcategory[]>>;
+    setTotalCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function SubcategoriesTable({data, handlerDeleteSubcategory}: SubcategoriesTableProps) {
-    const subcategories: React.JSX.Element[] = data.map(v => (
+export default function SubcategoriesTable({
+                                               subcategoriesApi,
+                                               subcategories,
+                                               setSubcategories,
+                                               setTotalCount
+                                           }: SubcategoriesTableProps) {
+    const {deleteSubcategoryMutation} = useSubcategoryMutations(subcategoriesApi);
+
+    const handleDeleteSubcategory = async (id: number) => {
+        const response = await deleteSubcategoryMutation.mutateAsync(id);
+
+        if (!response.error) {
+            setSubcategories((prevState) => prevState.filter((subcategory) => subcategory.id !== id));
+            setTotalCount((prevState) => prevState - 1);
+        }
+    };
+
+    const tableBody: React.JSX.Element[] = subcategories.map(v => (
         <tr key={v.id}>
             <th scope="row">{v.id}</th>
             <td>{v.name}</td>
@@ -20,7 +39,7 @@ export default function SubcategoriesTable({data, handlerDeleteSubcategory}: Sub
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => handlerDeleteSubcategory(v.id)}
+                    onClick={() => handleDeleteSubcategory(v.id)}
                 >
                     <i className="bi bi-trash"/>
                 </button>
@@ -40,7 +59,7 @@ export default function SubcategoriesTable({data, handlerDeleteSubcategory}: Sub
                 </tr>
                 </thead>
                 <tbody>
-                {subcategories}
+                {tableBody}
                 </tbody>
             </table>
         </>

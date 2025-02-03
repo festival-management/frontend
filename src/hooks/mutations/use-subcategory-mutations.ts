@@ -8,6 +8,12 @@ const useSubcategoryMutations = (subcategoriesApi: UseSubcategoriesApiInterface)
     const {addToast} = useToastContext();
     const {onSuccessMutation} = baseMutation(addToast);
 
+    // Create
+    const addSubcategoryMutation = useMutation({
+        mutationFn: subcategoriesApi.addSubcategory,
+        onSuccess: onSuccessMutation
+    });
+
     // Updates
     const updateSubcategoryNameMutation = useMutation({
         mutationFn: (variables: {
@@ -24,7 +30,18 @@ const useSubcategoryMutations = (subcategoriesApi: UseSubcategoriesApiInterface)
         onSuccess: onSuccessMutation
     });
 
-    return {updateSubcategoryNameMutation, updateSubcategoryOrderMutation};
+    // Delete
+    const deleteSubcategoryMutation = useMutation({
+        mutationFn: subcategoriesApi.deleteSubcategory,
+        onSuccess: onSuccessMutation
+    });
+
+    return {
+        addSubcategoryMutation,
+        updateSubcategoryNameMutation,
+        updateSubcategoryOrderMutation,
+        deleteSubcategoryMutation
+    };
 };
 
 export default useSubcategoryMutations;
