@@ -1,15 +1,31 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
+import useUsersApi from "../../api/users.ts";
 import {User} from "../../models/users.model";
+import useUserMutations from "../../hooks/mutations/use-user-mutations.ts";
 
 interface UsersTableProps {
-    data: User[];
-    handlerDeleteUser: (id: number) => void;
+    users: User[];
+    setUsers: React.Dispatch<React.SetStateAction<User[]>>;
+    setTotalCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function UsersTable({data, handlerDeleteUser}: UsersTableProps) {
-    const users: React.JSX.Element[] = data.map(v => (
+export default function UsersTable({users, setUsers, setTotalCount}: UsersTableProps) {
+    const usersApi = useUsersApi();
+
+    const {deleteUserMutation} = useUserMutations(usersApi);
+
+    const handleDeleteUser = async (id: number) => {
+        const response = await deleteUserMutation.mutateAsync(id);
+
+        if (!response.error) {
+            setUsers((prevState) => prevState.filter((user) => user.id !== id));
+            setTotalCount((prevState) => prevState - 1);
+        }
+    };
+
+    const tableBody: React.JSX.Element[] = users.map(v => (
         <tr key={v.id}>
             <th scope="row">{v.id}</th>
             <td>{v.username}</td>
@@ -20,7 +36,7 @@ export default function UsersTable({data, handlerDeleteUser}: UsersTableProps) {
                 <button
                     type="button"
                     className="btn btn-danger"
-                    onClick={() => handlerDeleteUser(v.id)}
+                    onClick={() => handleDeleteUser(v.id)}
                 >
                     <i className="bi bi-trash"/>
                 </button>
@@ -40,7 +56,7 @@ export default function UsersTable({data, handlerDeleteUser}: UsersTableProps) {
                 </tr>
                 </thead>
                 <tbody>
-                {users}
+                {tableBody}
                 </tbody>
             </table>
         </>

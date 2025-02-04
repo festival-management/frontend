@@ -2,9 +2,9 @@ import {AxiosResponse} from "axios";
 
 import API from "../env/api";
 import useHttpClient from "./utils";
-import {LoginResponse, RegisterResponse} from "../models/auth.model";
+import {LoginResponse, RegisterResponse, UseAuthApiInterface} from "../models/auth.model";
 
-const useAuthApi = () => {
+const useAuthApi = (): UseAuthApiInterface => {
     const {http, token, navigate} = useHttpClient(API.AUTH.toString());
 
     const login = async (username: string, password: string) => {

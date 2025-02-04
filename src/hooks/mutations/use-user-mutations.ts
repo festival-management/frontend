@@ -8,6 +8,7 @@ const useUserMutations = (usersApi: UseUsersApiInterface) => {
     const {addToast} = useToastContext();
     const {onSuccessMutation} = baseMutation(addToast);
 
+    // Updates
     const updateUserNameMutation = useMutation({
         mutationFn: (variables: { id: number, name: string }) => usersApi.updateUserName(variables.id, variables.name),
         onSuccess: onSuccessMutation
@@ -27,7 +28,13 @@ const useUserMutations = (usersApi: UseUsersApiInterface) => {
         onSuccess: onSuccessMutation
     });
 
-    return {updateUserNameMutation, updateUserPasswordMutation, updateUserRoleIdMutation};
+    // Delete
+    const deleteUserMutation = useMutation({
+        mutationFn: usersApi.deleteUser,
+        onSuccess: onSuccessMutation
+    });
+
+    return {updateUserNameMutation, updateUserPasswordMutation, updateUserRoleIdMutation, deleteUserMutation};
 };
 
 export default useUserMutations;

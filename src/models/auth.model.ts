@@ -9,3 +9,10 @@ export interface LoginResponse extends BaseResponse {
 export interface RegisterResponse extends BaseResponse {
     user?: User;
 }
+
+// Interface for the useAuthApi hook
+export interface UseAuthApiInterface {
+    login(username: string, password: string): Promise<LoginResponse>;
+
+    register(username: string, password: string, roleId: number): Promise<RegisterResponse>;
+}
