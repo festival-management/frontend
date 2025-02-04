@@ -3,9 +3,9 @@ import {AxiosResponse} from "axios";
 import API from "../env/api";
 import useHttpClient from "./utils";
 import BaseResponse from "../models/base.model";
-import {GetUserResponse, GetUsersResponse} from "../models/users.model";
+import {GetUserResponse, GetUsersResponse, UseUsersApiInterface} from "../models/users.model";
 
-const useUsersApi = () => {
+const useUsersApi = (): UseUsersApiInterface => {
     const {http, token} = useHttpClient(API.USERS.toString());
 
     const deleteUser = async (id: number) => {

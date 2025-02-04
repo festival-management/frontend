@@ -1,0 +1,33 @@
+import {useMutation} from "@tanstack/react-query";
+
+import {baseMutation} from "./base.ts";
+import {useToastContext} from "../../contexts/ToastContext.tsx";
+import {UseUsersApiInterface} from "../../models/users.model.ts";
+
+const useUserMutations = (usersApi: UseUsersApiInterface) => {
+    const {addToast} = useToastContext();
+    const {onSuccessMutation} = baseMutation(addToast);
+
+    const updateUserNameMutation = useMutation({
+        mutationFn: (variables: { id: number, name: string }) => usersApi.updateUserName(variables.id, variables.name),
+        onSuccess: onSuccessMutation
+    });
+    const updateUserPasswordMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            password: string
+        }) => usersApi.updateUserPassword(variables.password, variables.id),
+        onSuccess: onSuccessMutation
+    });
+    const updateUserRoleIdMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            roleId: number
+        }) => usersApi.updateUserRoleId(variables.id, variables.roleId),
+        onSuccess: onSuccessMutation
+    });
+
+    return {updateUserNameMutation, updateUserPasswordMutation, updateUserRoleIdMutation};
+};
+
+export default useUserMutations;

@@ -19,7 +19,7 @@ const UseRoleQueries = (rolesApi: UseRolesApiInterface) => {
         return data;
     };
 
-    const fetchRolesName = (canOrder: boolean): GetRolesNameResponse | undefined => {
+    const fetchRolesName = (canOrder?: boolean): GetRolesNameResponse | undefined => {
         const {data} = useQuery({
             queryKey: ["roles-name", canOrder],
             queryFn: () => rolesApi.getRolesName(canOrder),

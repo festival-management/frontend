@@ -1,136 +1,61 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {useMutation, useQuery} from "@tanstack/react-query";
 
 import useRolesApi from "../../../api/roles";
 import useUsersApi from "../../../api/users";
 import UserEditNameForm from "./UserEditNameForm";
+import {User} from "../../../models/users.model.ts";
 import {RoleName} from "../../../models/roles.model";
-import BaseResponse from "../../../models/base.model";
 import UserEditRoleIdForm from "./UserEditRoleIdForm";
-import {ErrorCodes} from "../../../errors/ErrorCodes.ts";
 import UserEditPasswordForm from "./UserEditPasswordForm";
-import ToastManager from "../../../components/toast-manager.tsx";
-import ToastMessage, {ToastType} from "../../../models/toast-message.model.ts";
+import {useToastContext} from "../../../contexts/ToastContext.tsx";
+import useRoleQueries from "../../../hooks/queries/use-role-queries.ts";
+import useUserQueries from "../../../hooks/queries/use-user-queries.ts";
 
 export default function RouteUserEdit() {
     const {id} = useParams();
 
-    const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [rolesName, setRolesName] = useState<RoleName[]>([]);
-    const [userName, setUserName] = useState("");
-    const [userPassword, setUserPassword] = useState("");
-    const [userRoleId, setUserRoleId] = useState(-1);
+    const [user, setUser] = useState<User>();
 
     const usersApi = useUsersApi();
     const rolesApi = useRolesApi();
 
-    const addToast = (errorCode: number, type: ToastType) => {
-        setToasts((prevToasts) => [{ errorCode, type }, ...prevToasts]);
-    };
+    const {addToast} = useToastContext();
+    const {fetchRolesName} = useRoleQueries(rolesApi);
+    const {fetchUserDetails} = useUserQueries(usersApi);
 
-    const removeToast = (index: number) => {
-        setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
-    };
-
-    const {data} = useQuery({
-        queryKey: ["users-edit", id],
-        queryFn: async () => {
-            const data = await usersApi.getUserById(parseInt(id || "-1"));
-            const dataRolesName = await rolesApi.getRolesName();
-
-            return {user: data, rolesName: dataRolesName};
-        },
-        enabled: true,
-        staleTime: 0,
-    });
-    const onSuccessMutation = async (data: BaseResponse) => {
-        if (data.error) {
-            return addToast(data.code, "error");
-        }
-
-        addToast(ErrorCodes.SUCCESS, "success");
-    };
-    const updateUserNameMutation = useMutation({
-        mutationFn: (variables: { id: number, name: string }) => usersApi.updateUserName(variables.id, variables.name),
-        onSuccess: onSuccessMutation
-    });
-    const updateUserPasswordMutation = useMutation({
-        mutationFn: (variables: {
-            id: number,
-            password: string
-        }) => usersApi.updateUserPassword(variables.password, variables.id),
-        onSuccess: onSuccessMutation
-    });
-    const updateUserRoleIdMutation = useMutation({
-        mutationFn: (variables: {
-            id: number,
-            roleId: number
-        }) => usersApi.updateUserRoleId(variables.id, variables.roleId),
-        onSuccess: onSuccessMutation
-    });
-
-    const handleUserNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUserName(event.target.value);
-    };
-
-    const handleUserPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUserPassword(event.target.value);
-    };
-
-    const handleUserRoleIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setUserRoleId(parseInt(event.target.value));
-    };
-
-    const handleSubmitChangeNewUserName = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        updateUserNameMutation.mutate({id: parseInt(id || "-1"), name: userName});
-    };
-
-    const handleSubmitChangeNewUserPassword = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        updateUserPasswordMutation.mutate({id: parseInt(id || "-1"), password: userPassword});
-    };
-
-    const handleSubmitChangeNewUserRoleId = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        updateUserRoleIdMutation.mutate({id: parseInt(id || "-1"), roleId: userRoleId});
-    };
+    const rolesNameData = fetchRolesName();
+    const userData = fetchUserDetails(parseInt(id || "-1"));
 
     useEffect(() => {
-        if (data) {
-            if (data.user.error) {
-                return addToast(data.user.code, "error");
-            }
+        if (!rolesNameData) return;
 
-            setUserName(data.user.username!);
-            setUserRoleId(data.user.role_id!);
+        if (rolesNameData.error) return addToast(rolesNameData.code, "error");
 
-            if (data.rolesName.error) {
-                return addToast(data.rolesName.code, "error");
-            }
+        setRolesName(rolesNameData.roles!);
+    }, [rolesNameData]);
 
-            setRolesName(data.rolesName.roles!);
-        }
-    }, [data]);
+    useEffect(() => {
+        if (!userData) return;
+
+        if (userData.error) return addToast(userData.code, "error");
+
+        setUser(userData as User);
+    }, [userData]);
+
+    if (!user) return;
 
     return (
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <UserEditNameForm name={userName} handleNameChange={handleUserNameChange}
-                                      handleSubmit={handleSubmitChangeNewUserName}/>
-                    <UserEditPasswordForm password={userPassword} handlePasswordChange={handleUserPasswordChange}
-                                          handleSubmit={handleSubmitChangeNewUserPassword}/>
-                    <UserEditRoleIdForm rolesName={rolesName} roleId={userRoleId}
-                                        handleRoleIdChange={handleUserRoleIdChange}
-                                        handleSubmit={handleSubmitChangeNewUserRoleId}/>
+                    <UserEditNameForm usersApi={usersApi} userId={user.id} userName={user.username}/>
+                    <UserEditPasswordForm usersApi={usersApi} userId={user.id}/>
+                    <UserEditRoleIdForm usersApi={usersApi} userId={user.id} userRoleId={user.role_id}
+                                        rolesName={rolesName}/>
                 </div>
             </div>
-            <ToastManager toasts={toasts} removeToast={removeToast}/>
         </div>
     );
 }
