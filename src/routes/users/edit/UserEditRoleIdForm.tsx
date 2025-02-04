@@ -1,20 +1,29 @@
 import React, {useEffect, useState} from "react";
 
+import useRolesApi from "../../../api/roles.ts";
 import {RoleName} from "../../../models/roles.model";
+import {useToastContext} from "../../../contexts/ToastContext.tsx";
 import {UseUsersApiInterface} from "../../../models/users.model.ts";
+import useRoleQueries from "../../../hooks/queries/use-role-queries.ts";
 import useUserMutations from "../../../hooks/mutations/use-user-mutations.ts";
 
 type UserEditRoleIdFormProps = {
     usersApi: UseUsersApiInterface;
     userId: number;
     userRoleId: number;
-    rolesName: RoleName[];
 }
 
-export default function UserEditRoleIdForm({usersApi, userId, userRoleId, rolesName}: UserEditRoleIdFormProps) {
+export default function UserEditRoleIdForm({usersApi, userId, userRoleId}: UserEditRoleIdFormProps) {
+    const [rolesName, setRolesName] = useState<RoleName[]>([]);
     const [newUserRoleId, setNewUserRoleId] = useState(userRoleId);
 
+    const rolesApi = useRolesApi();
+
+    const {addToast} = useToastContext();
+    const {fetchRolesName} = useRoleQueries(rolesApi);
     const {updateUserRoleIdMutation} = useUserMutations(usersApi);
+
+    const rolesNameData = fetchRolesName();
 
     const handleUserRoleIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setNewUserRoleId(parseInt(event.target.value));
@@ -25,6 +34,14 @@ export default function UserEditRoleIdForm({usersApi, userId, userRoleId, rolesN
 
         updateUserRoleIdMutation.mutate({id: userId, roleId: newUserRoleId});
     };
+
+    useEffect(() => {
+        if (!rolesNameData) return;
+
+        if (rolesNameData.error) return addToast(rolesNameData.code, "error");
+
+        setRolesName(rolesNameData.roles!);
+    }, [rolesNameData]);
 
     useEffect(() => {
         setNewUserRoleId(userRoleId);
