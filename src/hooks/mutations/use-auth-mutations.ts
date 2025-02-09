@@ -17,7 +17,15 @@ const useAuthMutations = (authApi: UseAuthApiInterface) => {
         onSuccess: onSuccessMutation
     });
 
-    return {addUserMutation};
+    const loginMutation = useMutation({
+        mutationFn: (variables: {
+            username: string,
+            password: string
+        }) => authApi.login(variables.username, variables.password),
+        onSuccess: onSuccessMutation
+    });
+
+    return {addUserMutation, loginMutation};
 };
 
 export default useAuthMutations;

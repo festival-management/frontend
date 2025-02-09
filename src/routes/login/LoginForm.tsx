@@ -1,20 +1,30 @@
-import React from "react";
+import React, {useState} from "react";
 
-type LoginFormProps = {
-    username: string;
-    password: string;
-    handleUsernameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    handlePasswordChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-}
+import useAuthApi from "../../api/auth.ts";
+import useAuthMutations from "../../hooks/mutations/use-auth-mutations.ts";
 
-export default function LoginForm({
-                                      username,
-                                      password,
-                                      handleUsernameChange,
-                                      handlePasswordChange,
-                                      handleSubmit
-                                  }: LoginFormProps) {
+export default function LoginForm() {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const authApi = useAuthApi();
+
+    const {loginMutation} = useAuthMutations(authApi);
+
+    const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setUsername(event.target.value);
+    };
+
+    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(event.target.value);
+    };
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        loginMutation.mutate({username, password});
+    };
+
     return (
         <form onSubmit={handleSubmit}>
             <div className="mb-3">
