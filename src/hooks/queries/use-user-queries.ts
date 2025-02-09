@@ -3,11 +3,11 @@ import {useQuery} from "@tanstack/react-query";
 import {GetUserResponse, GetUsersResponse, UseUsersApiInterface} from "../../models/users.model.ts";
 
 const useUserQueries = (usersApi: UseUsersApiInterface) => {
-    const fetchUserDetails = (id: number): GetUserResponse | undefined => {
+    const fetchUserDetails = (id?: number): GetUserResponse | undefined => {
         const {data} = useQuery({
             queryKey: ["users-details", id],
             queryFn: () => usersApi.getUserById(id),
-            enabled: !!id,
+            enabled: true,
             staleTime: 0,
         });
 

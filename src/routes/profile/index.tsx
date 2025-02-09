@@ -1,62 +1,26 @@
-import React, {useEffect, useState} from 'react';
-import {useMutation, useQuery} from "@tanstack/react-query";
+import {useEffect, useState} from 'react';
 
 import useUsersApi from "../../api/users";
-import {ErrorCodes} from "../../errors/ErrorCodes.ts";
-import ToastManager from "../../components/toast-manager.tsx";
 import ProfileEditPasswordForm from "./ProfileEditPasswordForm";
-import ToastMessage, {ToastType} from "../../models/toast-message.model.ts";
+import {useToastContext} from "../../contexts/ToastContext.tsx";
+import useUserQueries from "../../hooks/queries/use-user-queries.ts";
 
 export default function RouteProfile() {
-    const [toasts, setToasts] = useState<ToastMessage[]>([]);
     const [userName, setUserName] = useState("");
-    const [password, setPassword] = useState("");
 
     const usersApi = useUsersApi();
 
-    const addToast = (errorCode: number, type: ToastType) => {
-        setToasts((prevToasts) => [{ errorCode, type }, ...prevToasts]);
-    };
+    const {addToast} = useToastContext();
+    const {fetchUserDetails} = useUserQueries(usersApi);
 
-    const removeToast = (index: number) => {
-        setToasts((prevToasts) => prevToasts.filter((_, i) => i !== index));
-    };
-
-    const {data} = useQuery({
-        queryKey: ["profile"],
-        queryFn: () => usersApi.getUserById(),
-        enabled: true,
-        staleTime: 0,
-    });
-    const updateUserPasswordMutation = useMutation({
-        mutationFn: usersApi.updateUserPassword,
-        onSuccess: async (data) => {
-            if (data.error) {
-                return addToast(data.code, "error");
-            }
-
-            addToast(ErrorCodes.SUCCESS, "success");
-        }
-    });
-
-    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(event.target.value);
-    };
-
-    const handleSubmitChangePassword = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        updateUserPasswordMutation.mutate(password);
-    }
+    const data = fetchUserDetails();
 
     useEffect(() => {
-        if (data) {
-            if (data.error) {
-                return addToast(data.code, "error");
-            }
+        if (!data) return;
 
-            setUserName(data.username!);
-        }
+        if (data.error) return addToast(data.code, "error");
+
+        setUserName(data.username!);
     }, [data]);
 
     return (
@@ -67,11 +31,9 @@ export default function RouteProfile() {
                         Username: {userName}
                     </div>
                     <hr/>
-                    <ProfileEditPasswordForm password={password} handlePasswordChange={handlePasswordChange}
-                                             handleSubmit={handleSubmitChangePassword}/>
+                    <ProfileEditPasswordForm usersApi={usersApi}/>
                 </div>
             </div>
-            <ToastManager toasts={toasts} removeToast={removeToast}/>
         </div>
     );
 }

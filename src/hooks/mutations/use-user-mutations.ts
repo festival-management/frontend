@@ -15,8 +15,8 @@ const useUserMutations = (usersApi: UseUsersApiInterface) => {
     });
     const updateUserPasswordMutation = useMutation({
         mutationFn: (variables: {
-            id: number,
-            password: string
+            password: string,
+            id?: number,
         }) => usersApi.updateUserPassword(variables.password, variables.id),
         onSuccess: onSuccessMutation
     });
