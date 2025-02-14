@@ -25,7 +25,18 @@ const useMenuQueries = (menusApi: UseMenusApiInterface) => {
         return data;
     };
 
-    return { fetchMenusData, fetchMenuDetails };
+    const fetchAllMenusUser = (orderBy: string, includeFields: boolean): GetMenusResponse | undefined => {
+        const {data} = useQuery({
+            queryKey: ["menu-user", orderBy, includeFields],
+            queryFn: async () => menusApi.getAllMenusUser(orderBy, includeFields),
+            enabled: true,
+            staleTime: 0,
+        });
+
+        return data;
+    };
+
+    return {fetchMenusData, fetchMenuDetails, fetchAllMenusUser};
 };
 
 export default useMenuQueries;

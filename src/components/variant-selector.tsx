@@ -1,26 +1,24 @@
 import {ProductVariant} from "../models/products.model.ts";
 
 type VariantSelectorProps = {
-    index: number;
     variants: ProductVariant[];
-    selectedVariantId: number;
-    onVariantChange: (variantId: number) => void;
+    selectedVariantId: number | null;
+    onVariantChange: (variantId: number | null) => void;
 };
 
-export default function VariantSelector({index, variants, selectedVariantId, onVariantChange}: VariantSelectorProps) {
+export default function VariantSelector({variants, selectedVariantId, onVariantChange}: VariantSelectorProps) {
     return (
         <div className="mb-3 row align-items-center">
-            <div className="col-2">
-                <label htmlFor={`variantSelect-${index}`} className="form-label"><strong>Choose a variant:</strong></label>
-            </div>
             <div className="col">
                 <select
-                    id={`variantSelect-${index}`}
                     className="form-select"
                     value={selectedVariantId ?? ""}
-                    onChange={(e) => onVariantChange(parseInt(e.target.value))}
+                    onChange={(e) => {
+                        const value = e.target.value === "" ? null : parseInt(e.target.value);
+                        onVariantChange(value);
+                    }}
                 >
-                    <option value="-1">Select Variant</option>
+                    <option value="">Select Variant</option>
                     {variants.map(variant => (
                         <option key={variant.id} value={variant.id}>{variant.name}</option>
                     ))}

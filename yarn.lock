@@ -959,6 +959,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash@npm:^4.17.15":
+  version: 4.17.15
+  resolution: "@types/lodash@npm:4.17.15"
+  checksum: 10c0/2eb2dc6d231f5fb4603d176c08c8d7af688f574d09af47466a179cd7812d9f64144ba74bb32ca014570ffdc544eedc51b7a5657212bad083b6eecbd72223f9bb
+  languageName: node
+  linkType: hard
+
 "@types/react-dom@npm:^19.0.3":
   version: 19.0.3
   resolution: "@types/react-dom@npm:19.0.3"
@@ -2468,6 +2475,7 @@ __metadata:
     "@tanstack/react-query": "npm:^5.66.0"
     "@types/bootstrap": "npm:^5.2.10"
     "@types/esutils": "npm:^2.0.2"
+    "@types/lodash": "npm:^4.17.15"
     "@types/react": "npm:^19.0.8"
     "@types/react-dom": "npm:^19.0.3"
     "@typescript-eslint/eslint-plugin": "npm:^8.22.0"
@@ -2484,6 +2492,7 @@ __metadata:
     esutils: "npm:^2.0.3"
     globals: "npm:^15.14.0"
     jwt-decode: "npm:^4.0.0"
+    lodash: "npm:^4.17.21"
     react: "npm:^19.0.0"
     react-dom: "npm:^19.0.0"
     react-router-dom: "npm:^7.1.5"
@@ -3425,6 +3434,13 @@ __metadata:
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: 10c0/402fa16a1edd7538de5b5903a90228aa48eb5533986ba7fa26606a49db2572bf414ff73a2c9f5d5fd36b31c46a5d5c7e1527749c07cbcf965ccff5fbdf32c506
+  languageName: node
+  linkType: hard
+
+"lodash@npm:^4.17.21":
+  version: 4.17.21
+  resolution: "lodash@npm:4.17.21"
+  checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
   languageName: node
   linkType: hard
 

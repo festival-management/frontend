@@ -1,34 +1,33 @@
+import QuantitySelector from "./quantity-selector.tsx";
 import {ProductIngredient} from "../models/products.model.ts";
 
 type IngredientsSelectorProps = {
     ingredients: ProductIngredient[];
-    selectedIngredientIds: number[];
-    onIngredientChange: (ingredientId: number, isSelected: boolean) => void;
+    selectedIngredientIds: Map<number, number>;
+    handleIngredientChange: (ingredientId: number, change: number) => void;
 };
 
-export default function IngredientsSelector({ingredients, selectedIngredientIds, onIngredientChange}: IngredientsSelectorProps) {
+export default function IngredientsSelector({
+                                                ingredients,
+                                                selectedIngredientIds,
+                                                handleIngredientChange
+                                            }: IngredientsSelectorProps) {
     return (
-        <div className="mb-3 row align-items-center">
-            <div className="col-2">
-                <h6><strong>Ingredients:</strong></h6>
-            </div>
-            <div className="col d-flex flex-wrap">
-                {ingredients.map(ingredient => (
-                    <div key={ingredient.id} className="form-check me-3 mb-2">
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id={`ingredient-${ingredient.id}`}
-                            value={ingredient.id}
-                            checked={selectedIngredientIds.includes(ingredient.id)}
-                            onChange={(e) => onIngredientChange(ingredient.id, e.target.checked)}
+        <div className="mb-3 d-flex flex-wrap flex-column">
+            {ingredients.map((ingredient) => {
+                const quantity = selectedIngredientIds.get(ingredient.id) || 0;
+                return (
+                    <div key={ingredient.id} className="d-flex align-items-center me-3 mb-2">
+                        <QuantitySelector
+                            quantity={quantity}
+                            handleQuantityChange={(change) => handleIngredientChange(ingredient.id, change)}
                         />
-                        <label className="form-check-label" htmlFor={`ingredient-${ingredient.id}`}>
+                        <label className="form-check-label ms-2 text-break" htmlFor={`ingredient-${ingredient.id}`}>
                             {ingredient.name}
                         </label>
                     </div>
-                ))}
-            </div>
+                );
+            })}
         </div>
     );
 }

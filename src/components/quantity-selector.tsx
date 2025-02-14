@@ -1,29 +1,27 @@
-import React from "react";
-
 type QuantitySelectorProps = {
-    index: number;
     quantity: number;
-    handleQuantityChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    handleQuantityChange: (change: number) => void;
 };
 
-export default function QuantitySelector({index, quantity, handleQuantityChange}: QuantitySelectorProps) {
+export default function QuantitySelector({quantity, handleQuantityChange}: QuantitySelectorProps) {
     return (
-        <div className="mb-3 row align-items-center">
-            <div className="col-2">
-                <label htmlFor={`quantitySelect-${index}`} className="form-label"><strong>Choose a quantity:</strong></label>
-            </div>
-            <div className="col">
-                <input
-                    type="number"
-                    className="form-control"
-                    id={`quantitySelect-${index}`}
-                    placeholder="Input the quantity"
-                    min="1"
-                    value={quantity}
-                    onChange={handleQuantityChange}
-                    required
-                />
-            </div>
+        <div className="d-flex align-items-center">
+            <button
+                className="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center"
+                onClick={() => handleQuantityChange(-1)}
+                disabled={quantity === 0}
+                style={{width: "25px", height: "25px"}}
+            >
+                <i className="bi bi-dash"></i>
+            </button>
+            <span className="mx-3">{quantity}</span>
+            <button
+                className="btn btn-sm btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center me-2"
+                onClick={() => handleQuantityChange(1)}
+                style={{width: "25px", height: "25px"}}
+            >
+                <i className="bi bi-plus"></i>
+            </button>
         </div>
     );
 }

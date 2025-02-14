@@ -1,45 +1,55 @@
 import React from "react";
 
-type OrderInfoProps = {
-    customer: string;
-    guests: number;
-    isTakeAway: boolean;
-    table: number;
-    handleCustomerChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    handleGuestsChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    handleIsTakeAwayChange: () => void;
-    handleTableChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
+import {useOrderContext} from "../../contexts/OrderContext.tsx";
 
-export default function OrderInfo({
-                                      customer,
-                                      guests,
-                                      isTakeAway,
-                                      table,
-                                      handleCustomerChange,
-                                      handleGuestsChange,
-                                      handleIsTakeAwayChange,
-                                      handleTableChange
-                                  }: OrderInfoProps) {
+export default function OrderInfo() {
+    const {
+        orderCustomer,
+        setOrderCustomer,
+        orderIsTakeAway,
+        setOrderIsTakeAway,
+        orderGuests,
+        setOrderGuests,
+        orderTable,
+        setOrderTable
+    } = useOrderContext();
+
+    const handleOrderCustomerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOrderCustomer(event.target.value);
+    };
+
+    const handleOrderIsTakeAwayChange = () => {
+        setOrderIsTakeAway((prevState) => !prevState);
+    };
+
+    const handleOrderGuestsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOrderGuests(parseInt(event.target.value));
+    };
+
+    const handleOrderTableChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOrderTable(parseInt(event.target.value));
+    };
+
     return (
         <div className="mb-3">
             <div className="input-group mb-3">
                 <span className="input-group-text">Customer</span>
-                <input type="text" id="newOrderCustomer" className="form-control" value={customer}
-                       onChange={handleCustomerChange}
+                <input type="text" id="newOrderCustomer" className="form-control" value={orderCustomer}
+                       onChange={handleOrderCustomerChange}
                        required/>
                 <span className="input-group-text">Is take away?</span>
-                <div className="form-control d-flex justify-content-center">
-                    <input type="checkbox" id="newOrderIsTakeAway" className="form-check-input" checked={isTakeAway}
-                           onChange={handleIsTakeAwayChange}
+                <div className="form-control form-switch d-flex justify-content-center">
+                    <input type="checkbox" id="newOrderIsTakeAway" className="form-check-input"
+                           checked={orderIsTakeAway}
+                           onChange={handleOrderIsTakeAwayChange}
                            required/>
                 </div>
                 <span className="input-group-text">Guests</span>
-                <input type="number" id="newOrderGuests" min="1" className="form-control" value={guests}
-                       onChange={handleGuestsChange} disabled={isTakeAway}/>
+                <input type="number" id="newOrderGuests" min="1" className="form-control" value={orderGuests}
+                       onChange={handleOrderGuestsChange} disabled={orderIsTakeAway}/>
                 <span className="input-group-text">Table</span>
-                <input type="number" id="newOrderTable" min="1" className="form-control" value={table}
-                       onChange={handleTableChange} disabled={isTakeAway}/>
+                <input type="number" id="newOrderTable" min="1" className="form-control" value={orderTable}
+                       onChange={handleOrderTableChange} disabled={orderIsTakeAway}/>
             </div>
         </div>
     );

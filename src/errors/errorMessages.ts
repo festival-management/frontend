@@ -1,4 +1,4 @@
-import { ErrorCodes } from './ErrorCodes';
+import {ErrorCodes} from './ErrorCodes';
 
 const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.SUCCESS]: "Operation was successful.",
@@ -23,19 +23,21 @@ const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.MENU_ROLE_NOT_FOUND]: "Menu role not found.",
 
     // Orders
+    [ErrorCodes.DUPLICATE_MENU_FIELDS]: "Input duplicate menu fields.",
+    [ErrorCodes.DUPLICATE_MENU_FIELDS_PRODUCT]: "Input duplicate menu field products.",
     [ErrorCodes.INPUT_MENU_FIELD_PRODUCT_VARIANT]: "Input menu field product variant.",
     [ErrorCodes.INPUT_PRODUCT_VARIANT]: "Input product variant.",
+    [ErrorCodes.INPUT_DUPLICATE_PRODUCT_INGREDIENT]: "Input duplicate product ingredients.",
+    [ErrorCodes.INPUT_DUPLICATE_MENU_FIELD_PRODUCT_INGREDIENT]: "Input duplicate menu field product ingredients.",
     [ErrorCodes.MENU_DATE_NOT_VALID]: "Menu date is not valid.",
     [ErrorCodes.MENU_FIELD_NOT_EXIST]: "Menu field does not exist.",
     [ErrorCodes.MENU_FIELD_PRODUCT_INGREDIENT_NOT_EXIST]: "Menu field product ingredient does not exist.",
     [ErrorCodes.MENU_FIELD_PRODUCT_VARIANT_NOT_EXIST]: "Menu field product variant does not exist.",
     [ErrorCodes.MENU_FIELD_PRODUCT_NOT_EXIST]: "Menu field product does not exist.",
-    [ErrorCodes.MENU_FIELD_TOO_MANY_PRODUCTS]: "Menu field has too many products.",
     [ErrorCodes.MENU_NOT_EXIST]: "Menu does not exist.",
     [ErrorCodes.MENU_ROLE_NOT_EXIST]: "Menu role does not exist.",
     [ErrorCodes.MISSING_MENU_FIELD_PRODUCTS]: "Missing menu field products.",
     [ErrorCodes.MISSING_OBLIGATORY_MENU_FIELDS]: "Missing obligatory menu fields.",
-    [ErrorCodes.MISSING_PRODUCT_QUANTITY]: "Missing product quantity.",
     [ErrorCodes.NO_PRODUCTS_AND_MENUS]: "No products and menus.",
     [ErrorCodes.PRODUCT_DATE_NOT_VALID]: "Product date is not valid.",
     [ErrorCodes.PRODUCT_INGREDIENT_NOT_EXIST]: "Product ingredient does not exist.",
@@ -83,11 +85,16 @@ const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.ONLY_ONE_STATISTICS_CAN_BE_TRUE]: "Only one of `can_statistics` and `can_priority_statistics` can be true.",
     [ErrorCodes.PAPER_SIZE_REQUIRED_IF_CAN_ORDER]: "If `can_order` is `True` then `paper_size` is required.",
     [ErrorCodes.UNKNOWN_ORDER_BY_PARAMETER]: "Unknown order_by parameter.",
+    [ErrorCodes.INVALID_OFFSET_OR_LIMIT_NEGATIVE]: "Invalid offset or limit negative.",
 
     // Default
     [ErrorCodes.GENERIC_HTTP_EXCEPTION]: "Generic HTTP exception.",
     [ErrorCodes.INTERNAL_ERROR_SERVER]: "Internal server error.",
-    [ErrorCodes.REQUEST_VALIDATION_ERROR]: "Request validation error."
+    [ErrorCodes.REQUEST_VALIDATION_ERROR]: "Request validation error.",
+
+    // Frontend Error
+    [ErrorCodes.PRODUCT_QUANTITY_CANNOT_BE_ZERO]: "Product quantity cannot be zero.",
+    [ErrorCodes.MENU_QUANTITY_CANNOT_BE_ZERO]: "Menu quantity cannot be zero.",
 };
 
 export default function getErrorMessage(errorCode: number, language: string = 'en'): string {

@@ -1,42 +1,48 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 import {Product} from "../../models/products.model.ts";
-import {OrderProduct} from "../../models/order.model.ts";
-import {ToastType} from "../../models/toast-message.model.ts";
+import useSubcategoriesApi from "../../api/subcategories.ts";
+import {useToastContext} from "../../contexts/ToastContext.tsx";
 import {SubcategoryName} from "../../models/subcategories.model.ts";
 import OrderProductsTableElement from "./OrderProductsTableElement.tsx";
+import useSubcategoryQueries from "../../hooks/queries/use-subcategory-queries.ts";
 import SelectProductSubcategoryId from "../../components/select-product-subcategory-id.tsx";
 
 type OrderProductsTableProps = {
-    subcategoriesName: SubcategoryName[];
     products: Product[];
-    addToast: (errorCode: number, type: ToastType) => void;
-    handleSubmitAddProduct: (product: OrderProduct) => Promise<void>;
 }
 
-export default function OrderProductsTable({subcategoriesName, products, addToast, handleSubmitAddProduct}: OrderProductsTableProps) {
+export default function OrderProductsTable({products}: OrderProductsTableProps) {
     const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(-1);
-    const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
     const [subcategoriesWithProducts, setSubcategoriesWithProducts] = useState<SubcategoryName[]>([]);
+
+    const {addToast} = useToastContext();
+    const subcategoriesApi = useSubcategoriesApi();
+
+    const {fetchSubcategoriesName} = useSubcategoryQueries(subcategoriesApi);
+
+    const subcategoriesNameData = fetchSubcategoriesName("order");
 
     const handleSelectedSubcategoryIdChange = (subcategoryId: number) => {
         setSelectedSubcategoryId(subcategoryId);
     };
 
-    useEffect(() => {
-        const subcategoriesSet = new Set(products.map(product => product.subcategory_id));
-        const validSubcategories = subcategoriesName.filter(subcategory => subcategoriesSet.has(subcategory.id));
-        setSubcategoriesWithProducts(validSubcategories);
-    }, [subcategoriesName, products]);
+    const filteredProducts = useMemo(() => {
+        return selectedSubcategoryId === -1
+            ? []
+            : products.filter(product => product.subcategory_id === selectedSubcategoryId);
+    }, [selectedSubcategoryId, products]);
 
     useEffect(() => {
-        if (selectedSubcategoryId !== -1) {
-            const newFilteredProducts = products.filter(product => product.subcategory_id === selectedSubcategoryId);
-            setFilteredProducts(newFilteredProducts);
-        } else {
-            setFilteredProducts([]);
-        }
-    }, [selectedSubcategoryId, products]);
+        if (!subcategoriesNameData) return;
+
+        if (subcategoriesNameData.error) return addToast(subcategoriesNameData.code, "error");
+
+        const subcategoriesSet = new Set(products.map(product => product.subcategory_id));
+        setSubcategoriesWithProducts(
+            subcategoriesNameData.subcategories!.filter(subcategory => subcategoriesSet.has(subcategory.id))
+        );
+    }, [subcategoriesNameData, products]);
 
     return (
         <>
@@ -45,11 +51,11 @@ export default function OrderProductsTable({subcategoriesName, products, addToas
                 subcategoriesName={subcategoriesWithProducts}
                 handleSelectedSubcategoryIdChange={handleSelectedSubcategoryIdChange}
             />
-            <div className="overflow-y-scroll remove-scrollbar">
+            <div className="row overflow-y-scroll remove-scrollbar">
                 {filteredProducts.map(product => (
-                    <React.Fragment key={product.id}>
-                        <OrderProductsTableElement product={product} addToast={addToast} handleSubmitAddProduct={handleSubmitAddProduct} />
-                    </React.Fragment>
+                    <div className="col-lg-6 col-12" key={product.id}>
+                        <OrderProductsTableElement product={product}/>
+                    </div>
                 ))}
             </div>
         </>

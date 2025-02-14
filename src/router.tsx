@@ -14,6 +14,7 @@ import RouteUserEdit from "./routes/users/edit";
 import RouteProductEdit from "./routes/products/edit";
 import RouteSubcategories from "./routes/subcategories";
 import {ToastProvider} from "./contexts/ToastContext.tsx";
+import {OrderProvider} from "./contexts/OrderContext.tsx";
 import RouteSubcategoryEdit from "./routes/subcategories/edit";
 import {MenuEditProvider} from "./contexts/MenuEditContext.tsx";
 import {ProductEditProvider} from "./contexts/ProductEditContext.tsx";
@@ -38,7 +39,7 @@ const routers = createBrowserRouter(
                 },
                 {
                     path: "/order",
-                    element: <RouteOrder/>
+                    element: <OrderProvider><RouteOrder/></OrderProvider>
                 },
                 {
                     path: "/products",
