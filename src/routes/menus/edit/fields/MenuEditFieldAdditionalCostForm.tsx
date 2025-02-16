@@ -37,6 +37,8 @@ export default function MenuEditFieldAdditionalCostForm({menuField}: MenuEditFie
                     className="form-control"
                     id="menuFieldAdditionalCost"
                     placeholder="Input the additional cost of menu field"
+                    min="0"
+                    step="0.01"
                     value={newMenuFieldAdditionalCost}
                     onChange={handleNewMenuFieldAdditionalCostChange}
                     required

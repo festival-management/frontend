@@ -56,7 +56,7 @@ export default function MenuEditFieldsTable() {
                     <MenuEditFieldMaxSortableElementsForm menuField={v}/>
                     <MenuEditFieldAdditionalCostForm menuField={v}/>
                     <MenuEditFieldProductAdd menuField={v} productsName={productsName}/>
-                    <MenuEditFieldProductsTable menuField={v} productsName={productsName}/>
+                    <MenuEditFieldProductsTable menuField={v}/>
                     <button
                         type="button"
                         className="btn btn-danger"

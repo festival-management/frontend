@@ -77,7 +77,7 @@ export interface UseMenusApiInterface {
     deleteMenuField(id: number, menuFieldId: number): Promise<BaseResponse>;
     deleteMenuFieldProduct(id: number, menuFieldId: number, menuFieldProductId: number): Promise<BaseResponse>;
     deleteMenuRole(id: number, menuRoleId: number): Promise<BaseResponse>;
-    getMenuById(id: number, includeDates?: boolean, includeFields?: boolean, includeRoles?: boolean): Promise<GetMenuResponse>;
+    getMenuById(id: number, includeDates: boolean, includeFields: boolean, includeFieldsProducts: boolean, includeFieldsProductsDates: boolean, includeFieldsProductsIngredients: boolean, includeFieldsProductsRoles: boolean, includeFieldsProductsVariants: boolean, includeRoles: boolean): Promise<GetMenuResponse>;
     getMenus(page: number, orderBy?: string): Promise<GetMenusResponse>;
     getAllMenusUser(orderBy: string, includeFields: boolean, includeFieldsProducts: boolean, includeFieldsProductsIngredients: boolean, includeFieldsProductsVariants: boolean): Promise<GetMenusResponse>;
     updateMenuFieldName(id: number, menuFieldId: number, name: string): Promise<BaseResponse>;

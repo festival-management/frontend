@@ -138,10 +138,15 @@ const useProductsApi = (): UseProductsApiInterface => {
         return response.data;
     };
 
-    const getProductsName = async (orderBy?: string) => {
+    const getProductsName = async (orderBy: string) => {
         const response: AxiosResponse<GetProductsNameResponse> = await http.get(
             "/",
-            {params: {order_by: orderBy, only_name: true}}
+            {
+                params: {
+                    order_by: orderBy,
+                    only_name: true
+                }
+            }
         );
 
         return response.data;

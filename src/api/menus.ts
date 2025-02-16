@@ -102,13 +102,28 @@ const useMenusApi = (): UseMenusApiInterface => {
         return response.data;
     };
 
-    const getMenuById = async (id: number, includeDates: boolean = false, includeFields: boolean = false, includeRoles: boolean = false) => {
+    const getMenuById = async (
+        id: number,
+        includeDates: boolean,
+        includeFields: boolean,
+        includeFieldsProducts: boolean,
+        includeFieldsProductsDates: boolean,
+        includeFieldsProductsIngredients: boolean,
+        includeFieldsProductsRoles: boolean,
+        includeFieldsProductsVariants: boolean,
+        includeRoles: boolean
+    ) => {
         const response: AxiosResponse<GetMenuResponse> = await http.get(
             `/${id}`,
             {
                 params: {
                     include_dates: includeDates,
                     include_fields: includeFields,
+                    include_fields_products: includeFieldsProducts,
+                    include_fields_products_dates: includeFieldsProductsDates,
+                    include_fields_products_ingredients: includeFieldsProductsIngredients,
+                    include_fields_products_roles: includeFieldsProductsRoles,
+                    include_fields_products_variants: includeFieldsProductsVariants,
                     include_roles: includeRoles,
                 }
             }

@@ -92,7 +92,7 @@ export interface UseProductsApiInterface {
     getProductById(id: number, includeDates?: boolean, includeIngredients?: boolean, includeRoles?: boolean, includeVariants?: boolean): Promise<GetProductResponse>;
     getProducts(page: number, subcategoryId?: number, orderBy?: string): Promise<GetProductsResponse>;
     getAllProductsUser(orderBy?: string, includeIngredients?: boolean, includeVariants?: boolean): Promise<GetProductsResponse>;
-    getProductsName(orderBy?: string): Promise<GetProductsNameResponse>;
+    getProductsName(orderBy: string): Promise<GetProductsNameResponse>;
     updateProductCategory(id: number, category: string): Promise<BaseResponse>;
     updateProductIsPriority(id: number, isPriority: boolean): Promise<BaseResponse>;
     updateProductName(id: number, name: string): Promise<BaseResponse>;

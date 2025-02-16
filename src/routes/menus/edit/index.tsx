@@ -27,7 +27,7 @@ export default function RouteMenuEdit() {
     } = useMenuEditContext();
     const {fetchMenuDetails} = useMenuQueries(menusApi);
 
-    const menusData = fetchMenuDetails(parseInt(id || "-1"), true, true, true);
+    const menusData = fetchMenuDetails(parseInt(id || "-1"), true, true, true, true, true, true, true, true);
 
     useEffect(() => {
         if (!menusData) return;

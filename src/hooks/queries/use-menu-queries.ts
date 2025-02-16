@@ -5,7 +5,7 @@ import {GetMenuResponse, GetMenusResponse, UseMenusApiInterface} from "../../mod
 const useMenuQueries = (menusApi: UseMenusApiInterface) => {
     const fetchMenusData = (page: number, orderBy: string): GetMenusResponse | undefined => {
         const {data} = useQuery({
-            queryKey: ["menus", page],
+            queryKey: ["menus", page, orderBy],
             queryFn: () => menusApi.getMenus(page, orderBy),
             enabled: true,
             staleTime: 0,
@@ -14,10 +14,41 @@ const useMenuQueries = (menusApi: UseMenusApiInterface) => {
         return data;
     };
 
-    const fetchMenuDetails = (id: number, includeDates: boolean, includeFields: boolean, includeRoles: boolean): GetMenuResponse | undefined => {
+    const fetchMenuDetails = (
+        id: number,
+        includeDates: boolean,
+        includeFields: boolean,
+        includeFieldsProducts: boolean,
+        includeFieldsProductsDates: boolean,
+        includeFieldsProductsIngredients: boolean,
+        includeFieldsProductsRoles: boolean,
+        includeFieldsProductsVariants: boolean,
+        includeRoles: boolean
+    ): GetMenuResponse | undefined => {
         const {data} = useQuery({
-            queryKey: ["menu-edit", id, includeDates, includeFields, includeRoles],
-            queryFn: async () => menusApi.getMenuById(id, includeDates, includeFields, includeRoles),
+            queryKey: [
+                "menu-edit",
+                id,
+                includeDates,
+                includeFields,
+                includeFieldsProducts,
+                includeFieldsProductsDates,
+                includeFieldsProductsIngredients,
+                includeFieldsProductsRoles,
+                includeFieldsProductsVariants,
+                includeRoles
+            ],
+            queryFn: async () => menusApi.getMenuById(
+                id,
+                includeDates,
+                includeFields,
+                includeFieldsProducts,
+                includeFieldsProductsDates,
+                includeFieldsProductsIngredients,
+                includeFieldsProductsRoles,
+                includeFieldsProductsVariants,
+                includeRoles
+            ),
             enabled: !!id,
             staleTime: 0,
         });
@@ -33,7 +64,14 @@ const useMenuQueries = (menusApi: UseMenusApiInterface) => {
         includeFieldsProductsVariants: boolean
     ): GetMenusResponse | undefined => {
         const {data} = useQuery({
-            queryKey: ["menu-user", orderBy, includeFields],
+            queryKey: [
+                "menu-user",
+                orderBy,
+                includeFields,
+                includeFieldsProducts,
+                includeFieldsProductsIngredients,
+                includeFieldsProductsVariants
+            ],
             queryFn: async () => menusApi.getAllMenusUser(
                 orderBy,
                 includeFields,
