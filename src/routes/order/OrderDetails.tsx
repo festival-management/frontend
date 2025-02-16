@@ -77,7 +77,15 @@ export default function OrderDetails({products, menus}: OrderDetailsProps) {
                         {menu.fields.map((field, fieldIndex) => (
                             <div key={fieldIndex} className="ms-3">
                                 {field.products.map((product, productIndex) => {
-                                    const {name, variantName, ingredientNames} = getProductDetails(product, products);
+                                    const menuData = menus.find((m) => m.id === menu.menu_id);
+                                    const fieldData = menuData?.fields?.find((f) => f.id === field.menu_field_id);
+                                    const field_products = fieldData?.products?.map((product) => product.product) || [];
+
+                                    const {
+                                        name,
+                                        variantName,
+                                        ingredientNames
+                                    } = getProductDetails(product, field_products);
                                     return (
                                         <div key={productIndex} className="mb-2">
                                             <div className="d-flex align-items-center justify-content-between">

@@ -2,7 +2,6 @@ import {useEffect, useReducer, useState} from "react";
 
 import {Menu} from "../../models/menus.model.ts";
 import {ErrorCodes} from "../../errors/ErrorCodes.ts";
-import {Product} from "../../models/products.model.ts";
 import {useToastContext} from "../../contexts/ToastContext.tsx";
 import {useOrderContext} from "../../contexts/OrderContext.tsx";
 import {selectedFieldsReducer} from "../../contexts/orderReducer.ts";
@@ -11,10 +10,9 @@ import OrderMenusFieldProductTableElement from "./OrderMenusFieldProductTableEle
 
 type OrderMenusTableElementProps = {
     menu: Menu;
-    products: Product[];
 }
 
-export default function OrderMenusTableElement({menu, products}: OrderMenusTableElementProps) {
+export default function OrderMenusTableElement({menu}: OrderMenusTableElementProps) {
     const [price, setPrice] = useState(menu.price);
     const [selectedQuantity, setSelectedQuantity] = useState<number>(0);
     const [selectedFields, selectedFieldsDispatch] = useReducer(selectedFieldsReducer, []);
@@ -27,8 +25,12 @@ export default function OrderMenusTableElement({menu, products}: OrderMenusTable
         setSelectedQuantity((prevState) => prevState + change);
     };
 
-    const getProductDetails = (productId: number) => {
-        return products.find(product => product.id === productId);
+    const getProductDetails = (fieldId: number, productId: number) => {
+        return menu.fields
+            ?.find(field => field.id === fieldId)
+            ?.products
+            ?.find(product => product.id === productId)
+            ?.product;
     };
 
     const handleSubmit = async () => {
@@ -48,7 +50,7 @@ export default function OrderMenusTableElement({menu, products}: OrderMenusTable
 
         const hasInvalidProduct = selectedFields.some(field =>
             field.products.some(product => {
-                const productDetails = getProductDetails(product.product_id);
+                const productDetails = getProductDetails(field.menu_field_id, product.product_id);
                 return productDetails && productDetails.variants && productDetails.variants.length > 0 && !product.variant_id;
             })
         );
@@ -94,6 +96,8 @@ export default function OrderMenusTableElement({menu, products}: OrderMenusTable
         setPrice(newPrice);
     }, [selectedQuantity, selectedFields, menu]);
 
+    console.log(menu)
+
     return (
         <div className="card mb-2">
             <div className="card-body">
@@ -118,14 +122,10 @@ export default function OrderMenusTableElement({menu, products}: OrderMenusTable
                                     </h5>
                                     <div className="mb-2">
                                         {field.products?.map(fp => {
-                                            const productDetails = getProductDetails(fp.product_id);
-
-                                            if (!productDetails) return;
-
                                             return <OrderMenusFieldProductTableElement
-                                                key={`${field.id}-${productDetails.id}`}
+                                                key={`${field.id}-${fp.product.id}`}
                                                 fieldId={field.id}
-                                                product={productDetails}
+                                                product={fp.product}
                                                 dispatch={selectedFieldsDispatch}
                                                 resetTrigger={resetTrigger}
                                             />

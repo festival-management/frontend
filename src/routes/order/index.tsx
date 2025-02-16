@@ -7,6 +7,7 @@ import useOrdersApi from "../../api/orders.ts";
 import {Menu} from "../../models/menus.model.ts";
 import useProductsApi from "../../api/products.ts";
 import OrderMenusTable from "./OrderMenusTable.tsx";
+import {ErrorCodes} from "../../errors/ErrorCodes.ts";
 import {Product} from "../../models/products.model.ts";
 import OrderProductsTable from "./OrderProductsTable.tsx";
 import {useToastContext} from "../../contexts/ToastContext.tsx";
@@ -45,13 +46,15 @@ export default function RouteOrder() {
         setOrderMenus
     } = useOrderContext();
 
-    const menusData = fetchAllMenusUser("name", true);
+    const menusData = fetchAllMenusUser("name", true, true, true, true);
     const productsData = fetchAllProductsUser("name", true, true);
 
     const {addOrderMutation} = useOrderMutations(ordersApi);
 
     const handleSubmit = async () => {
-        // TODO: Manage error
+        if (!orderCustomer) return addToast(ErrorCodes.MISSING_ORDER_CUSTOMER, "error");
+        if (orderProducts.length === 0 && orderMenus.length === 0) return addToast(ErrorCodes.NO_PRODUCTS_AND_MENUS, "error");
+        if (!orderIsTakeAway && !orderGuests) return addToast(ErrorCodes.SET_GUESTS_NUMBER, "error");
 
         const response = await addOrderMutation.mutateAsync({
             customer: orderCustomer,
@@ -123,7 +126,7 @@ export default function RouteOrder() {
                             </div>
                             {isSelectedProducts ?
                                 <OrderProductsTable products={products}/> :
-                                <OrderMenusTable menus={menus} products={products}/>}
+                                <OrderMenusTable menus={menus}/>}
                         </div>
                     </div>
                 </div>

@@ -25,10 +25,22 @@ const useMenuQueries = (menusApi: UseMenusApiInterface) => {
         return data;
     };
 
-    const fetchAllMenusUser = (orderBy: string, includeFields: boolean): GetMenusResponse | undefined => {
+    const fetchAllMenusUser = (
+        orderBy: string,
+        includeFields: boolean,
+        includeFieldsProducts: boolean,
+        includeFieldsProductsIngredients: boolean,
+        includeFieldsProductsVariants: boolean
+    ): GetMenusResponse | undefined => {
         const {data} = useQuery({
             queryKey: ["menu-user", orderBy, includeFields],
-            queryFn: async () => menusApi.getAllMenusUser(orderBy, includeFields),
+            queryFn: async () => menusApi.getAllMenusUser(
+                orderBy,
+                includeFields,
+                includeFieldsProducts,
+                includeFieldsProductsIngredients,
+                includeFieldsProductsVariants
+            ),
             enabled: true,
             staleTime: 0,
         });

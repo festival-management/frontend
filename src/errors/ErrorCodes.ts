@@ -117,4 +117,5 @@ export enum ErrorCodes {
     // Orders
     PRODUCT_QUANTITY_CANNOT_BE_ZERO = 1000,
     MENU_QUANTITY_CANNOT_BE_ZERO,
+    MISSING_ORDER_CUSTOMER,
 }

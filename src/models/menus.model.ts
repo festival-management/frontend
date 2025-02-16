@@ -1,4 +1,5 @@
 import BaseResponse from "./base.model";
+import {Product} from "./products.model.ts";
 
 export interface MenuDate {
     id: number;
@@ -9,7 +10,7 @@ export interface MenuDate {
 export interface MenuFieldProduct {
     id: number;
     price: number;
-    product_id: number;
+    product: Product;
 }
 
 export interface MenuField {
@@ -78,7 +79,7 @@ export interface UseMenusApiInterface {
     deleteMenuRole(id: number, menuRoleId: number): Promise<BaseResponse>;
     getMenuById(id: number, includeDates?: boolean, includeFields?: boolean, includeRoles?: boolean): Promise<GetMenuResponse>;
     getMenus(page: number, orderBy?: string): Promise<GetMenusResponse>;
-    getAllMenusUser(orderBy?: string, includeFields?: boolean): Promise<GetMenusResponse>;
+    getAllMenusUser(orderBy: string, includeFields: boolean, includeFieldsProducts: boolean, includeFieldsProductsIngredients: boolean, includeFieldsProductsVariants: boolean): Promise<GetMenusResponse>;
     updateMenuFieldName(id: number, menuFieldId: number, name: string): Promise<BaseResponse>;
     updateMenuFieldIsOptional(id: number, menuFieldId: number, isOptional: boolean): Promise<BaseResponse>;
     updateMenuFieldMaxSortableElements(id: number, menuFieldId: number, maxSortableElements: number): Promise<BaseResponse>;
