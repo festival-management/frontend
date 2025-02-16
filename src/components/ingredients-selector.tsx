@@ -22,7 +22,7 @@ export default function IngredientsSelector({
                             quantity={quantity}
                             handleQuantityChange={(change) => handleIngredientChange(ingredient.id, change)}
                         />
-                        <label className="form-check-label ms-2 text-break" htmlFor={`ingredient-${ingredient.id}`}>
+                        <label className="form-check-label ms-2 text-break">
                             {ingredient.name}
                         </label>
                     </div>

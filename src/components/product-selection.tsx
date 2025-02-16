@@ -101,7 +101,7 @@ export default function ProductSelection({
             {isFromMenu ?
                 <div className="row align-items-center g-2">
                     <div className="col-auto">
-                        <label className="form-check-label" htmlFor={`product-${product.id}`}>
+                        <label className="form-check-label">
                             {product.name}
                         </label>
                     </div>

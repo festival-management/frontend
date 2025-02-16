@@ -96,8 +96,6 @@ export default function OrderMenusTableElement({menu}: OrderMenusTableElementPro
         setPrice(newPrice);
     }, [selectedQuantity, selectedFields, menu]);
 
-    console.log(menu)
-
     return (
         <div className="card mb-2">
             <div className="card-body">

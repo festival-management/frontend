@@ -3,6 +3,7 @@ import {useEffect, useMemo, useState} from "react";
 import {Product} from "../../models/products.model.ts";
 import useSubcategoriesApi from "../../api/subcategories.ts";
 import {useToastContext} from "../../contexts/ToastContext.tsx";
+import {useOrderContext} from "../../contexts/OrderContext.tsx";
 import {SubcategoryName} from "../../models/subcategories.model.ts";
 import OrderProductsTableElement from "./OrderProductsTableElement.tsx";
 import useSubcategoryQueries from "../../hooks/queries/use-subcategory-queries.ts";
@@ -15,8 +16,10 @@ type OrderProductsTableProps = {
 export default function OrderProductsTable({products}: OrderProductsTableProps) {
     const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(-1);
     const [subcategoriesWithProducts, setSubcategoriesWithProducts] = useState<SubcategoryName[]>([]);
+    const [subcategoriesDone, setSubcategoriesDone] = useState<number[]>([]);
 
     const {addToast} = useToastContext();
+    const {orderProducts} = useOrderContext();
     const subcategoriesApi = useSubcategoriesApi();
 
     const {fetchSubcategoriesName} = useSubcategoryQueries(subcategoriesApi);
@@ -44,11 +47,16 @@ export default function OrderProductsTable({products}: OrderProductsTableProps) 
         );
     }, [subcategoriesNameData, products]);
 
+    useEffect(() => {
+        setSubcategoriesDone([...new Set(orderProducts.map((value) => products.find((p) => p.id === value.product_id)?.subcategory_id || -1))]);
+    }, [orderProducts, products]);
+
     return (
         <>
             <SelectProductSubcategoryId
                 selectedSubcategoryId={selectedSubcategoryId}
                 subcategoriesName={subcategoriesWithProducts}
+                subcategoriesDone={subcategoriesDone}
                 handleSelectedSubcategoryIdChange={handleSelectedSubcategoryIdChange}
             />
             <div className="row overflow-y-scroll remove-scrollbar">
