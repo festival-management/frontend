@@ -2,7 +2,7 @@ import {useCallback, useMemo} from "react";
 
 import {Menu} from "../../models/menus.model.ts";
 import {Product} from "../../models/products.model.ts";
-import {OrderProduct} from "../../models/order.model.ts";
+import {CreateOrderProduct} from "../../models/order.model.ts";
 import {useOrderContext} from "../../contexts/OrderContext.tsx";
 
 type OrderDetailsProps = {
@@ -10,7 +10,7 @@ type OrderDetailsProps = {
     menus: Menu[];
 }
 
-const getProductDetails = (product: OrderProduct, products: Product[]) => {
+const getProductDetails = (product: CreateOrderProduct, products: Product[]) => {
     const productDetails = products.find(p => p.id === product.product_id);
     if (!productDetails) return {name: "", variantName: "", ingredientNames: "", price: "0.00"};
 

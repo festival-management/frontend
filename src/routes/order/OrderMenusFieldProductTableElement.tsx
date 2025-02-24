@@ -1,7 +1,7 @@
 import React from "react";
 
 import {Product} from "../../models/products.model.ts";
-import {OrderProduct} from "../../models/order.model.ts";
+import {CreateOrderProduct} from "../../models/order.model.ts";
 import ProductSelection from "../../components/product-selection.tsx";
 import {SelectedFieldsReducerAction} from "../../contexts/orderReducer.ts";
 
@@ -18,7 +18,7 @@ export default function OrderMenusFieldProductTableElement({
                                                                dispatch,
                                                                resetTrigger
                                                            }: OrderMenusFieldProductTableElementProps) {
-    const updateProductInState = (orderProduct: OrderProduct) => {
+    const updateProductInState = (orderProduct: CreateOrderProduct) => {
         if (orderProduct.quantity > 0) {
             dispatch({
                 type: "ADD_OR_UPDATE_PRODUCT",

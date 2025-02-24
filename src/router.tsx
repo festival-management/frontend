@@ -6,6 +6,7 @@ import RouteLogin from "./routes/login";
 import RouteRoles from "./routes/roles";
 import RouteUsers from "./routes/users";
 import RouteOrder from "./routes/order";
+import RouteOrders from "./routes/orders";
 import RouteProfile from "./routes/profile";
 import RouteProducts from "./routes/products";
 import RouteMenuEdit from "./routes/menus/edit";
@@ -40,6 +41,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/order",
                     element: <OrderProvider><RouteOrder/></OrderProvider>
+                },
+                {
+                    path: "/orders",
+                    element: <RouteOrders/>
                 },
                 {
                     path: "/products",

@@ -1,7 +1,7 @@
 import React, {createContext, ReactNode, useContext, useState} from 'react';
 import {isEqual} from "lodash";
 
-import {OrderMenu, OrderProduct} from "../models/order.model.ts";
+import {CreateOrderMenu, CreateOrderProduct} from "../models/order.model.ts";
 
 interface OrderContextType {
     orderCustomer: string;
@@ -12,14 +12,14 @@ interface OrderContextType {
     setOrderIsTakeAway: React.Dispatch<React.SetStateAction<boolean>>;
     orderTable: number;
     setOrderTable: React.Dispatch<React.SetStateAction<number>>;
-    orderProducts: OrderProduct[];
-    setOrderProducts: React.Dispatch<React.SetStateAction<OrderProduct[]>>;
-    orderMenus: OrderMenu[];
-    setOrderMenus: React.Dispatch<React.SetStateAction<OrderMenu[]>>;
+    orderProducts: CreateOrderProduct[];
+    setOrderProducts: React.Dispatch<React.SetStateAction<CreateOrderProduct[]>>;
+    orderMenus: CreateOrderMenu[];
+    setOrderMenus: React.Dispatch<React.SetStateAction<CreateOrderMenu[]>>;
 
-    addProduct(product: OrderProduct): void;
+    addProduct(product: CreateOrderProduct): void;
 
-    addMenu(menu: OrderMenu): void
+    addMenu(menu: CreateOrderMenu): void
 }
 
 const OrderContext = createContext<OrderContextType | undefined>(undefined);
@@ -33,10 +33,10 @@ export const OrderProvider = ({children}: OrderProviderProps) => {
     const [orderGuests, setOrderGuests] = useState(1);
     const [orderIsTakeAway, setOrderIsTakeAway] = useState(false);
     const [orderTable, setOrderTable] = useState(1);
-    const [orderProducts, setOrderProducts] = useState<OrderProduct[]>([]);
-    const [orderMenus, setOrderMenus] = useState<OrderMenu[]>([]);
+    const [orderProducts, setOrderProducts] = useState<CreateOrderProduct[]>([]);
+    const [orderMenus, setOrderMenus] = useState<CreateOrderMenu[]>([]);
 
-    const _isEqual = (a: OrderProduct | OrderMenu, b: OrderProduct | OrderMenu): boolean => {
+    const _isEqual = (a: CreateOrderProduct | CreateOrderMenu, b: CreateOrderProduct | CreateOrderMenu): boolean => {
         if ("product_id" in a && "product_id" in b) {
             return a.product_id === b.product_id &&
                 a.variant_id === b.variant_id &&
@@ -51,7 +51,7 @@ export const OrderProvider = ({children}: OrderProviderProps) => {
         return false;
     };
 
-    const mergeOrderItems = <T extends OrderProduct | OrderMenu>(items: T[]): T[] => {
+    const mergeOrderItems = <T extends CreateOrderProduct | CreateOrderMenu>(items: T[]): T[] => {
         const mergedItems: T[] = [];
 
         items.forEach((item) => {
@@ -71,12 +71,12 @@ export const OrderProvider = ({children}: OrderProviderProps) => {
         return mergedItems;
     };
 
-    const addProduct = (product: OrderProduct) => {
+    const addProduct = (product: CreateOrderProduct) => {
         const newOrderProducts = mergeOrderItems([...orderProducts, product]);
         setOrderProducts(newOrderProducts);
     };
 
-    const addMenu = (menu: OrderMenu) => {
+    const addMenu = (menu: CreateOrderMenu) => {
         const newOrderMenus = mergeOrderItems([...orderMenus, menu]);
         setOrderMenus(newOrderMenus);
     };

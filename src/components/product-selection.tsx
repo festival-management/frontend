@@ -2,15 +2,15 @@ import {useEffect, useState} from "react";
 
 import {Product} from "../models/products.model.ts";
 import VariantSelector from "./variant-selector.tsx";
-import {OrderProduct} from "../models/order.model.ts";
 import QuantitySelector from "./quantity-selector.tsx";
+import {CreateOrderProduct} from "../models/order.model.ts";
 import IngredientsSelector from "./ingredients-selector.tsx";
 
 interface ProductSelectionProps {
     product: Product;
     isFromMenu: boolean;
     resetTrigger?: number;
-    updateProductInState: (orderProduct: OrderProduct) => void;
+    updateProductInState: (orderProduct: CreateOrderProduct) => void;
 }
 
 export default function ProductSelection({
@@ -24,7 +24,7 @@ export default function ProductSelection({
     const [selectedIngredientIds, setSelectedIngredientIds] = useState<Map<number, number>>(new Map());
     const [calculatedPrice, setCalculatedPrice] = useState<number>(isFromMenu ? 0 : product.price);
 
-    const createProductInstance = (): OrderProduct => {
+    const createProductInstance = (): CreateOrderProduct => {
         return {
             product_id: product.id,
             ingredients: Array.from(selectedIngredientIds, ([id, quantity]) => ({ingredient_id: id, quantity})),

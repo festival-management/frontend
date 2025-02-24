@@ -1,11 +1,11 @@
-import {OrderMenuField, OrderProduct} from "../models/order.model.ts";
+import {CreateOrderMenuField, CreateOrderProduct} from "../models/order.model.ts";
 
 export type SelectedFieldsReducerAction =
-    | { type: "ADD_OR_UPDATE_PRODUCT"; fieldId: number; product: OrderProduct }
+    | { type: "ADD_OR_UPDATE_PRODUCT"; fieldId: number; product: CreateOrderProduct }
     | { type: "REMOVE_PRODUCT"; fieldId: number; productId: number }
     | { type: "RESET" };
 
-export function selectedFieldsReducer(state: OrderMenuField[], action: SelectedFieldsReducerAction) {
+export function selectedFieldsReducer(state: CreateOrderMenuField[], action: SelectedFieldsReducerAction) {
     switch (action.type) {
         case "ADD_OR_UPDATE_PRODUCT": {
             const fieldIndex = state.findIndex(field => field.menu_field_id === action.fieldId);
