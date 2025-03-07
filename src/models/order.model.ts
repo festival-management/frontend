@@ -1,4 +1,5 @@
 import {Menu} from "./menus.model.ts";
+import {User} from "./users.model.ts";
 import BaseResponse from "./base.model.ts";
 import {Product} from "./products.model.ts";
 
@@ -39,10 +40,10 @@ export interface Order {
     guests?: number;
     is_take_away: boolean;
     table?: number;
-    user_id: number;
-    created_at: string;
+    user?: User;
     menus?: OrderMenu[];
     products?: OrderProduct[];
+    created_at: string;
 }
 
 export interface CreateOrderProductIngredient {
@@ -78,6 +79,6 @@ export interface GetOrdersResponse extends BaseResponse {
 // Interface for the useOrdersApi hook
 export interface UseOrdersApiInterface {
     addOrder(customer: string, guests: number | null, isTakeAway: boolean, table: number | null, products: CreateOrderProduct[], menus: CreateOrderMenu[]): Promise<BaseResponse>;
-    getOrders(page: number, includeMenus: boolean, includeMenusMenu: boolean, includeMenusMenuDates: boolean, includeMenusMenuFields: boolean, includeMenusMenuFieldsProducts: boolean, includeMenusMenuFieldsProductsDates: boolean, includeMenusMenuFieldsProductsIngredients: boolean, includeMenusMenuFieldsProductsRoles: boolean, includeMenusMenuFieldsProductsVariants: boolean, includeMenusMenuRoles: boolean, includeMenusFields: boolean, includeMenusFieldsProducts: boolean, includeMenusFieldsProductsIngredients: boolean, includeProducts: boolean, includeProductsProduct: boolean, includeProductsProductDates: boolean, includeProductsProductIngredients: boolean, includeProductsProductRoles: boolean, includeProductsProductVariants: boolean, includeProductsIngredients: boolean, orderBy?: string): Promise<GetOrdersResponse>;
+    getOrders(page: number, includeMenus: boolean, includeMenusMenu: boolean, includeMenusMenuDates: boolean, includeMenusMenuFields: boolean, includeMenusMenuFieldsProducts: boolean, includeMenusMenuFieldsProductsDates: boolean, includeMenusMenuFieldsProductsIngredients: boolean, includeMenusMenuFieldsProductsRoles: boolean, includeMenusMenuFieldsProductsVariants: boolean, includeMenusMenuRoles: boolean, includeMenusFields: boolean, includeMenusFieldsProducts: boolean, includeMenusFieldsProductsIngredients: boolean, includeProducts: boolean, includeProductsProduct: boolean, includeProductsProductDates: boolean, includeProductsProductIngredients: boolean, includeProductsProductRoles: boolean, includeProductsProductVariants: boolean, includeProductsIngredients: boolean, includeUser: boolean, orderBy?: string): Promise<GetOrdersResponse>;
     deleteOrder(id: number): Promise<BaseResponse>;
 }

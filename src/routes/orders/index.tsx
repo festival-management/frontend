@@ -19,7 +19,7 @@ export default function RouteOrders() {
 
     const data = fetchMenusData(
         page, "id", true, true, true, true, true, true, true, true, true,
-        true, true, true, true, true, true, true, true, true, true, true
+        true, true, true, true, true, true, true, true, true, true, true, true
     );
 
     useEffect(() => {

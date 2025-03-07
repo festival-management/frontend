@@ -25,7 +25,8 @@ const useOrderQueries = (ordersApi: UseOrdersApiInterface) => {
         includeProductsProductIngredients: boolean,
         includeProductsProductRoles: boolean,
         includeProductsProductVariants: boolean,
-        includeProductsIngredients: boolean
+        includeProductsIngredients: boolean,
+        includeUser: boolean,
     ): GetOrdersResponse | undefined => {
         const {data} = useQuery({
             queryKey: [
@@ -51,7 +52,8 @@ const useOrderQueries = (ordersApi: UseOrdersApiInterface) => {
                 includeProductsProductIngredients,
                 includeProductsProductRoles,
                 includeProductsProductVariants,
-                includeProductsIngredients
+                includeProductsIngredients,
+                includeUser
             ],
             queryFn: () => ordersApi.getOrders(
                 page,
@@ -75,6 +77,7 @@ const useOrderQueries = (ordersApi: UseOrdersApiInterface) => {
                 includeProductsProductRoles,
                 includeProductsProductVariants,
                 includeProductsIngredients,
+                includeUser,
                 orderBy
             ),
             enabled: true,

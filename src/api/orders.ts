@@ -47,6 +47,7 @@ const useOrdersApi = (): UseOrdersApiInterface => {
         includeProductsProductRoles: boolean,
         includeProductsProductVariants: boolean,
         includeProductsIngredients: boolean,
+        includeUser: boolean,
         orderBy?: string
     ) => {
         const limit = import.meta.env.VITE_DEFAULT_LIMIT_VALUE;
@@ -76,7 +77,8 @@ const useOrdersApi = (): UseOrdersApiInterface => {
                     include_products_product_ingredients: includeProductsProductIngredients,
                     include_products_product_roles: includeProductsProductRoles,
                     include_products_product_variants: includeProductsProductVariants,
-                    include_products_ingredients: includeProductsIngredients
+                    include_products_ingredients: includeProductsIngredients,
+                    include_user: includeUser,
                 }
             }
         );
