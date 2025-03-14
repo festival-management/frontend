@@ -76,9 +76,13 @@ export interface GetOrdersResponse extends BaseResponse {
     orders: Order[];
 }
 
+export interface GetOrderResponse extends BaseResponse, Partial<Order> {
+}
+
 // Interface for the useOrdersApi hook
 export interface UseOrdersApiInterface {
     addOrder(customer: string, guests: number | null, isTakeAway: boolean, table: number | null, products: CreateOrderProduct[], menus: CreateOrderMenu[]): Promise<BaseResponse>;
+    getOrderById(id: number, includeMenus: boolean, includeMenusMenu: boolean, includeMenusMenuDates: boolean, includeMenusMenuFields: boolean, includeMenusMenuFieldsProducts: boolean, includeMenusMenuFieldsProductsDates: boolean, includeMenusMenuFieldsProductsIngredients: boolean, includeMenusMenuFieldsProductsRoles: boolean, includeMenusMenuFieldsProductsVariants: boolean, includeMenusMenuRoles: boolean, includeMenusFields: boolean, includeMenusFieldsProducts: boolean, includeMenusFieldsProductsIngredients: boolean, includeProducts: boolean, includeProductsProduct: boolean, includeProductsProductDates: boolean, includeProductsProductIngredients: boolean, includeProductsProductRoles: boolean, includeProductsProductVariants: boolean, includeProductsIngredients: boolean, includeUser: boolean): Promise<GetOrderResponse>;
     getOrders(page: number, includeMenus: boolean, includeMenusMenu: boolean, includeMenusMenuDates: boolean, includeMenusMenuFields: boolean, includeMenusMenuFieldsProducts: boolean, includeMenusMenuFieldsProductsDates: boolean, includeMenusMenuFieldsProductsIngredients: boolean, includeMenusMenuFieldsProductsRoles: boolean, includeMenusMenuFieldsProductsVariants: boolean, includeMenusMenuRoles: boolean, includeMenusFields: boolean, includeMenusFieldsProducts: boolean, includeMenusFieldsProductsIngredients: boolean, includeProducts: boolean, includeProductsProduct: boolean, includeProductsProductDates: boolean, includeProductsProductIngredients: boolean, includeProductsProductRoles: boolean, includeProductsProductVariants: boolean, includeProductsIngredients: boolean, includeUser: boolean, orderBy?: string): Promise<GetOrdersResponse>;
     deleteOrder(id: number): Promise<BaseResponse>;
 }

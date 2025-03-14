@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 import {Order, UseOrdersApiInterface} from "../../models/order.model.ts";
 import useOrderMutations from "../../hooks/mutations/use-order-mutations.ts";
@@ -31,6 +32,9 @@ export default function OrdersTable({ordersApi, orders, setOrders, setTotalCount
             <td>{v.table}</td>
             <td>{v.user?.username}</td>
             <td>
+                <Link className="btn btn-primary" to={`/orders/info/${v.id}`} role="button">
+                    <i className="bi bi-info-circle"/>
+                </Link>
                 <button
                     type="button"
                     className="btn btn-danger"

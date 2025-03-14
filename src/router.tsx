@@ -12,6 +12,7 @@ import RouteProducts from "./routes/products";
 import RouteMenuEdit from "./routes/menus/edit";
 import RouteRoleEdit from "./routes/roles/edit";
 import RouteUserEdit from "./routes/users/edit";
+import RouteOrderInfo from "./routes/orders/info";
 import RouteProductEdit from "./routes/products/edit";
 import RouteSubcategories from "./routes/subcategories";
 import {ToastProvider} from "./contexts/ToastContext.tsx";
@@ -45,6 +46,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/orders",
                     element: <RouteOrders/>
+                },
+                {
+                    path: "/orders/info/:id",
+                    element: <RouteOrderInfo/>
                 },
                 {
                     path: "/products",

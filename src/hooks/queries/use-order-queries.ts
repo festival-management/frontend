@@ -1,9 +1,90 @@
 import {useQuery} from "@tanstack/react-query";
 
-import {GetOrdersResponse, UseOrdersApiInterface} from "../../models/order.model.ts";
+import {GetOrderResponse, GetOrdersResponse, UseOrdersApiInterface} from "../../models/order.model.ts";
 
 const useOrderQueries = (ordersApi: UseOrdersApiInterface) => {
-    const fetchMenusData = (
+    const fetchOrderDetails = (
+        id: number,
+        includeMenus: boolean,
+        includeMenusMenu: boolean,
+        includeMenusMenuDates: boolean,
+        includeMenusMenuFields: boolean,
+        includeMenusMenuFieldsProducts: boolean,
+        includeMenusMenuFieldsProductsDates: boolean,
+        includeMenusMenuFieldsProductsIngredients: boolean,
+        includeMenusMenuFieldsProductsRoles: boolean,
+        includeMenusMenuFieldsProductsVariants: boolean,
+        includeMenusMenuRoles: boolean,
+        includeMenusFields: boolean,
+        includeMenusFieldsProducts: boolean,
+        includeMenusFieldsProductsIngredients: boolean,
+        includeProducts: boolean,
+        includeProductsProduct: boolean,
+        includeProductsProductDates: boolean,
+        includeProductsProductIngredients: boolean,
+        includeProductsProductRoles: boolean,
+        includeProductsProductVariants: boolean,
+        includeProductsIngredients: boolean,
+        includeUser: boolean,
+    ): GetOrderResponse | undefined => {
+        const {data} = useQuery({
+            queryKey: [
+                "order-details",
+                id,
+                includeMenus,
+                includeMenusMenu,
+                includeMenusMenuDates,
+                includeMenusMenuFields,
+                includeMenusMenuFieldsProducts,
+                includeMenusMenuFieldsProductsDates,
+                includeMenusMenuFieldsProductsIngredients,
+                includeMenusMenuFieldsProductsRoles,
+                includeMenusMenuFieldsProductsVariants,
+                includeMenusMenuRoles,
+                includeMenusFields,
+                includeMenusFieldsProducts,
+                includeMenusFieldsProductsIngredients,
+                includeProducts,
+                includeProductsProduct,
+                includeProductsProductDates,
+                includeProductsProductIngredients,
+                includeProductsProductRoles,
+                includeProductsProductVariants,
+                includeProductsIngredients,
+                includeUser
+            ],
+            queryFn: () => ordersApi.getOrderById(
+                id,
+                includeMenus,
+                includeMenusMenu,
+                includeMenusMenuDates,
+                includeMenusMenuFields,
+                includeMenusMenuFieldsProducts,
+                includeMenusMenuFieldsProductsDates,
+                includeMenusMenuFieldsProductsIngredients,
+                includeMenusMenuFieldsProductsRoles,
+                includeMenusMenuFieldsProductsVariants,
+                includeMenusMenuRoles,
+                includeMenusFields,
+                includeMenusFieldsProducts,
+                includeMenusFieldsProductsIngredients,
+                includeProducts,
+                includeProductsProduct,
+                includeProductsProductDates,
+                includeProductsProductIngredients,
+                includeProductsProductRoles,
+                includeProductsProductVariants,
+                includeProductsIngredients,
+                includeUser
+            ),
+            enabled: !!id,
+            staleTime: 0,
+        });
+
+        return data;
+    };
+
+    const fetchOrdersData = (
         page: number,
         orderBy: string,
         includeMenus: boolean,
@@ -87,7 +168,7 @@ const useOrderQueries = (ordersApi: UseOrdersApiInterface) => {
         return data;
     };
 
-    return {fetchMenusData};
+    return {fetchOrderDetails, fetchOrdersData};
 };
 
 export default useOrderQueries;

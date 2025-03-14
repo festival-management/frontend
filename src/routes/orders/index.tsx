@@ -15,11 +15,11 @@ export default function RouteOrders() {
     const ordersApi = useOrdersApi();
 
     const {addToast} = useToastContext();
-    const {fetchMenusData} = useOrderQueries(ordersApi);
+    const {fetchOrdersData} = useOrderQueries(ordersApi);
 
-    const data = fetchMenusData(
-        page, "id", true, true, true, true, true, true, true, true, true,
-        true, true, true, true, true, true, true, true, true, true, true, true
+    const data = fetchOrdersData(
+        page, "id", false, false, false, false, false, false, false, false, false, false,
+        false, false, false, false, false, false, false, false, false, false, true
     );
 
     useEffect(() => {
