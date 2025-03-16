@@ -33,6 +33,7 @@ export enum ErrorCodes {
     MENU_ROLE_NOT_FOUND,
 
     // Orders
+    ORDER_NOT_FOUND,
     // Create
     DUPLICATE_MENU_FIELDS,
     DUPLICATE_MENU_FIELDS_PRODUCT,
