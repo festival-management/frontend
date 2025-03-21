@@ -37,7 +37,7 @@ export default function RouteSettings() {
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <SettingsTable settingsApi={settingsApi} settings={settings} setSettings={setSettings}/>
+                    <SettingsTable settings={settings} setSettings={setSettings}/>
                     <button type="button" className="btn btn-primary mt-3" onClick={handleSubmit}>
                         Save
                     </button>
