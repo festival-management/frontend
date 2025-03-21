@@ -1,14 +1,13 @@
 import React from "react";
 
-import {Settings, UseSettingsApiInterface} from "../../models/settings.ts";
+import {Settings} from "../../models/settings.ts";
 
 interface SettingsTableProps {
-    settingsApi: UseSettingsApiInterface;
     settings: Settings;
     setSettings: React.Dispatch<React.SetStateAction<Settings>>;
 }
 
-export default function SettingsTable({settingsApi, settings, setSettings}: SettingsTableProps) {
+export default function SettingsTable({settings, setSettings}: SettingsTableProps) {
     const handleCheckboxChange = (key: keyof Settings) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setSettings((prevSettings) => ({
             ...prevSettings,
