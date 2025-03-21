@@ -8,6 +8,7 @@ import RouteUsers from "./routes/users";
 import RouteOrder from "./routes/order";
 import RouteOrders from "./routes/orders";
 import RouteProfile from "./routes/profile";
+import RouteSettings from "./routes/settings";
 import RouteProducts from "./routes/products";
 import RouteMenuEdit from "./routes/menus/edit";
 import RouteRoleEdit from "./routes/roles/edit";
@@ -70,6 +71,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/roles/edit/:id",
                     element: <RouteRoleEdit/>
+                },
+                {
+                    path: "/settings",
+                    element: <RouteSettings/>
                 },
                 {
                     path: "/subcategories",

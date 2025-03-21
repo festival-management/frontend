@@ -15,6 +15,9 @@ const API = {
     get ROLES() {
         return new URL("/roles", this.BASE_URL);
     },
+    get SETTINGS() {
+        return new URL("/settings", this.BASE_URL);
+    },
     get SUBCATEGORIES() {
         return new URL("/subcategories", this.BASE_URL);
     },
