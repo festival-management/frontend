@@ -8,6 +8,7 @@ import RouteUsers from "./routes/users";
 import RouteOrder from "./routes/order";
 import RouteOrders from "./routes/orders";
 import RouteProfile from "./routes/profile";
+import RoutePrinters from "./routes/printers";
 import RouteSettings from "./routes/settings";
 import RouteProducts from "./routes/products";
 import RouteMenuEdit from "./routes/menus/edit";
@@ -51,6 +52,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/orders/info/:id",
                     element: <RouteOrderInfo/>
+                },
+                {
+                    path: "/printers",
+                    element: <RoutePrinters/>
                 },
                 {
                     path: "/products",

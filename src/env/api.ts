@@ -9,6 +9,9 @@ const API = {
     get ORDERS() {
         return new URL("/orders", this.BASE_URL);
     },
+    get PRINTERS() {
+        return new URL("/printers", this.BASE_URL);
+    },
     get PRODUCTS() {
         return new URL("/products", this.BASE_URL);
     },

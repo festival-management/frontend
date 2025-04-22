@@ -23,6 +23,7 @@ const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.MENU_ROLE_NOT_FOUND]: "Menu role not found.",
 
     // Orders
+    [ErrorCodes.ORDER_NOT_FOUND]: "Order not found.",
     [ErrorCodes.DUPLICATE_MENU_FIELDS]: "Input duplicate menu fields.",
     [ErrorCodes.DUPLICATE_MENU_FIELDS_PRODUCT]: "Input duplicate menu field products.",
     [ErrorCodes.INPUT_MENU_FIELD_PRODUCT_VARIANT]: "Input menu field product variant.",
@@ -46,6 +47,10 @@ const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.PRODUCT_VARIANT_NOT_EXIST]: "Product variant does not exist.",
     [ErrorCodes.SET_GUESTS_NUMBER]: "Set guests number.",
 
+    // Printers
+    [ErrorCodes.PRINTER_NOT_FOUND]: "Printer not found.",
+    [ErrorCodes.PRINTER_ALREADY_EXISTS]: "Printer already exists.",
+
     // Products
     [ErrorCodes.PRODUCT_ALREADY_EXISTS]: "Product already exists.",
     [ErrorCodes.PRODUCT_NOT_FOUND]: "Product not found.",
@@ -62,7 +67,9 @@ const errorMessagesEn: { [key in number]: string } = {
     // Roles
     [ErrorCodes.ROLE_CANNOT_ORDER]: "Role cannot order.",
     [ErrorCodes.ROLE_NOT_FOUND]: "Role not found.",
+    [ErrorCodes.ROLE_PRINTER_ALREADY_EXISTS]: "Role printer already exists.",
     [ErrorCodes.ROLE_ALREADY_EXISTS]: "Role already exists.",
+    [ErrorCodes.ROLE_PRINTER_NOT_FOUND]: "Role printer not found.",
 
     // Subcategories
     [ErrorCodes.SUBCATEGORY_NOT_FOUND]: "Subcategory not found.",

@@ -58,6 +58,11 @@ export enum ErrorCodes {
     PRODUCT_VARIANT_NOT_EXIST,
     SET_GUESTS_NUMBER,
 
+    // Printers
+    PRINTER_NOT_FOUND,
+    // Create
+    PRINTER_ALREADY_EXISTS,
+
     // Products
     PRODUCT_ALREADY_EXISTS,
     PRODUCT_NOT_FOUND,
@@ -82,8 +87,12 @@ export enum ErrorCodes {
     // Roles
     ROLE_CANNOT_ORDER,
     ROLE_NOT_FOUND,
+    // Add role printer
+    ROLE_PRINTER_ALREADY_EXISTS,
     // Create
     ROLE_ALREADY_EXISTS,
+    // Delete role printer
+    ROLE_PRINTER_NOT_FOUND,
 
     // Subcategories
     SUBCATEGORY_NOT_FOUND,
