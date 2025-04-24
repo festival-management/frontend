@@ -8,10 +8,10 @@ import {
 } from "../../models/roles.model.ts";
 
 const UseRoleQueries = (rolesApi: UseRolesApiInterface) => {
-    const fetchRoleDetails = (id: number): GetRoleResponse | undefined => {
+    const fetchRoleDetails = (id: number, includePrinters: boolean): GetRoleResponse | undefined => {
         const {data} = useQuery({
             queryKey: ["roles-details", id],
-            queryFn: () => rolesApi.getRolesById(id),
+            queryFn: () => rolesApi.getRolesById(id, includePrinters),
             enabled: !!id,
             staleTime: 0,
         });
@@ -30,10 +30,10 @@ const UseRoleQueries = (rolesApi: UseRolesApiInterface) => {
         return data;
     };
 
-    const fetchRolesData = (page: number): GetRolesResponse | undefined => {
+    const fetchRolesData = (page: number, includePrinters: boolean): GetRolesResponse | undefined => {
         const {data} = useQuery({
             queryKey: ["roles", page],
-            queryFn: () => rolesApi.getRoles(page),
+            queryFn: () => rolesApi.getRoles(page, includePrinters),
             enabled: true,
             staleTime: 0,
         });

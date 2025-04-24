@@ -18,7 +18,7 @@ export default function RouteRoles() {
     const {addToast} = useToastContext();
     const {fetchRolesData} = useRoleQueries(rolesApi);
 
-    const rolesData = fetchRolesData(page);
+    const rolesData = fetchRolesData(page, false);
 
     useEffect(() => {
         if (!rolesData) return;

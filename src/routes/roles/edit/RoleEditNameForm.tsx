@@ -1,32 +1,22 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 
-import {UseRolesApiInterface} from "../../../models/roles.model.ts";
+import {useRoleEditContext} from "../../../contexts/RoleEditContext.tsx";
 import useRoleMutations from "../../../hooks/mutations/use-role-mutations.ts";
 
-type RoleEditNameFormProps = {
-    rolesApi: UseRolesApiInterface;
-    roleId: number;
-    roleName: string;
-}
-
-export default function RoleEditNameForm({rolesApi, roleId, roleName}: RoleEditNameFormProps) {
-    const [newRoleName, setNewRoleName] = useState(roleName);
+export default function RoleEditNameForm() {
+    const {roleId, roleName, setRoleName, rolesApi} = useRoleEditContext();
 
     const {updateRoleNameMutation} = useRoleMutations(rolesApi);
 
-    const handleNewRoleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewRoleName(event.target.value);
+    const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRoleName(event.target.value);
     };
 
     const handleSubmitChangeName = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        updateRoleNameMutation.mutate({id: roleId, name: newRoleName});
+        updateRoleNameMutation.mutate({id: roleId, name: roleName});
     };
-
-    useEffect(() => {
-        setNewRoleName(roleName);
-    }, [roleName]);
 
     return (
         <>
@@ -38,8 +28,8 @@ export default function RoleEditNameForm({rolesApi, roleId, roleName}: RoleEditN
                         className="form-control"
                         id="formInputName"
                         placeholder="Input the name of role"
-                        value={newRoleName}
-                        onChange={handleNewRoleNameChange}
+                        value={roleName}
+                        onChange={handleNameChange}
                         required
                     />
                 </div>

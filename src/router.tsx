@@ -21,6 +21,7 @@ import {ToastProvider} from "./contexts/ToastContext.tsx";
 import {OrderProvider} from "./contexts/OrderContext.tsx";
 import RouteSubcategoryEdit from "./routes/subcategories/edit";
 import {MenuEditProvider} from "./contexts/MenuEditContext.tsx";
+import {RoleEditProvider} from "./contexts/RoleEditContext.tsx";
 import {ProductEditProvider} from "./contexts/ProductEditContext.tsx";
 
 const routers = createBrowserRouter(
@@ -75,7 +76,7 @@ const routers = createBrowserRouter(
                 },
                 {
                     path: "/roles/edit/:id",
-                    element: <RouteRoleEdit/>
+                    element: <RoleEditProvider><RouteRoleEdit/></RoleEditProvider>
                 },
                 {
                     path: "/settings",

@@ -1,43 +1,54 @@
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {useParams} from "react-router-dom";
 
-import useRolesApi from "../../../api/roles";
+import RoleEditPrinters from "./printers";
 import RoleEditNameForm from "./RoleEditNameForm";
-import {Role} from "../../../models/roles.model.ts";
-import RoleEditPaperSizeForm from "./RoleEditPaperSizeForm";
 import RoleEditPermissionsForm from "./RoleEditPermissionsForm";
 import {useToastContext} from "../../../contexts/ToastContext.tsx";
 import useRoleQueries from "../../../hooks/queries/use-role-queries.ts";
+import {useRoleEditContext} from "../../../contexts/RoleEditContext.tsx";
+import {Permission} from "../../../enums/permission.ts";
 
 export default function RouteRoleEdit() {
     const {id} = useParams();
 
-    const [role, setRole] = useState<Role>();
-
-    const rolesApi = useRolesApi();
-
     const {addToast} = useToastContext();
+    const {
+        setRoleId,
+        setRoleName,
+        setRolePermissions,
+        setRolePrinters,
+        rolesApi
+    } = useRoleEditContext();
     const {fetchRoleDetails} = useRoleQueries(rolesApi);
 
-    const roleData = fetchRoleDetails(parseInt(id || "-1"));
+    const roleData = fetchRoleDetails(parseInt(id || "-1"), true);
 
     useEffect(() => {
         if (!roleData) return;
 
         if (roleData.error) return addToast(roleData.code, "error");
 
-        setRole(roleData as Role);
+        setRoleId(roleData.id!);
+        setRoleName(roleData.name!);
+        setRolePermissions(
+            new Map<Permission, boolean>(
+                Object.entries(roleData.permissions!).map(([key, value]) => [
+                    Object.values(Permission).find(p => p === key)!,
+                    value
+                ])
+            )
+        );
+        setRolePrinters(roleData.printers!);
     }, [roleData]);
-
-    if (!role) return;
 
     return (
         <div className="container mt-4">
             <div className="card">
                 <div className="card-body">
-                    <RoleEditNameForm rolesApi={rolesApi} roleId={role.id} roleName={role.name}/>
-                    <RoleEditPermissionsForm rolesApi={rolesApi} roleId={role.id} rolePermissions={role.permissions}/>
-                    <RoleEditPaperSizeForm rolesApi={rolesApi} roleId={role.id} rolePaperSize={role.paper_size}/>
+                    <RoleEditNameForm/>
+                    <RoleEditPermissionsForm/>
+                    <RoleEditPrinters/>
                 </div>
             </div>
         </div>

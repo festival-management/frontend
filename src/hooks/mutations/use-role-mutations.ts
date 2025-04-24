@@ -23,15 +23,8 @@ const useRoleMutations = (rolesApi: UseRolesApiInterface) => {
     const updateRolePermissionsMutation = useMutation({
         mutationFn: (variables: {
             id: number,
-            permissions: { [permission in Permission]: boolean }
+            permissions: Map<Permission, boolean>
         }) => rolesApi.updateRolePermissions(variables.id, variables.permissions),
-        onSuccess: onSuccessMutation
-    });
-    const updateRolePaperSizeMutation = useMutation({
-        mutationFn: (variables: {
-            id: number,
-            paperSize: string
-        }) => rolesApi.updateRolePaperSize(variables.id, variables.paperSize),
         onSuccess: onSuccessMutation
     });
 
@@ -41,12 +34,30 @@ const useRoleMutations = (rolesApi: UseRolesApiInterface) => {
         onSuccess: onSuccessMutation
     });
 
+    // Printers
+    const addRolePrinterMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            printerId: number,
+            printerType: string
+        }) => rolesApi.addRolePrinter(variables.id, variables.printerId, variables.printerType),
+        onSuccess: onSuccessMutation
+    });
+    const deleteRolePrinterMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            rolePrinterId: number
+        }) => rolesApi.deleteRolePrinter(variables.id, variables.rolePrinterId),
+        onSuccess: onSuccessMutation
+    });
+
     return {
         addRoleMutation,
         updateRoleNameMutation,
         updateRolePermissionsMutation,
-        updateRolePaperSizeMutation,
-        deleteRoleMutation
+        deleteRoleMutation,
+        addRolePrinterMutation,
+        deleteRolePrinterMutation,
     };
 };
 

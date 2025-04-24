@@ -1,36 +1,27 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 
 import {Permission} from "../../../enums/permission";
-import {UseRolesApiInterface} from "../../../models/roles.model.ts";
+import {useRoleEditContext} from "../../../contexts/RoleEditContext.tsx";
 import useRoleMutations from "../../../hooks/mutations/use-role-mutations.ts";
 
-type RoleEditPermissionsFormProps = {
-    rolesApi: UseRolesApiInterface;
-    roleId: number;
-    rolePermissions: Record<Permission, boolean>;
-}
-
-export default function RoleEditPermissionsForm({rolesApi, roleId, rolePermissions}: RoleEditPermissionsFormProps) {
-    const [newRolePermissions, setNewRolePermissions] = useState(rolePermissions);
-
+export default function RoleEditPermissionsForm() {
+    const {roleId, rolePermissions, setRolePermissions, rolesApi} = useRoleEditContext();
     const {updateRolePermissionsMutation} = useRoleMutations(rolesApi);
 
     const handlePermissionToggle = (permission: Permission) => {
-        setNewRolePermissions(prevState => ({
-            ...prevState,
-            [permission]: !prevState[permission]
-        }));
+        setRolePermissions(prevState => {
+            const newState = new Map(prevState);
+            const currentValue = newState.get(permission) || false;
+            newState.set(permission, !currentValue);
+            return newState;
+        });
     };
 
     const handleSubmitChangePermissions = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        updateRolePermissionsMutation.mutate({id: roleId, permissions: newRolePermissions});
+        updateRolePermissionsMutation.mutate({id: roleId, permissions: rolePermissions});
     };
-
-    useEffect(() => {
-        setNewRolePermissions(rolePermissions);
-    }, [rolePermissions]);
 
     return (
         <>
@@ -40,10 +31,10 @@ export default function RoleEditPermissionsForm({rolesApi, roleId, rolePermissio
                     {Object.values(Permission).map(permission => (
                         <div className="form-check form-switch" key={permission}>
                             <input className="form-check-input" type="checkbox" id={permission}
-                                   checked={newRolePermissions[permission]}
+                                   checked={rolePermissions?.get(permission) ?? false}
                                    onChange={() => handlePermissionToggle(permission as Permission)}/>
                             <label className="form-check-label" htmlFor={permission}>
-                                {permission.replace("_", " ")}
+                                {permission.toString().replaceAll("_", " ")}
                             </label>
                         </div>
                     ))}
