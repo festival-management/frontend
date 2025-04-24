@@ -6,7 +6,7 @@ export default function RoleEditPrinters() {
     return (
         <>
             <h6 className="mb-3">Printers</h6>
-            <EditPrinters AddComponent={RoleEditPrintersAdd} TableComponent={RoleEditPrintersTable} />
+            <EditPrinters AddComponent={RoleEditPrintersAdd} TableComponent={RoleEditPrintersTable}/>
         </>
     );
 }

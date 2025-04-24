@@ -24,10 +24,14 @@ export default function RoleEditPrintersAdd({printersName}: RoleEditPrintersAddP
         setNewRolePrinterType(event.target.value);
     };
 
-    const handleSubmitAddPrinter = async (event: React.FormEvent<HTMLFormElement>)=> {
+    const handleSubmitAddPrinter = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const response = await addRolePrinterMutation.mutateAsync({id: roleId, printerId: newRolePrinterId, printerType: newRolePrinterType});
+        const response = await addRolePrinterMutation.mutateAsync({
+            id: roleId,
+            printerId: newRolePrinterId,
+            printerType: newRolePrinterType
+        });
 
         if (!response.error) {
             setRolePrinters((prevState) => [...prevState, response.printer!]);
