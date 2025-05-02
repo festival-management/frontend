@@ -59,6 +59,20 @@ export default function OrderMenusTableElement({menu}: OrderMenusTableElementPro
             return addToast(ErrorCodes.INPUT_MENU_FIELD_PRODUCT_VARIANT, "error");
         }
 
+        for (const field of selectedFields) {
+            const menuField = menu.fields?.find(f => f.id === field.menu_field_id);
+
+            if (menuField) {
+                const maxSortableElements = menuField.max_sortable_elements;
+                const canExceedMaxSortable = menuField.can_exceed_max_sortable;
+                const totalQuantity = field.products.reduce((sum, value) => sum + value.quantity, 0);
+
+                if (!canExceedMaxSortable && totalQuantity > maxSortableElements) {
+                    return addToast(ErrorCodes.MENU_FIELD_PRODUCT_QUANTITY_EXCEEDED, "error");
+                }
+            }
+        }
+
         addMenu({
             menu_id: menu.id,
             fields: selectedFields,

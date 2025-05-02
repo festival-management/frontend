@@ -201,6 +201,15 @@ const useMenusApi = (): UseMenusApiInterface => {
         return response.data;
     };
 
+    const updateMenuFieldCanExceedMaxSortable = async (id: number, menuFieldId: number, canExceedMaxSortable: boolean) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/field/${menuFieldId}/can_exceed_max_sortable`,
+            {can_exceed_max_sortable: canExceedMaxSortable}
+        );
+
+        return response.data;
+    };
+
     const updateMenuName = async (id: number, name: string) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/name`,
@@ -246,6 +255,7 @@ const useMenusApi = (): UseMenusApiInterface => {
         updateMenuFieldIsOptional,
         updateMenuFieldMaxSortableElements,
         updateMenuFieldAdditionalCost,
+        updateMenuFieldCanExceedMaxSortable,
         updateMenuName,
         updateMenuPrice,
         updateMenuShortName

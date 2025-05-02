@@ -19,6 +19,7 @@ export interface MenuField {
     max_sortable_elements: number;
     additional_cost: number;
     is_optional: boolean;
+    can_exceed_max_sortable: boolean;
     products?: MenuFieldProduct[];
 }
 
@@ -84,6 +85,7 @@ export interface UseMenusApiInterface {
     updateMenuFieldIsOptional(id: number, menuFieldId: number, isOptional: boolean): Promise<BaseResponse>;
     updateMenuFieldMaxSortableElements(id: number, menuFieldId: number, maxSortableElements: number): Promise<BaseResponse>;
     updateMenuFieldAdditionalCost(id: number, menuFieldId: number, additionalCost: number): Promise<BaseResponse>;
+    updateMenuFieldCanExceedMaxSortable(id: number, menuFieldId: number, canExceedMaxSortable: boolean): Promise<BaseResponse>;
     updateMenuName(id: number, name: string): Promise<BaseResponse>;
     updateMenuPrice(id: number, price: number): Promise<BaseResponse>;
     updateMenuShortName(id: number, shortName: string): Promise<BaseResponse>;

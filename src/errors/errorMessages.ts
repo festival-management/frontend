@@ -35,6 +35,7 @@ const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.MENU_FIELD_PRODUCT_INGREDIENT_NOT_EXIST]: "Menu field product ingredient does not exist.",
     [ErrorCodes.MENU_FIELD_PRODUCT_VARIANT_NOT_EXIST]: "Menu field product variant does not exist.",
     [ErrorCodes.MENU_FIELD_PRODUCT_NOT_EXIST]: "Menu field product does not exist.",
+    [ErrorCodes.MENU_FIELD_PRODUCT_QUANTITY_EXCEEDED]: "Menu field product quantity exceeded.",
     [ErrorCodes.MENU_NOT_EXIST]: "Menu does not exist.",
     [ErrorCodes.MENU_ROLE_NOT_EXIST]: "Menu role does not exist.",
     [ErrorCodes.MISSING_MENU_FIELD_PRODUCTS]: "Missing menu field products.",

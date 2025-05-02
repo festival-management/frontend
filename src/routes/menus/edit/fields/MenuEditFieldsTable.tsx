@@ -12,6 +12,7 @@ import useProductQueries from "../../../../hooks/queries/use-product-queries.ts"
 import useMenuMutations from "../../../../hooks/mutations/use-menu-mutations.ts";
 import MenuEditFieldAdditionalCostForm from "./MenuEditFieldAdditionalCostForm.tsx";
 import MenuEditFieldMaxSortableElementsForm from "./MenuEditFieldMaxSortableElementsForm.tsx";
+import MenuEditFieldCanExceedMaxSortableForm from "./MenuEditFieldCanExceedMaxSortableForm.tsx";
 
 export default function MenuEditFieldsTable() {
     const [productsName, setProductsName] = useState<ProductName[]>([]);
@@ -55,6 +56,7 @@ export default function MenuEditFieldsTable() {
                     <MenuEditFieldIsOptionalForm menuField={v}/>
                     <MenuEditFieldMaxSortableElementsForm menuField={v}/>
                     <MenuEditFieldAdditionalCostForm menuField={v}/>
+                    <MenuEditFieldCanExceedMaxSortableForm menuField={v}/>
                     <MenuEditFieldProductAdd menuField={v} productsName={productsName}/>
                     <MenuEditFieldProductsTable menuField={v}/>
                     <button

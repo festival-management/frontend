@@ -69,6 +69,14 @@ const useMenuMutations = (menusApi: UseMenusApiInterface) => {
         }) => menusApi.updateMenuFieldAdditionalCost(variables.id, variables.menuFieldId, variables.additionalCost),
         onSuccess: onSuccessMutation
     });
+    const updateMenuFieldCanExceedMaxSortableMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            menuFieldId: number,
+            canExceedMaxSortable: boolean
+        }) => menusApi.updateMenuFieldCanExceedMaxSortable(variables.id, variables.menuFieldId, variables.canExceedMaxSortable),
+        onSuccess: onSuccessMutation
+    });
 
     // Delete
     const deleteMenuMutation = useMutation({
@@ -153,6 +161,7 @@ const useMenuMutations = (menusApi: UseMenusApiInterface) => {
         updateMenuFieldIsOptionalMutation,
         updateMenuFieldMaxSortableElementsMutation,
         updateMenuFieldAdditionalCostMutation,
+        updateMenuFieldCanExceedMaxSortableMutation,
         deleteMenuMutation,
         addMenuDateMutation,
         deleteMenuDateMutation,
