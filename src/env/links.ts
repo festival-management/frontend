@@ -5,6 +5,7 @@ import LinkModel from "../models/link.model";
 export const LINKS = [
     new LinkModel(NavLink, "/login", "nav-link", "Login", (t) => !t.isLoggedIn()),
     new LinkModel(NavLink, "/order", "nav-link", "Order", (t) => t.canUserOrder()),
+    new LinkModel(NavLink, "/statistics", "nav-link", "Statistics", (t) => t.canUserStatistics() || t.canUserPriorityStatistics()),
     new LinkModel(NavLink, "/roles", "nav-link", "Roles", (t) => t.canUserAdminister()),
     new LinkModel(NavLink, "/users", "nav-link", "Users", (t) => t.canUserAdminister()),
     new LinkModel(NavLink, "/subcategories", "nav-link", "Subcategories", (t) => t.canUserAdminister()),

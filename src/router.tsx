@@ -14,6 +14,7 @@ import RouteProducts from "./routes/products";
 import RouteMenuEdit from "./routes/menus/edit";
 import RouteRoleEdit from "./routes/roles/edit";
 import RouteUserEdit from "./routes/users/edit";
+import RouteStatistics from "./routes/statistics";
 import RouteOrderInfo from "./routes/orders/info";
 import RouteProductEdit from "./routes/products/edit";
 import RouteSubcategories from "./routes/subcategories";
@@ -81,6 +82,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/settings",
                     element: <RouteSettings/>
+                },
+                {
+                    path: "/statistics",
+                    element: <RouteStatistics/>
                 },
                 {
                     path: "/subcategories",

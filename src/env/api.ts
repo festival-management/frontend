@@ -21,6 +21,9 @@ const API = {
     get SETTINGS() {
         return new URL("/settings", this.BASE_URL);
     },
+    get STATISTICS() {
+        return new URL("/statistics", this.BASE_URL);
+    },
     get SUBCATEGORIES() {
         return new URL("/subcategories", this.BASE_URL);
     },

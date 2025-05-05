@@ -29,6 +29,20 @@ const useTokenJwtUtils = () => {
 
         return isLoggedIn() && decodedToken.permissions["can_order"];
     }
+    const canUserStatistics = () => {
+        const decodedToken = getDecodedToken();
+
+        if (!decodedToken) return false;
+
+        return isLoggedIn() && decodedToken.permissions["can_statistics"];
+    };
+    const canUserPriorityStatistics = () => {
+        const decodedToken = getDecodedToken();
+
+        if (!decodedToken) return false;
+
+        return isLoggedIn() && decodedToken.permissions["can_priority_statistics"];
+    };
     const getToken = () => {
         const decodedToken = getDecodedToken();
         return isLoggedIn() ? decodedToken : null;
@@ -50,6 +64,8 @@ const useTokenJwtUtils = () => {
         isLoggedIn,
         canUserAdminister,
         canUserOrder,
+        canUserStatistics,
+        canUserPriorityStatistics,
         getToken,
         getTokenString,
         reset,
