@@ -16,9 +16,9 @@ interface OrderContextType {
     setOrderProducts: React.Dispatch<React.SetStateAction<CreateOrderProduct[]>>;
     orderMenus: CreateOrderMenu[];
     setOrderMenus: React.Dispatch<React.SetStateAction<CreateOrderMenu[]>>;
-
+    orderTotalPrice: number;
+    setOrderTotalPrice: React.Dispatch<React.SetStateAction<number>>;
     addProduct(product: CreateOrderProduct): void;
-
     addMenu(menu: CreateOrderMenu): void
 }
 
@@ -35,6 +35,7 @@ export const OrderProvider = ({children}: OrderProviderProps) => {
     const [orderTable, setOrderTable] = useState(1);
     const [orderProducts, setOrderProducts] = useState<CreateOrderProduct[]>([]);
     const [orderMenus, setOrderMenus] = useState<CreateOrderMenu[]>([]);
+    const [orderTotalPrice, setOrderTotalPrice] = useState(0);
 
     const _isEqual = (a: CreateOrderProduct | CreateOrderMenu, b: CreateOrderProduct | CreateOrderMenu): boolean => {
         if ("product_id" in a && "product_id" in b) {
@@ -90,6 +91,7 @@ export const OrderProvider = ({children}: OrderProviderProps) => {
                 orderTable, setOrderTable,
                 orderProducts, setOrderProducts,
                 orderMenus, setOrderMenus,
+                orderTotalPrice, setOrderTotalPrice,
                 addProduct, addMenu
             }}
         >

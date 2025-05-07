@@ -43,7 +43,9 @@ export default function RouteOrder() {
         orderProducts,
         setOrderProducts,
         orderMenus,
-        setOrderMenus
+        setOrderMenus,
+        orderTotalPrice,
+        setOrderTotalPrice
     } = useOrderContext();
 
     const menusData = fetchAllMenusUser("name", true, true, true, true);
@@ -70,6 +72,7 @@ export default function RouteOrder() {
             setOrderGuests(1);
             setOrderIsTakeAway(false);
             setOrderTable(1);
+            setOrderTotalPrice(0);
 
             setOrderProducts([]);
             setOrderMenus([]);
@@ -137,9 +140,12 @@ export default function RouteOrder() {
                             <div className="overflow-y-scroll mb-3 remove-scrollbar">
                                 <OrderDetails products={products} menus={menus}/>
                             </div>
-                            <button type="button" className="align-self-center btn btn-block btn-primary mt-auto"
-                                    onClick={handleSubmit}>Submit
-                            </button>
+                            <div className="mt-auto d-flex flex-column">
+                                <h5 className="align-self-center">TOTAL: {orderTotalPrice.toFixed(2)} €</h5>
+                                <button type="button" className="align-self-center btn btn-block btn-primary"
+                                        onClick={handleSubmit}>Submit
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
