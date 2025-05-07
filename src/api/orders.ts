@@ -3,6 +3,7 @@ import {AxiosResponse} from "axios";
 import API from "../env/api";
 import useHttpClient from "./utils";
 import BaseResponse from "../models/base.model.ts";
+import {PrinterType} from "../enums/printer-type.ts";
 import {
     CreateOrderMenu,
     CreateOrderProduct,
@@ -148,7 +149,16 @@ const useOrdersApi = (): UseOrdersApiInterface => {
         return response.data;
     };
 
-    return {addOrder, deleteOrder, getOrderById, getOrders};
+    const printOrder = async (orderId: number, printerTypes?: PrinterType[]) => {
+        const response: AxiosResponse<BaseResponse> = await http.post(
+            `/${orderId}/print`,
+            {printer_types: printerTypes?.map(pt => pt.toString())},
+        );
+
+        return response.data;
+    };
+
+    return {addOrder, deleteOrder, getOrderById, getOrders, printOrder};
 }
 
 export default useOrdersApi;

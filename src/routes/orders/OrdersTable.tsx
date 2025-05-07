@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 
 import {Order, UseOrdersApiInterface} from "../../models/order.model.ts";
 import useOrderMutations from "../../hooks/mutations/use-order-mutations.ts";
+import OrderPrint from "./OrderPrint.tsx";
 
 interface OrdersTableProps {
     ordersApi: UseOrdersApiInterface;
@@ -35,6 +36,7 @@ export default function OrdersTable({ordersApi, orders, setOrders, setTotalCount
                 <Link className="btn btn-primary" to={`/orders/info/${v.id}`} role="button">
                     <i className="bi bi-info-circle"/>
                 </Link>
+                <OrderPrint ordersApi={ordersApi} orderId={v.id}/>
                 <button
                     type="button"
                     className="btn btn-danger"

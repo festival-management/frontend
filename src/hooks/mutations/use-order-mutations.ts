@@ -1,6 +1,7 @@
 import {useMutation} from "@tanstack/react-query";
 
 import {baseMutation} from "./base.ts";
+import {PrinterType} from "../../enums/printer-type.ts";
 import {useToastContext} from "../../contexts/ToastContext.tsx";
 import {CreateOrderMenu, CreateOrderProduct, UseOrdersApiInterface} from "../../models/order.model.ts";
 
@@ -27,7 +28,16 @@ const useOrderMutations = (ordersApi: UseOrdersApiInterface) => {
         onSuccess: onSuccessMutation
     });
 
-    return {addOrderMutation, deleteOrderMutation};
+    // Print
+    const printOrderMutation = useMutation({
+        mutationFn: (variables: {
+            orderId: number,
+            printerTypes?: PrinterType[]
+        }) => ordersApi.printOrder(variables.orderId, variables.printerTypes),
+        onSuccess: onSuccessMutation
+    });
+
+    return {addOrderMutation, deleteOrderMutation, printOrderMutation};
 };
 
 export default useOrderMutations;
