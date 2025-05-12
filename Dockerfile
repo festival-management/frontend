@@ -1,4 +1,4 @@
-FROM node:18.20.3-alpine as build
+FROM node:23.9.0-alpine as build
 ARG VITE_BASE_URL
 ARG VITE_DEFAULT_LIMIT_VALUE
 ENV VITE_BASE_URL=$VITE_BASE_URL
