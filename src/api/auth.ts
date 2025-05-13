@@ -5,7 +5,7 @@ import useHttpClient from "./utils";
 import {LoginResponse, RegisterResponse, UseAuthApiInterface} from "../models/auth.model";
 
 const useAuthApi = (): UseAuthApiInterface => {
-    const {http, token, navigate} = useHttpClient(API.AUTH.href);
+    const {http, token, navigate} = useHttpClient(API.AUTH.toString());
 
     const login = async (username: string, password: string) => {
         const response: AxiosResponse<LoginResponse> = await http.post(

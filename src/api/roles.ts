@@ -14,7 +14,7 @@ import {
 } from "../models/roles.model";
 
 const useRolesApi = (): UseRolesApiInterface => {
-    const {http} = useHttpClient(API.ROLES.href);
+    const {http} = useHttpClient(API.ROLES.toString());
 
     const addRole = async (name: string) => {
         const response: AxiosResponse<CreateRoleResponse> = await http.post(

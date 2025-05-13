@@ -6,7 +6,7 @@ import BaseResponse from "../models/base.model";
 import {GetUserResponse, GetUsersResponse, UseUsersApiInterface} from "../models/users.model";
 
 const useUsersApi = (): UseUsersApiInterface => {
-    const {http, token} = useHttpClient(API.USERS.href);
+    const {http, token} = useHttpClient(API.USERS.toString());
 
     const deleteUser = async (id: number) => {
         const response: AxiosResponse<BaseResponse> = await http.delete(

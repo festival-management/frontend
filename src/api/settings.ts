@@ -6,7 +6,7 @@ import BaseResponse from "../models/base.model.ts";
 import {GetSettingsResponse, Settings, UseSettingsApiInterface} from "../models/settings.ts";
 
 const useSettingsApi = (): UseSettingsApiInterface => {
-    const {http} = useHttpClient(API.SETTINGS.href);
+    const {http} = useHttpClient(API.SETTINGS.toString());
 
     const getSettings = async () => {
         const response: AxiosResponse<GetSettingsResponse> = await http.get(

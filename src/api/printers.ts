@@ -12,7 +12,7 @@ import {
 } from "../models/printers.model.ts";
 
 const usePrintersApi = (): UsePrintersApiInterface => {
-    const {http} = useHttpClient(API.PRINTERS.href);
+    const {http} = useHttpClient(API.PRINTERS.toString());
 
     const addPrinter = async (name: string, ipAddress: string) => {
         const response: AxiosResponse<CreatePrinterResponse> = await http.post(

@@ -16,7 +16,7 @@ import {
 } from "../models/products.model";
 
 const useProductsApi = (): UseProductsApiInterface => {
-    const {http} = useHttpClient(API.PRODUCTS.href);
+    const {http} = useHttpClient(API.PRODUCTS.toString());
 
     const addProduct = async (name: string, shortName: string, price: number, category: string, subcategoryId: number) => {
         const response: AxiosResponse<CreateProductResponse> = await http.post(
