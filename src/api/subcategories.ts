@@ -12,7 +12,7 @@ import {
 } from "../models/subcategories.model";
 
 const useSubcategoriesApi = (): UseSubcategoriesApiInterface => {
-    const {http} = useHttpClient(API.SUBCATEGORIES.toString());
+    const {http} = useHttpClient(API.SUBCATEGORIES.href);
 
     const addSubcategory = async (name: string) => {
         const response: AxiosResponse<CreateSubcategoryResponse> = await http.post(

@@ -13,7 +13,7 @@ import {
 } from "../models/order.model.ts";
 
 const useOrdersApi = (): UseOrdersApiInterface => {
-    const {http} = useHttpClient(API.ORDERS.toString());
+    const {http} = useHttpClient(API.ORDERS.href);
 
     const addOrder = async (customer: string, guests: number | null, isTakeAway: boolean, table: number | null, products: CreateOrderProduct[], menus: CreateOrderMenu[]) => {
         const response: AxiosResponse<BaseResponse> = await http.post(

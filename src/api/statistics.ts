@@ -5,7 +5,7 @@ import useHttpClient from "./utils.ts";
 import {GetStatisticResponse, UseStatisticsApiInterface} from "../models/statistics.model.ts";
 
 const useStatisticsApi = (): UseStatisticsApiInterface => {
-    const {http} = useHttpClient(API.STATISTICS.toString());
+    const {http} = useHttpClient(API.STATISTICS.href);
 
     const getStatistic = async (startDate?: Date, endDate?: Date) => {
         const response: AxiosResponse<GetStatisticResponse> = await http.get(

@@ -15,7 +15,7 @@ import {
 } from "../models/menus.model.ts";
 
 const useMenusApi = (): UseMenusApiInterface => {
-    const {http} = useHttpClient(API.MENUS.toString());
+    const {http} = useHttpClient(API.MENUS.href);
 
     const addMenu = async (name: string, shortName: string, price: number) => {
         const response: AxiosResponse<CreateMenuResponse> = await http.post(
