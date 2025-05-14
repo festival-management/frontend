@@ -29,7 +29,7 @@ export default function OrderMenusTableElement({menu}: OrderMenusTableElementPro
         return menu.fields
             ?.find(field => field.id === fieldId)
             ?.products
-            ?.find(product => product.id === productId)
+            ?.find(product => product.product.id === productId)
             ?.product;
     };
 
