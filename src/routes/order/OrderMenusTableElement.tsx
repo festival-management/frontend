@@ -93,6 +93,7 @@ export default function OrderMenusTableElement({menu}: OrderMenusTableElementPro
 
         selectedFields.forEach(field => {
             field.products.forEach(product => {
+                basePrice += (menu.fields?.find(f => f.id === field.menu_field_id)?.products?.find(p => p.product.id === product.product_id)?.price || 0) * product.quantity;
                 basePrice += product.price;
             });
 
