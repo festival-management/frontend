@@ -15,6 +15,15 @@ import {
 const useOrdersApi = (): UseOrdersApiInterface => {
     const {http} = useHttpClient(API.ORDERS.toString());
 
+    const confirmOrder = async (orderId: number, table: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.patch(
+            `/${orderId}/confirm`,
+            {table}
+        );
+
+        return response.data;
+    };
+
     const addOrder = async (customer: string, guests: number | null, isTakeAway: boolean, table: number | null, products: CreateOrderProduct[], menus: CreateOrderMenu[]) => {
         const response: AxiosResponse<BaseResponse> = await http.post(
             "/",
@@ -158,7 +167,7 @@ const useOrdersApi = (): UseOrdersApiInterface => {
         return response.data;
     };
 
-    return {addOrder, deleteOrder, getOrderById, getOrders, printOrder};
+    return {confirmOrder, addOrder, deleteOrder, getOrderById, getOrders, printOrder};
 }
 
 export default useOrdersApi;

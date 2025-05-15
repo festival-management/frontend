@@ -9,6 +9,15 @@ const useOrderMutations = (ordersApi: UseOrdersApiInterface) => {
     const {addToast} = useToastContext();
     const {onSuccessMutation} = baseMutation(addToast);
 
+    // Confirm
+    const confirmOrderMutation = useMutation({
+        mutationFn: (variables: {
+            orderId: number,
+            table: number
+        })=> ordersApi.confirmOrder(variables.orderId, variables.table),
+        onSuccess: onSuccessMutation
+    });
+
     // Create
     const addOrderMutation = useMutation({
         mutationFn: (variables: {
@@ -37,7 +46,7 @@ const useOrderMutations = (ordersApi: UseOrdersApiInterface) => {
         onSuccess: onSuccessMutation
     });
 
-    return {addOrderMutation, deleteOrderMutation, printOrderMutation};
+    return {confirmOrderMutation, addOrderMutation, deleteOrderMutation, printOrderMutation};
 };
 
 export default useOrderMutations;

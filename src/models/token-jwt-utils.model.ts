@@ -5,6 +5,7 @@ export interface TokenJwtUtils {
     isLoggedIn: () => boolean;
     canUserAdminister: () => boolean;
     canUserOrder: () => boolean;
+    canUserConfirmOrder: () => boolean;
     canUserStatistics: () => boolean;
     canUserPriorityStatistics: () => boolean;
     getToken: () => Token | null;

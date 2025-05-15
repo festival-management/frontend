@@ -28,6 +28,13 @@ const useTokenJwtUtils = () => {
         if (!decodedToken) return false;
 
         return isLoggedIn() && decodedToken.permissions["can_order"];
+    };
+    const canUserConfirmOrder = () => {
+        const decodedToken = getDecodedToken();
+
+        if (!decodedToken) return false;
+
+        return isLoggedIn() && decodedToken.permissions["can_confirm_orders"];
     }
     const canUserStatistics = () => {
         const decodedToken = getDecodedToken();
@@ -64,6 +71,7 @@ const useTokenJwtUtils = () => {
         isLoggedIn,
         canUserAdminister,
         canUserOrder,
+        canUserConfirmOrder,
         canUserStatistics,
         canUserPriorityStatistics,
         getToken,

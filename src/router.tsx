@@ -17,6 +17,7 @@ import RouteUserEdit from "./routes/users/edit";
 import RouteStatistics from "./routes/statistics";
 import RouteOrderInfo from "./routes/orders/info";
 import RouteProductEdit from "./routes/products/edit";
+import RouteOrderConfirm from "./routes/order/confirm";
 import RouteSubcategories from "./routes/subcategories";
 import {ToastProvider} from "./contexts/ToastContext.tsx";
 import {OrderProvider} from "./contexts/OrderContext.tsx";
@@ -46,6 +47,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/order",
                     element: <OrderProvider><RouteOrder/></OrderProvider>
+                },
+                {
+                    path: "/order/confirm",
+                    element: <RouteOrderConfirm/>
                 },
                 {
                     path: "/orders",
