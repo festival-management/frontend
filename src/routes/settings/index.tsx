@@ -27,10 +27,7 @@ export default function RouteSettings() {
 
         if (settingsData.error) return addToast(settingsData.code, "error");
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { error, message, code, ...settingsOnly } = settingsData;
-
-        setSettings(settingsOnly as Settings);
+        setSettings(settingsData.settings! as Settings);
     }, [settingsData]);
 
     return (
