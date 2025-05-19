@@ -7,13 +7,22 @@ interface SettingsTableProps {
     setSettings: React.Dispatch<React.SetStateAction<Settings>>;
 }
 
-export default function SettingsTable({settings, setSettings}: SettingsTableProps) {
-    const handleChange = (key: keyof Settings) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.type === "checkbox"
-            ? event.target.checked
-            : event.target.type === "number"
-                ? Number(event.target.value)
-                : event.target.value;
+
+export default function SettingsTable({ settings, setSettings }: SettingsTableProps) {
+    const handleChange = (key: keyof Settings) => (
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        const target = event.target;
+
+        let value: string | number | boolean;
+
+        if (target instanceof HTMLInputElement && target.type === "checkbox") {
+            value = target.checked;
+        } else if (target instanceof HTMLInputElement && target.type === "number") {
+            value = Number(target.value);
+        } else {
+            value = target.value;
+        }
 
         setSettings((prevSettings) => ({
             ...prevSettings,
@@ -64,12 +73,12 @@ export default function SettingsTable({settings, setSettings}: SettingsTableProp
                         inputElement = (
                             <div className="mb-3" key={key}>
                                 <label htmlFor={`settings-change-${key}`} className="form-label">{label}</label>
-                                <input
-                                    type="text"
+                                <textarea
                                     className="form-control"
                                     id={`settings-change-${key}`}
                                     value={value}
                                     onChange={handleChange(key)}
+                                    rows={3}
                                 />
                             </div>
                         );
