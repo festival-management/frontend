@@ -23,7 +23,7 @@ const getProductDetails = (product: CreateOrderProduct, products: Product[]) => 
 
         if (!i) return "";
 
-        return i.name + " x" + ingredient.quantity;
+        return i.name;
     }).filter(Boolean).join(', ');
 
     return {

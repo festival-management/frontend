@@ -21,13 +21,13 @@ export default function ProductSelection({
                                          }: ProductSelectionProps) {
     const [selectedQuantity, setSelectedQuantity] = useState<number>(0);
     const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null);
-    const [selectedIngredientIds, setSelectedIngredientIds] = useState<Map<number, number>>(new Map());
+    const [selectedIngredientIds, setSelectedIngredientIds] = useState<number[]>([]);
     const [calculatedPrice, setCalculatedPrice] = useState<number>(isFromMenu ? 0 : product.price);
 
     const createProductInstance = (): CreateOrderProduct => {
         return {
             product_id: product.id,
-            ingredients: Array.from(selectedIngredientIds, ([id, quantity]) => ({ingredient_id: id, quantity})),
+            ingredients: selectedIngredientIds.map(id => ({ingredient_id: id})),
             quantity: selectedQuantity,
             variant_id: selectedVariantId ?? undefined,
             price: calculatedPrice
@@ -42,25 +42,20 @@ export default function ProductSelection({
         setSelectedVariantId(variantId);
     };
 
-    const handleIngredientChange = (ingredientId: number, change: number) => {
+    const handleIngredientChange = (ingredientId: number) => {
         setSelectedIngredientIds((prev) => {
-            const newSelection = new Map(prev);
-            const currentQuantity = newSelection.get(ingredientId) || 0;
-            const updatedQuantity = currentQuantity + change;
-
-            if (updatedQuantity > 0) {
-                newSelection.set(ingredientId, updatedQuantity);
+            if (prev.includes(ingredientId)) {
+                return prev.filter(id => id !== ingredientId);
             } else {
-                newSelection.delete(ingredientId);
+                return [...prev, ingredientId];
             }
-            return newSelection;
         });
     };
 
     const resetState = () => {
         setSelectedQuantity(0);
         setSelectedVariantId(null);
-        setSelectedIngredientIds(new Map());
+        setSelectedIngredientIds([]);
         setCalculatedPrice(isFromMenu ? 0 : product.price);
     };
 
@@ -76,10 +71,10 @@ export default function ProductSelection({
             if (selectedVariant) basePrice += selectedVariant.price;
         }
 
-        if (selectedIngredientIds.size > 0) {
-            const ingredientsPrice = Array.from(selectedIngredientIds).reduce((total, [id, quantity]) => {
+        if (selectedIngredientIds.length > 0) {
+            const ingredientsPrice = selectedIngredientIds.reduce((total, id) => {
                 const ingredient = product.ingredients?.find((ing) => ing.id === id);
-                return ingredient ? total + ingredient.price * quantity : total;
+                return ingredient ? total + ingredient.price : total;
             }, 0);
             basePrice += ingredientsPrice;
         }

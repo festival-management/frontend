@@ -7,7 +7,6 @@ import {PrinterType} from "../enums/printer-type.ts";
 export interface OrderProductIngredient {
     id: number;
     product_ingredient_id: number;
-    quantity: number;
 }
 
 export interface OrderProduct {
@@ -49,7 +48,6 @@ export interface Order {
 
 export interface CreateOrderProductIngredient {
     ingredient_id: number;
-    quantity: number;
 }
 
 export interface CreateOrderProduct {

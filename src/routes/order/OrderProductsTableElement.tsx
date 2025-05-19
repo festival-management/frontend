@@ -11,7 +11,7 @@ type OrderProductsTableElementProps = {
 
 export default function OrderProductsTableElement({product}: OrderProductsTableElementProps) {
     const {addToast} = useToastContext();
-    const {addProduct, setOrderTotalPrice} = useOrderContext();
+    const {addProduct} = useOrderContext();
 
     const handleSubmit = async (orderProduct: CreateOrderProduct) => {
         if (!orderProduct.quantity) return addToast(ErrorCodes.PRODUCT_QUANTITY_CANNOT_BE_ZERO, "error");
@@ -19,8 +19,6 @@ export default function OrderProductsTableElement({product}: OrderProductsTableE
         if (product.variants?.length && !orderProduct.variant_id) return addToast(ErrorCodes.INPUT_PRODUCT_VARIANT, "error");
 
         addProduct(orderProduct);
-
-        setOrderTotalPrice((prevState) => prevState + orderProduct.price);
     };
 
     return (

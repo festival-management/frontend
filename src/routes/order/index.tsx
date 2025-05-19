@@ -23,6 +23,7 @@ export default function RouteOrder() {
     const [isSelectedProducts, setIsSelectedProducts] = useState(true);
     const [products, setProducts] = useState<Product[]>([]);
     const [menus, setMenus] = useState<Menu[]>([]);
+    const [orderTotalPrice, setOrderTotalPrice] = useState(0);
 
     const productsApi = useProductsApi();
     const menusApi = useMenusApi();
@@ -44,8 +45,6 @@ export default function RouteOrder() {
         setOrderProducts,
         orderMenus,
         setOrderMenus,
-        orderTotalPrice,
-        setOrderTotalPrice
     } = useOrderContext();
 
     const menusData = fetchAllMenusUser("name", true, true, true, true);
@@ -108,6 +107,18 @@ export default function RouteOrder() {
 
         setMenus(menusData.menus!);
     }, [menusData]);
+
+    useEffect(() => {
+        const productsTotal = orderProducts.reduce((acc, product) => {
+            return acc + product.price;
+        }, 0);
+
+        const menusTotal = orderMenus.reduce((acc, menu) => {
+            return acc + menu.price;
+        }, 0);
+
+        setOrderTotalPrice(productsTotal + menusTotal);
+    }, [orderProducts, orderMenus, products, menus]);
 
     return (
         <div className="container-fluid p-4" style={{height: `calc(100vh - ${navbarHeight}px)`}}>

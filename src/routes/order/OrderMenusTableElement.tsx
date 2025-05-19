@@ -18,7 +18,7 @@ export default function OrderMenusTableElement({menu}: OrderMenusTableElementPro
     const [selectedFields, selectedFieldsDispatch] = useReducer(selectedFieldsReducer, []);
     const [resetTrigger, setResetTrigger] = useState(0);
 
-    const {addMenu, setOrderTotalPrice} = useOrderContext();
+    const {addMenu} = useOrderContext();
     const {addToast} = useToastContext();
 
     const handleQuantityChange = (change: number) => {
@@ -84,8 +84,6 @@ export default function OrderMenusTableElement({menu}: OrderMenusTableElementPro
         setSelectedQuantity(0);
         selectedFieldsDispatch({type: "RESET"});
         setResetTrigger(prev => prev + 1);
-
-        setOrderTotalPrice((prevState) => prevState + price);
     };
 
     useEffect(() => {
