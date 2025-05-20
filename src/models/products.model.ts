@@ -31,6 +31,7 @@ export interface Product {
     is_priority: boolean;
     price: number;
     category: Category;
+    order: number;
     subcategory_id: number;
     dates?: ProductDate[];
     ingredients?: ProductIngredient[];
@@ -96,6 +97,7 @@ export interface UseProductsApiInterface {
     updateProductCategory(id: number, category: string): Promise<BaseResponse>;
     updateProductIsPriority(id: number, isPriority: boolean): Promise<BaseResponse>;
     updateProductName(id: number, name: string): Promise<BaseResponse>;
+    updateProductOrder(id: number, order: number): Promise<BaseResponse>;
     updateProductPrice(id: number, price: number): Promise<BaseResponse>;
     updateProductShortName(id: number, shortName: string): Promise<BaseResponse>;
     updateProductSubcategory(id: number, subcategoryId: number): Promise<BaseResponse>;

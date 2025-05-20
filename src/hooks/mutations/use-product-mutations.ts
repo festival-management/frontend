@@ -28,6 +28,13 @@ export const useProductMutations = (productsApi: UseProductsApiInterface) => {
         }) => productsApi.updateProductName(variables.id, variables.name),
         onSuccess: onSuccessMutation
     });
+    const updateProductOrderMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            order: number
+        }) => productsApi.updateProductOrder(variables.id, variables.order),
+        onSuccess: onSuccessMutation
+    });
     const updateProductShortNameMutation = useMutation({
         mutationFn: (variables: {
             id: number,
@@ -140,6 +147,7 @@ export const useProductMutations = (productsApi: UseProductsApiInterface) => {
     return {
         addProductMutation,
         updateProductNameMutation,
+        updateProductOrderMutation,
         updateProductShortNameMutation,
         updateProductPriorityMutation,
         updateProductPriceMutation,

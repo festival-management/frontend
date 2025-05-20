@@ -14,6 +14,7 @@ import {useToastContext} from "../../../contexts/ToastContext.tsx";
 import ProductEditSubcategoryIdForm from "./ProductEditSubcategoryIdForm";
 import useProductQueries from "../../../hooks/queries/use-product-queries.ts";
 import {useProductEditContext} from "../../../contexts/ProductEditContext.tsx";
+import ProductEditOrderForm from "./ProductEditOrderForm.tsx";
 
 export default function RouteProductEdit() {
     const {id} = useParams();
@@ -26,6 +27,7 @@ export default function RouteProductEdit() {
         setProductPriority,
         setProductPrice,
         setProductCategory,
+        setProductOrder,
         setProductSubcategoryId,
         setProductDates,
         setProductIngredients,
@@ -48,6 +50,7 @@ export default function RouteProductEdit() {
         setProductPriority(productsData.is_priority!);
         setProductPrice(productsData.price!);
         setProductCategory(productsData.category!);
+        setProductOrder(productsData.order!);
         setProductSubcategoryId(productsData.subcategory_id!);
         setProductDates(productsData.dates!);
         setProductIngredients(productsData.ingredients!);
@@ -64,6 +67,7 @@ export default function RouteProductEdit() {
                     <ProductEditPriorityForm/>
                     <ProductEditPriceForm/>
                     <ProductEditCategoryForm/>
+                    <ProductEditOrderForm/>
                     <ProductEditSubcategoryIdForm/>
                     <ProductEditDates/>
                     <ProductEditIngredients/>

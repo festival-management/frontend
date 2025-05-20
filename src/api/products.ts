@@ -179,6 +179,15 @@ const useProductsApi = (): UseProductsApiInterface => {
         return response.data;
     };
 
+    const updateProductOrder = async (id: number, order: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/order`,
+            {order}
+        );
+
+        return response.data;
+    };
+
     const updateProductPrice = async (id: number, price: number) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/price`,
@@ -224,6 +233,7 @@ const useProductsApi = (): UseProductsApiInterface => {
         updateProductCategory,
         updateProductIsPriority,
         updateProductName,
+        updateProductOrder,
         updateProductPrice,
         updateProductShortName,
         updateProductSubcategory
