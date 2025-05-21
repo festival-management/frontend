@@ -33,6 +33,7 @@ export interface Menu {
     name: string;
     short_name: string;
     price: number;
+    daily_max_sales: number;
     dates?: MenuDate[];
     fields?: MenuField[];
     roles?: MenuRole[];
@@ -81,6 +82,7 @@ export interface UseMenusApiInterface {
     getMenuById(id: number, includeDates: boolean, includeFields: boolean, includeFieldsProducts: boolean, includeFieldsProductsDates: boolean, includeFieldsProductsIngredients: boolean, includeFieldsProductsRoles: boolean, includeFieldsProductsVariants: boolean, includeRoles: boolean): Promise<GetMenuResponse>;
     getMenus(page: number, orderBy?: string): Promise<GetMenusResponse>;
     getAllMenusUser(orderBy: string, includeFields: boolean, includeFieldsProducts: boolean, includeFieldsProductsIngredients: boolean, includeFieldsProductsVariants: boolean): Promise<GetMenusResponse>;
+    updateMenuDailyMaxSales(id: number, dailyMaxSales: number | null): Promise<BaseResponse>;
     updateMenuFieldName(id: number, menuFieldId: number, name: string): Promise<BaseResponse>;
     updateMenuFieldIsOptional(id: number, menuFieldId: number, isOptional: boolean): Promise<BaseResponse>;
     updateMenuFieldMaxSortableElements(id: number, menuFieldId: number, maxSortableElements: number): Promise<BaseResponse>;

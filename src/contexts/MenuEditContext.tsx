@@ -12,6 +12,8 @@ interface MenuEditContextType {
     setMenuShortName: React.Dispatch<React.SetStateAction<string>>;
     menuPrice: number;
     setMenuPrice: React.Dispatch<React.SetStateAction<number>>;
+    menuDailyMaxSales: number | null;
+    setMenuDailyMaxSales: React.Dispatch<React.SetStateAction<number | null>>;
     menuDates: MenuDate[];
     setMenuDates: React.Dispatch<React.SetStateAction<MenuDate[]>>;
     menuFields: MenuField[];
@@ -32,6 +34,7 @@ export const MenuEditProvider = ({children}: MenuEditProviderProps) => {
     const [menuName, setMenuName] = useState("");
     const [menuShortName, setMenuShortName] = useState("");
     const [menuPrice, setMenuPrice] = useState(0);
+    const [menuDailyMaxSales, setMenuDailyMaxSales] = useState<number | null>(null);
     const [menuDates, setMenuDates] = useState<MenuDate[]>([]);
     const [menuFields, setMenuFields] = useState<MenuField[]>([]);
     const [menuRoles, setMenuRoles] = useState<MenuRole[]>([]);
@@ -45,6 +48,7 @@ export const MenuEditProvider = ({children}: MenuEditProviderProps) => {
                 menuName, setMenuName,
                 menuShortName, setMenuShortName,
                 menuPrice, setMenuPrice,
+                menuDailyMaxSales, setMenuDailyMaxSales,
                 menuDates, setMenuDates,
                 menuFields, setMenuFields,
                 menuRoles, setMenuRoles,

@@ -32,6 +32,7 @@ export interface Product {
     price: number;
     category: Category;
     order: number;
+    daily_max_sales: number;
     subcategory_id: number;
     dates?: ProductDate[];
     ingredients?: ProductIngredient[];
@@ -95,6 +96,7 @@ export interface UseProductsApiInterface {
     getAllProductsUser(orderBy?: string, includeIngredients?: boolean, includeVariants?: boolean): Promise<GetProductsResponse>;
     getProductsName(orderBy: string): Promise<GetProductsNameResponse>;
     updateProductCategory(id: number, category: string): Promise<BaseResponse>;
+    updateProductDailyMaxSales(id: number, dailyMaxSales: number | null): Promise<BaseResponse>;
     updateProductIsPriority(id: number, isPriority: boolean): Promise<BaseResponse>;
     updateProductName(id: number, name: string): Promise<BaseResponse>;
     updateProductOrder(id: number, order: number): Promise<BaseResponse>;

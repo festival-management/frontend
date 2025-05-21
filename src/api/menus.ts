@@ -165,6 +165,15 @@ const useMenusApi = (): UseMenusApiInterface => {
         return response.data;
     };
 
+    const updateMenuDailyMaxSales = async (id: number, dailyMaxSales: number | null) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/daily_max_sales`,
+            {daily_max_sales: dailyMaxSales}
+        );
+
+        return response.data;
+    }
+
     const updateMenuFieldName = async (id: number, menuFieldId: number, name: string) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/field/${menuFieldId}/name`,
@@ -251,6 +260,7 @@ const useMenusApi = (): UseMenusApiInterface => {
         getMenuById,
         getMenus,
         getAllMenusUser,
+        updateMenuDailyMaxSales,
         updateMenuFieldName,
         updateMenuFieldIsOptional,
         updateMenuFieldMaxSortableElements,

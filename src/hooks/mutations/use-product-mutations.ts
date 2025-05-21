@@ -63,6 +63,13 @@ export const useProductMutations = (productsApi: UseProductsApiInterface) => {
         }) => productsApi.updateProductCategory(variables.id, variables.category),
         onSuccess: onSuccessMutation
     });
+    const updateProductDailyMaxSalesMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            dailyMaxSales: number | null
+        }) => productsApi.updateProductDailyMaxSales(variables.id, variables.dailyMaxSales),
+        onSuccess: onSuccessMutation
+    });
     const updateProductSubcategoryMutation = useMutation({
         mutationFn: (variables: {
             id: number,
@@ -152,6 +159,7 @@ export const useProductMutations = (productsApi: UseProductsApiInterface) => {
         updateProductPriorityMutation,
         updateProductPriceMutation,
         updateProductCategoryMutation,
+        updateProductDailyMaxSalesMutation,
         updateProductSubcategoryMutation,
         deleteProductMutation,
         addProductDateMutation,

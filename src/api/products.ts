@@ -161,6 +161,15 @@ const useProductsApi = (): UseProductsApiInterface => {
         return response.data;
     };
 
+    const updateProductDailyMaxSales = async (id: number, dailyMaxSales: number | null) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/daily_max_sales`,
+            {daily_max_sales: dailyMaxSales}
+        );
+
+        return response.data;
+    }
+
     const updateProductIsPriority = async (id: number, isPriority: boolean) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/priority`,
@@ -231,6 +240,7 @@ const useProductsApi = (): UseProductsApiInterface => {
         getAllProductsUser,
         getProductsName,
         updateProductCategory,
+        updateProductDailyMaxSales,
         updateProductIsPriority,
         updateProductName,
         updateProductOrder,

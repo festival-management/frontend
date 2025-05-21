@@ -37,6 +37,13 @@ const useMenuMutations = (menusApi: UseMenusApiInterface) => {
         }) => menusApi.updateMenuPrice(variables.id, variables.price),
         onSuccess: onSuccessMutation
     });
+    const updateMenuDailyMaxSalesMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            dailyMaxSales: number | null
+        }) => menusApi.updateMenuDailyMaxSales(variables.id, variables.dailyMaxSales),
+        onSuccess: onSuccessMutation
+    });
     const updateMenuFieldNameMutation = useMutation({
         mutationFn: (variables: {
             id: number,
@@ -157,6 +164,7 @@ const useMenuMutations = (menusApi: UseMenusApiInterface) => {
         updateMenuNameMutation,
         updateMenuShortNameMutation,
         updateMenuPriceMutation,
+        updateMenuDailyMaxSalesMutation,
         updateMenuFieldNameMutation,
         updateMenuFieldIsOptionalMutation,
         updateMenuFieldMaxSortableElementsMutation,

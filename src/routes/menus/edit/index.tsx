@@ -10,6 +10,7 @@ import MenuEditShortNameForm from "./MenuEditShortNameForm.tsx";
 import {useToastContext} from "../../../contexts/ToastContext.tsx";
 import useMenuQueries from "../../../hooks/queries/use-menu-queries.ts";
 import {useMenuEditContext} from "../../../contexts/MenuEditContext.tsx";
+import MenuEditDailyMaxSales from "./MenuEditDailyMaxSales.tsx";
 
 export default function RouteMenuEdit() {
     const {id} = useParams();
@@ -20,6 +21,7 @@ export default function RouteMenuEdit() {
         setMenuName,
         setMenuShortName,
         setMenuPrice,
+        setMenuDailyMaxSales,
         setMenuDates,
         setMenuFields,
         setMenuRoles,
@@ -38,6 +40,7 @@ export default function RouteMenuEdit() {
         setMenuName(menusData.name!);
         setMenuShortName(menusData.short_name!);
         setMenuPrice(menusData.price!);
+        setMenuDailyMaxSales(menusData.daily_max_sales!);
         setMenuDates(menusData.dates!);
         setMenuFields(menusData.fields!);
         setMenuRoles(menusData.roles!);
@@ -50,6 +53,7 @@ export default function RouteMenuEdit() {
                     <MenuEditNameForm/>
                     <MenuEditShortNameForm/>
                     <MenuEditPriceForm/>
+                    <MenuEditDailyMaxSales/>
                     <MenuEditDates/>
                     <MenuEditFields/>
                     <MenuEditRoles/>

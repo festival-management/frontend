@@ -24,6 +24,8 @@ interface ProductEditContextType {
     setProductCategory: React.Dispatch<React.SetStateAction<string>>;
     productOrder: number;
     setProductOrder: React.Dispatch<React.SetStateAction<number>>;
+    productDailyMaxSales: number | null;
+    setProductDailyMaxSales: React.Dispatch<React.SetStateAction<number | null>>;
     productSubcategoryId: number;
     setProductSubcategoryId: React.Dispatch<React.SetStateAction<number>>;
     productDates: ProductDate[];
@@ -51,6 +53,7 @@ export const ProductEditProvider = ({children}: ProductEditProviderProps) => {
     const [productPrice, setProductPrice] = useState(0);
     const [productCategory, setProductCategory] = useState("");
     const [productOrder, setProductOrder] = useState(0);
+    const [productDailyMaxSales, setProductDailyMaxSales] = useState<number | null>(null);
     const [productSubcategoryId, setProductSubcategoryId] = useState(-1);
     const [productDates, setProductDates] = useState<ProductDate[]>([]);
     const [productIngredients, setProductIngredients] = useState<ProductIngredient[]>([]);
@@ -69,6 +72,7 @@ export const ProductEditProvider = ({children}: ProductEditProviderProps) => {
                 productPrice, setProductPrice,
                 productCategory, setProductCategory,
                 productOrder, setProductOrder,
+                productDailyMaxSales, setProductDailyMaxSales,
                 productSubcategoryId, setProductSubcategoryId,
                 productDates, setProductDates,
                 productIngredients, setProductIngredients,
