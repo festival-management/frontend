@@ -34,6 +34,8 @@ export enum ErrorCodes {
 
     // Orders
     ORDER_NOT_FOUND,
+    // Confirm
+    ORDER_ALREADY_CONFIRMED,
     // Create
     DUPLICATE_MENU_FIELDS,
     DUPLICATE_MENU_FIELDS_PRODUCT,

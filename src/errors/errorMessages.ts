@@ -24,6 +24,7 @@ const errorMessagesEn: { [key in number]: string } = {
 
     // Orders
     [ErrorCodes.ORDER_NOT_FOUND]: "Order not found.",
+    [ErrorCodes.ORDER_ALREADY_CONFIRMED]: "Order already confirmed.",
     [ErrorCodes.DUPLICATE_MENU_FIELDS]: "Input duplicate menu fields.",
     [ErrorCodes.DUPLICATE_MENU_FIELDS_PRODUCT]: "Input duplicate menu field products.",
     [ErrorCodes.INPUT_MENU_FIELD_PRODUCT_VARIANT]: "Input menu field product variant.",
