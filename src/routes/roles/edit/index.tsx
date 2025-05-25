@@ -39,7 +39,7 @@ export default function RouteRoleEdit() {
                 ])
             )
         );
-        setRolePrinters(roleData.printers!);
+        setRolePrinters(roleData.printers || []);
     }, [roleData]);
 
     return (

@@ -24,7 +24,7 @@ export default function EditPrinters({AddComponent, TableComponent}: EditPrinter
         if (!printersNameData) return;
         if (printersNameData.error) return addToast(printersNameData.code, "error");
 
-        setPrintersName(printersNameData.printers!);
+        setPrintersName(printersNameData.printers || []);
     }, [printersNameData]);
 
     return (
