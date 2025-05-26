@@ -8,10 +8,10 @@ import {
 } from "../../models/roles.model.ts";
 
 const UseRoleQueries = (rolesApi: UseRolesApiInterface) => {
-    const fetchRoleDetails = (id: number, includePrinters: boolean): GetRoleResponse | undefined => {
+    const fetchRoleDetails = (id: number, includeOrderConfirmer: boolean, includePrinters: boolean): GetRoleResponse | undefined => {
         const {data} = useQuery({
             queryKey: ["roles-details", id],
-            queryFn: () => rolesApi.getRolesById(id, includePrinters),
+            queryFn: () => rolesApi.getRolesById(id, includeOrderConfirmer, includePrinters),
             enabled: !!id,
             staleTime: 0,
         });
@@ -19,10 +19,10 @@ const UseRoleQueries = (rolesApi: UseRolesApiInterface) => {
         return data;
     };
 
-    const fetchRolesName = (canOrder?: boolean): GetRolesNameResponse | undefined => {
+    const fetchRolesName = (canOrder?: boolean, canConfirmOrders?: boolean): GetRolesNameResponse | undefined => {
         const {data} = useQuery({
             queryKey: ["roles-name", canOrder],
-            queryFn: () => rolesApi.getRolesName(canOrder),
+            queryFn: () => rolesApi.getRolesName(canOrder, canConfirmOrders),
             enabled: true,
             staleTime: 0,
         });

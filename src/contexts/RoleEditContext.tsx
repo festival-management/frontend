@@ -13,6 +13,8 @@ interface RoleEditContextType {
     setRolePermissions: React.Dispatch<React.SetStateAction<Map<Permission, boolean>>>;
     rolePrinters: RolePrinter[];
     setRolePrinters: React.Dispatch<React.SetStateAction<RolePrinter[]>>;
+    roleOrderConfirmerId: number;
+    setRoleOrderConfirmerId: React.Dispatch<React.SetStateAction<number>>;
     rolesApi: UseRolesApiInterface;
 }
 
@@ -32,6 +34,7 @@ export const RoleEditProvider = ({children}: RoleEditProviderProps) => {
             )
     );
     const [rolePrinters, setRolePrinters] = useState<RolePrinter[]>([]);
+    const [roleOrderConfirmerId, setRoleOrderConfirmerId] = useState<number>(-1);
 
     const rolesApi = useRolesApi();
 
@@ -42,6 +45,7 @@ export const RoleEditProvider = ({children}: RoleEditProviderProps) => {
                 roleName, setRoleName,
                 rolePermissions, setRolePermissions,
                 rolePrinters, setRolePrinters,
+                roleOrderConfirmerId, setRoleOrderConfirmerId,
                 rolesApi
             }}
         >

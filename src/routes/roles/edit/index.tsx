@@ -3,11 +3,12 @@ import {useParams} from "react-router-dom";
 
 import RoleEditPrinters from "./printers";
 import RoleEditNameForm from "./RoleEditNameForm";
+import {Permission} from "../../../enums/permission.ts";
 import RoleEditPermissionsForm from "./RoleEditPermissionsForm";
 import {useToastContext} from "../../../contexts/ToastContext.tsx";
 import useRoleQueries from "../../../hooks/queries/use-role-queries.ts";
 import {useRoleEditContext} from "../../../contexts/RoleEditContext.tsx";
-import {Permission} from "../../../enums/permission.ts";
+import RoleEditOrderConfirmerForm from "./RoleEditOrderConfirmerForm.tsx";
 
 export default function RouteRoleEdit() {
     const {id} = useParams();
@@ -18,11 +19,12 @@ export default function RouteRoleEdit() {
         setRoleName,
         setRolePermissions,
         setRolePrinters,
+        setRoleOrderConfirmerId,
         rolesApi
     } = useRoleEditContext();
     const {fetchRoleDetails} = useRoleQueries(rolesApi);
 
-    const roleData = fetchRoleDetails(parseInt(id || "-1"), true);
+    const roleData = fetchRoleDetails(parseInt(id || "-1"), true, true);
 
     useEffect(() => {
         if (!roleData) return;
@@ -40,6 +42,7 @@ export default function RouteRoleEdit() {
             )
         );
         setRolePrinters(roleData.printers || []);
+        setRoleOrderConfirmerId(roleData.order_confirmer?.id || -1);
     }, [roleData]);
 
     return (
@@ -49,6 +52,7 @@ export default function RouteRoleEdit() {
                     <RoleEditNameForm/>
                     <RoleEditPermissionsForm/>
                     <RoleEditPrinters/>
+                    <RoleEditOrderConfirmerForm/>
                 </div>
             </div>
         </div>

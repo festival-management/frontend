@@ -60,19 +60,19 @@ const useRolesApi = (): UseRolesApiInterface => {
         return response.data;
     };
 
-    const getRolesById = async (id: number, includePrinters: boolean = false) => {
+    const getRolesById = async (id: number, includeOrderConfirmer: boolean = false, includePrinters: boolean = false) => {
         const response: AxiosResponse<GetRoleResponse> = await http.get(
             `/${id}`,
-            {params: {include_printers: includePrinters}}
+            {params: {include_order_confirmer: includeOrderConfirmer, include_printers: includePrinters}}
         );
 
         return response.data;
     };
 
-    const getRolesName = async (can_order?: boolean) => {
+    const getRolesName = async (can_order?: boolean, canConfirmOrders?: boolean) => {
         const response: AxiosResponse<GetRolesNameResponse> = await http.get(
             "/",
-            {params: {only_name: true, can_order}}
+            {params: {only_name: true, can_order, can_confirm_orders: canConfirmOrders}}
         );
 
         return response.data;
@@ -96,6 +96,15 @@ const useRolesApi = (): UseRolesApiInterface => {
         return response.data;
     };
 
+    const updateRoleOrderConfirmer = async (id: number, orderConfirmerId: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/order_confirmer`,
+            {order_confirmer_id: orderConfirmerId}
+        );
+
+        return response.data;
+    }
+
     return {
         addRole,
         addRolePrinter,
@@ -105,7 +114,8 @@ const useRolesApi = (): UseRolesApiInterface => {
         getRolesById,
         getRolesName,
         updateRoleName,
-        updateRolePermissions
+        updateRolePermissions,
+        updateRoleOrderConfirmer
     };
 };
 

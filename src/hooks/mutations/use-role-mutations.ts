@@ -27,6 +27,13 @@ const useRoleMutations = (rolesApi: UseRolesApiInterface) => {
         }) => rolesApi.updateRolePermissions(variables.id, variables.permissions),
         onSuccess: onSuccessMutation
     });
+    const updateRoleOrderConfirmerMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            orderConfirmerId: number
+        }) => rolesApi.updateRoleOrderConfirmer(variables.id, variables.orderConfirmerId),
+        onSuccess: onSuccessMutation
+    });
 
     // Delete
     const deleteRoleMutation = useMutation({
@@ -55,6 +62,7 @@ const useRoleMutations = (rolesApi: UseRolesApiInterface) => {
         addRoleMutation,
         updateRoleNameMutation,
         updateRolePermissionsMutation,
+        updateRoleOrderConfirmerMutation,
         deleteRoleMutation,
         addRolePrinterMutation,
         deleteRolePrinterMutation,
