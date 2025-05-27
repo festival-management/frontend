@@ -7,6 +7,7 @@ import {PrinterType} from "../enums/printer-type.ts";
 import {
     CreateOrderMenu,
     CreateOrderProduct,
+    CreateOrderResponse,
     GetOrderResponse,
     GetOrdersResponse,
     UseOrdersApiInterface
@@ -25,7 +26,7 @@ const useOrdersApi = (): UseOrdersApiInterface => {
     };
 
     const addOrder = async (customer: string, guests: number | null, isTakeAway: boolean, table: number | null, products: CreateOrderProduct[], menus: CreateOrderMenu[]) => {
-        const response: AxiosResponse<BaseResponse> = await http.post(
+        const response: AxiosResponse<CreateOrderResponse> = await http.post(
             "/",
             {customer, guests, is_take_away: isTakeAway, table, products, menus},
         );

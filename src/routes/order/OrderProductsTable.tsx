@@ -1,9 +1,11 @@
 import {useEffect, useMemo, useState} from "react";
 
+import {Menu} from "../../models/menus.model.ts";
 import {Product} from "../../models/products.model.ts";
 import useSubcategoriesApi from "../../api/subcategories.ts";
 import {useToastContext} from "../../contexts/ToastContext.tsx";
 import {useOrderContext} from "../../contexts/OrderContext.tsx";
+import OrderMenusTableElement from "./OrderMenusTableElement.tsx";
 import {SubcategoryName} from "../../models/subcategories.model.ts";
 import OrderProductsTableElement from "./OrderProductsTableElement.tsx";
 import useSubcategoryQueries from "../../hooks/queries/use-subcategory-queries.ts";
@@ -11,15 +13,17 @@ import SelectProductSubcategoryId from "../../components/select-product-subcateg
 
 type OrderProductsTableProps = {
     products: Product[];
+    menus: Menu[];
 }
 
-export default function OrderProductsTable({products}: OrderProductsTableProps) {
+export default function OrderProductsTable({products, menus}: OrderProductsTableProps) {
     const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(-1);
     const [subcategoriesWithProducts, setSubcategoriesWithProducts] = useState<SubcategoryName[]>([]);
     const [subcategoriesDone, setSubcategoriesDone] = useState<number[]>([]);
+    const [isSelectedMenus, setIsSelectedMenus] = useState(false);
 
     const {addToast} = useToastContext();
-    const {orderProducts} = useOrderContext();
+    const {orderProducts, orderMenus} = useOrderContext();
     const subcategoriesApi = useSubcategoriesApi();
 
     const {fetchSubcategoriesName} = useSubcategoryQueries(subcategoriesApi);
@@ -28,7 +32,13 @@ export default function OrderProductsTable({products}: OrderProductsTableProps) 
 
     const handleSelectedSubcategoryIdChange = (subcategoryId: number) => {
         setSelectedSubcategoryId(subcategoryId);
+        setIsSelectedMenus(false);
     };
+
+    const handleIsSelectedMenusChange = () => {
+        setIsSelectedMenus((prevState) => !prevState);
+        setSelectedSubcategoryId(-1);
+    }
 
     const filteredProducts = useMemo(() => {
         return selectedSubcategoryId === -1
@@ -58,9 +68,18 @@ export default function OrderProductsTable({products}: OrderProductsTableProps) 
                 subcategoriesName={subcategoriesWithProducts}
                 subcategoriesDone={subcategoriesDone}
                 handleSelectedSubcategoryIdChange={handleSelectedSubcategoryIdChange}
+                isMenus={menus.length > 0}
+                isSelectedMenus={isSelectedMenus}
+                hasMenusSelected={orderMenus.length > 0}
+                handleIsSelectedMenusChange={handleIsSelectedMenusChange}
             />
             <div className="row overflow-y-scroll remove-scrollbar">
-                {filteredProducts.map(product => (
+                {isSelectedMenus ? menus.map((menu) => (
+                        <OrderMenusTableElement
+                            key={menu.id}
+                            menu={menu}
+                        />
+                    )) : filteredProducts.map(product => (
                     <div className="col-lg-6 col-12" key={product.id}>
                         <OrderProductsTableElement product={product}/>
                     </div>

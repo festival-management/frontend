@@ -1,8 +1,13 @@
 import React from "react";
 
+import {SettingsUser} from "../../models/settings.ts";
 import {useOrderContext} from "../../contexts/OrderContext.tsx";
 
-export default function OrderInfo() {
+interface OrderInfoProps {
+    settings: SettingsUser;
+}
+
+export default function OrderInfo({settings}: OrderInfoProps) {
     const {
         orderCustomer,
         setOrderCustomer,
@@ -47,9 +52,14 @@ export default function OrderInfo() {
                 <span className="input-group-text">Guests</span>
                 <input type="number" id="newOrderGuests" min="1" className="form-control" value={orderGuests}
                        onChange={handleOrderGuestsChange} disabled={orderIsTakeAway}/>
-                <span className="input-group-text">Table</span>
-                <input type="number" id="newOrderTable" min="1" className="form-control" value={orderTable}
-                       onChange={handleOrderTableChange} disabled={orderIsTakeAway}/>
+                {
+                    settings.order_requires_confirmation ? null :
+                        <>
+                            <span className="input-group-text">Table</span>
+                            <input type="number" id="newOrderTable" min="1" className="form-control" value={orderTable}
+                                   onChange={handleOrderTableChange} disabled={orderIsTakeAway}/>
+                        </>
+                }
             </div>
         </div>
     );

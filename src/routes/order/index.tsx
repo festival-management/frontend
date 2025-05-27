@@ -6,32 +6,37 @@ import OrderDetails from "./OrderDetails.tsx";
 import useOrdersApi from "../../api/orders.ts";
 import {Menu} from "../../models/menus.model.ts";
 import useProductsApi from "../../api/products.ts";
-import OrderMenusTable from "./OrderMenusTable.tsx";
+import useSettingsApi from "../../api/settings.ts";
 import {ErrorCodes} from "../../errors/ErrorCodes.ts";
+import {SettingsUser} from "../../models/settings.ts";
 import {Product} from "../../models/products.model.ts";
 import OrderProductsTable from "./OrderProductsTable.tsx";
 import {useToastContext} from "../../contexts/ToastContext.tsx";
 import {useOrderContext} from "../../contexts/OrderContext.tsx";
 import useMenuQueries from "../../hooks/queries/use-menu-queries.ts";
 import useProductQueries from "../../hooks/queries/use-product-queries.ts";
+import useSettingQueries from "../../hooks/queries/use-setting-queries.ts";
 import useOrderMutations from "../../hooks/mutations/use-order-mutations.ts";
 
 import "./style.css";
 
 export default function RouteOrder() {
     const [navbarHeight, setNavbarHeight] = useState(0);
-    const [isSelectedProducts, setIsSelectedProducts] = useState(true);
     const [products, setProducts] = useState<Product[]>([]);
     const [menus, setMenus] = useState<Menu[]>([]);
     const [orderTotalPrice, setOrderTotalPrice] = useState(0);
+    const [settings, setSettings] = useState<SettingsUser>({} as SettingsUser);
+    const [lastOrder, setLastOrder] = useState<number>(0);
 
     const productsApi = useProductsApi();
     const menusApi = useMenusApi();
     const ordersApi = useOrdersApi();
+    const settingsApi = useSettingsApi();
 
     const {addToast} = useToastContext();
     const {fetchAllMenusUser} = useMenuQueries(menusApi);
     const {fetchAllProductsUser} = useProductQueries(productsApi);
+    const {fetchSettingsData} = useSettingQueries(settingsApi);
     const {
         orderCustomer,
         setOrderCustomer,
@@ -49,6 +54,7 @@ export default function RouteOrder() {
 
     const menusData = fetchAllMenusUser("name", true, true, true, true);
     const productsData = fetchAllProductsUser("name", true, true);
+    const settingsData = fetchSettingsData();
 
     const {addOrderMutation} = useOrderMutations(ordersApi);
 
@@ -67,6 +73,8 @@ export default function RouteOrder() {
         });
 
         if (!response.error) {
+            setLastOrder(response.order.id);
+
             setOrderCustomer("");
             setOrderGuests(1);
             setOrderIsTakeAway(false);
@@ -109,6 +117,14 @@ export default function RouteOrder() {
     }, [menusData]);
 
     useEffect(() => {
+        if (!settingsData) return;
+
+        if (settingsData.error) return addToast(settingsData.code, "error");
+
+        setSettings(settingsData.settings! as SettingsUser);
+    }, [settingsData]);
+
+    useEffect(() => {
         const productsTotal = orderProducts.reduce((acc, product) => {
             return acc + product.price;
         }, 0);
@@ -126,21 +142,8 @@ export default function RouteOrder() {
                 <div className="col-sm-8 d-flex h-100">
                     <div className="card w-100 h-100">
                         <div className="card-body d-flex flex-column h-100">
-                            <OrderInfo/>
-                            <div className="btn-group d-flex flex-wrap mb-3" role="group"
-                                 aria-label="Select menu or product">
-                                <button type="button"
-                                        className={`btn btn-outline-primary ${isSelectedProducts ? 'active' : ''}`}
-                                        onClick={() => setIsSelectedProducts(true)}>Products
-                                </button>
-                                <button type="button"
-                                        className={`btn btn-outline-primary ${isSelectedProducts ? '' : 'active'}`}
-                                        onClick={() => setIsSelectedProducts(false)}>Menus
-                                </button>
-                            </div>
-                            {isSelectedProducts ?
-                                <OrderProductsTable products={products}/> :
-                                <OrderMenusTable menus={menus}/>}
+                            <OrderInfo settings={settings}/>
+                            <OrderProductsTable products={products} menus={menus}/>
                         </div>
                     </div>
                 </div>
@@ -152,6 +155,7 @@ export default function RouteOrder() {
                                 <OrderDetails products={products} menus={menus}/>
                             </div>
                             <div className="mt-auto d-flex flex-column">
+                                <h5 className="align-self-center">LAST ORDER: {lastOrder}</h5>
                                 <h5 className="align-self-center">TOTAL: {orderTotalPrice.toFixed(2)} €</h5>
                                 <button type="button" className="align-self-center btn btn-block btn-primary"
                                         onClick={handleSubmit}>Submit
