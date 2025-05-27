@@ -8,6 +8,7 @@ import {useOrderContext} from "../../contexts/OrderContext.tsx";
 type OrderDetailsProps = {
     products: Product[];
     menus: Menu[];
+    coverCharge: number;
 }
 
 const getProductDetails = (product: CreateOrderProduct, products: Product[]) => {
@@ -34,8 +35,8 @@ const getProductDetails = (product: CreateOrderProduct, products: Product[]) => 
     };
 };
 
-export default function OrderDetails({products, menus}: OrderDetailsProps) {
-    const {orderProducts, setOrderProducts, orderMenus, setOrderMenus} = useOrderContext();
+export default function OrderDetails({products, menus, coverCharge}: OrderDetailsProps) {
+    const {orderGuests, orderIsTakeAway, orderProducts, setOrderProducts, orderMenus, setOrderMenus} = useOrderContext();
 
     const handleSubmitRemoveProduct = useCallback((index: number) => {
         setOrderProducts(prev => prev.filter((_, i) => i !== index));
@@ -119,6 +120,19 @@ export default function OrderDetails({products, menus}: OrderDetailsProps) {
 
     return (
         <div className="container-fluid">
+            {!orderIsTakeAway &&
+                <div className="row mb-2">
+                    <div className="col-12 col-md-6 col-lg-7 d-flex flex-wrap align-items-center">
+                        <strong>Coperti</strong>
+                    </div>
+                    <div className="col-2 col-md-2 col-lg-1 d-flex align-items-center">
+                        {orderGuests}
+                    </div>
+                    <div className="col-5 col-md-2 col-lg-2 d-flex align-items-center justify-content-end">
+                        {(orderGuests * coverCharge).toFixed(2)} €
+                    </div>
+                </div>
+            }
             {renderOrderProduct}
             {renderOrderMenu}
         </div>

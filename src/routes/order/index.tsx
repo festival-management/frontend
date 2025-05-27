@@ -133,8 +133,10 @@ export default function RouteOrder() {
             return acc + menu.price;
         }, 0);
 
-        setOrderTotalPrice(productsTotal + menusTotal);
-    }, [orderProducts, orderMenus, products, menus]);
+        const coverChargePrice = !orderIsTakeAway ? settings.cover_charge * orderGuests : 0;
+
+        setOrderTotalPrice(productsTotal + menusTotal + coverChargePrice);
+    }, [orderProducts, orderMenus, products, menus, settings, orderIsTakeAway, orderGuests]);
 
     return (
         <div className="container-fluid p-4" style={{height: `calc(100vh - ${navbarHeight}px)`}}>
@@ -152,7 +154,7 @@ export default function RouteOrder() {
                         <div className="card-body d-flex flex-column h-100">
                             <h6 className="pb-2">Details</h6>
                             <div className="overflow-y-scroll mb-3 remove-scrollbar">
-                                <OrderDetails products={products} menus={menus}/>
+                                <OrderDetails products={products} menus={menus} coverCharge={settings.cover_charge}/>
                             </div>
                             <div className="mt-auto d-flex flex-column">
                                 <h5 className="align-self-center">LAST ORDER: {lastOrder}</h5>
