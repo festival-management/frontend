@@ -30,7 +30,7 @@ export default function OrderInfoMenusTable({orderMenus}: OrderInfoMenusTablePro
 
                                 const ingredientDetails = product.ingredients?.map((ingredient) => {
                                     const ingredientName = productDetails?.ingredients?.find((ing) => ing.id === ingredient.product_ingredient_id)?.name;
-                                    return `x${ingredient.quantity} ${ingredientName}`;
+                                    return `${ingredientName}`;
                                 }).join(", ");
 
                                 return (

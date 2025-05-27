@@ -19,7 +19,7 @@ export default function OrderInfoProductsTable({orderProducts}: OrderInfoProduct
                     const ingredientDetails = orderProduct.product?.ingredients?.find(
                         (ing) => ing.id === ingredient.id
                     );
-                    return ingredientDetails ? `${ingredientDetails.name} x${ingredient.quantity}` : "";
+                    return ingredientDetails ? `${ingredientDetails.name}` : "";
                 }).join(", ") || "N/A"}
             </td>
         </tr>
