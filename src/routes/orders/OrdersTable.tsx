@@ -39,7 +39,7 @@ export default function OrdersTable({ordersApi, orders, setOrders, setTotalCount
                 <OrderPrint ordersApi={ordersApi} orderId={v.id}/>
                 <button
                     type="button"
-                    className="btn btn-danger"
+                    className="btn btn-danger invisible"
                     onClick={() => handleDeleteOrder(v.id)}
                 >
                     <i className="bi bi-trash"/>

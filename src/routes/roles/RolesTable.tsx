@@ -33,7 +33,7 @@ export default function RolesTable({rolesApi, roles, setRoles, setTotalCount}: R
                 </Link>
                 <button
                     type="button"
-                    className="btn btn-danger"
+                    className="btn btn-danger invisible"
                     onClick={() => handleDeleteRole(v.id)}
                 >
                     <i className="bi bi-trash"/>

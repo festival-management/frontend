@@ -61,7 +61,7 @@ export default function MenuEditFieldsTable() {
                     <MenuEditFieldProductsTable menuField={v}/>
                     <button
                         type="button"
-                        className="btn btn-danger"
+                        className="btn btn-danger invisible"
                         onClick={() => handleDeleteMenuField(v.id)}
                     >
                         <i className="bi bi-trash"/> Delete

@@ -33,7 +33,7 @@ export default function ProductEditRolesTable({rolesName}: ProductEditRoleTableP
             <td>
                 <button
                     type="button"
-                    className="btn btn-danger"
+                    className="btn btn-danger invisible"
                     onClick={() => handleDeleteProductRole(v.id)}
                 >
                     <i className="bi bi-trash"/>

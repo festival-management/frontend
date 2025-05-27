@@ -35,7 +35,7 @@ export default function MenusTable({menusApi, menus, setMenus, setTotalCount}: M
                 </Link>
                 <button
                     type="button"
-                    className="btn btn-danger"
+                    className="btn btn-danger invisible"
                     onClick={() => handleDeleteMenu(v.id)}
                 >
                     <i className="bi bi-trash"/>

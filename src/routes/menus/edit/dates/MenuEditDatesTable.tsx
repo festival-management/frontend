@@ -23,7 +23,7 @@ export default function MenuEditDatesTable() {
             <td>
                 <button
                     type="button"
-                    className="btn btn-danger"
+                    className="btn btn-danger invisible"
                     onClick={() => handleDeleteMenuDate(v.id)}
                 >
                     <i className="bi bi-trash"/>

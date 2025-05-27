@@ -35,7 +35,7 @@ export default function UsersTable({users, setUsers, setTotalCount}: UsersTableP
                 </Link>
                 <button
                     type="button"
-                    className="btn btn-danger"
+                    className="btn btn-danger invisible"
                     onClick={() => handleDeleteUser(v.id)}
                 >
                     <i className="bi bi-trash"/>

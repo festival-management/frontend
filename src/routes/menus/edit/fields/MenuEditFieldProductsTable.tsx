@@ -35,7 +35,7 @@ export default function MenuEditFieldProductsTable({menuField}: MenuEditFieldPro
             <td>
                 <button
                     type="button"
-                    className="btn btn-danger"
+                    className="btn btn-danger invisible"
                     onClick={() => handleDeleteMenuFieldProduct(v.id)}
                 >
                     <i className="bi bi-trash"/>

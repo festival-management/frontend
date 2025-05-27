@@ -37,7 +37,7 @@ export default function ProductsTable({productsApi, products, setProducts, setTo
                 </Link>
                 <button
                     type="button"
-                    className="btn btn-danger"
+                    className="btn btn-danger invisible"
                     onClick={() => handleDeleteProduct(v.id)}
                 >
                     <i className="bi bi-trash"/>
