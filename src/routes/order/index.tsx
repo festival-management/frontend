@@ -53,7 +53,7 @@ export default function RouteOrder() {
     } = useOrderContext();
 
     const menusData = fetchAllMenusUser("name", true, true, true, true);
-    const productsData = fetchAllProductsUser("name", true, true);
+    const productsData = fetchAllProductsUser("order", true, true);
     const settingsData = fetchSettingsData();
 
     const {addOrderMutation} = useOrderMutations(ordersApi);
