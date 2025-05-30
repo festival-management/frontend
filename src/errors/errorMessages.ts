@@ -107,6 +107,7 @@ const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.PRODUCT_QUANTITY_CANNOT_BE_ZERO]: "Product quantity cannot be zero.",
     [ErrorCodes.MENU_QUANTITY_CANNOT_BE_ZERO]: "Menu quantity cannot be zero.",
     [ErrorCodes.MISSING_ORDER_CUSTOMER]: "Missing order costumer.",
+    [ErrorCodes.MISSING_ORDER_ID_OR_TABLE]: "Missing order_id or table.",
 };
 
 export default function getErrorMessage(errorCode: number, language: string = 'en'): string {
