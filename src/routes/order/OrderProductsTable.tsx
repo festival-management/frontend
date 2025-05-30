@@ -55,6 +55,12 @@ export default function OrderProductsTable({products, menus}: OrderProductsTable
         setSubcategoriesWithProducts(
             subcategoriesNameData.subcategories!.filter(subcategory => subcategoriesSet.has(subcategory.id))
         );
+
+        setSelectedSubcategoryId(
+            subcategoriesNameData.subcategories && subcategoriesNameData.subcategories.length > 0
+                ? subcategoriesNameData.subcategories[0].id
+                : -1
+        );
     }, [subcategoriesNameData, products]);
 
     useEffect(() => {

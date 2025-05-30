@@ -16,7 +16,9 @@ export default function OrderInfo({settings}: OrderInfoProps) {
         orderGuests,
         setOrderGuests,
         orderTable,
-        setOrderTable
+        setOrderTable,
+        orderIsVoucher,
+        setOrderIsVoucher,
     } = useOrderContext();
 
     const handleOrderCustomerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +35,10 @@ export default function OrderInfo({settings}: OrderInfoProps) {
 
     const handleOrderTableChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setOrderTable(parseInt(event.target.value));
+    };
+
+    const handleOrderIsVoucherChange = () => {
+        setOrderIsVoucher((prevState) => !prevState);
     };
 
     return (
@@ -60,6 +66,13 @@ export default function OrderInfo({settings}: OrderInfoProps) {
                                    onChange={handleOrderTableChange} disabled={orderIsTakeAway}/>
                         </>
                 }
+                <span className="input-group-text">Is voucher?</span>
+                <div className="form-control form-switch d-flex justify-content-center">
+                    <input type="checkbox" id="newOrderIsVoucher" className="form-check-input"
+                           checked={orderIsVoucher}
+                           onChange={handleOrderIsVoucherChange}
+                           required/>
+                </div>
             </div>
         </div>
     );

@@ -25,10 +25,18 @@ const useOrdersApi = (): UseOrdersApiInterface => {
         return response.data;
     };
 
-    const addOrder = async (customer: string, guests: number | null, isTakeAway: boolean, table: number | null, products: CreateOrderProduct[], menus: CreateOrderMenu[]) => {
+    const addOrder = async (
+        customer: string,
+        guests: number | null,
+        isTakeAway: boolean,
+        table: number | null,
+        isVoucher: boolean,
+        products: CreateOrderProduct[],
+        menus: CreateOrderMenu[]
+    ) => {
         const response: AxiosResponse<CreateOrderResponse> = await http.post(
             "/",
-            {customer, guests, is_take_away: isTakeAway, table, products, menus},
+            {customer, guests, is_take_away: isTakeAway, table, is_voucher: isVoucher, products, menus},
         );
 
         return response.data;

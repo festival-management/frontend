@@ -33,7 +33,7 @@ export default function MenuEditRolesTable({rolesName}: MenuEditRolesTableProps)
             <td>
                 <button
                     type="button"
-                    className="btn btn-danger invisible"
+                    className="btn btn-danger"
                     onClick={() => handleDeleteMenuRole(v.id)}
                 >
                     <i className="bi bi-trash"/>

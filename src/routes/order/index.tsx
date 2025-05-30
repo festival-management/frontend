@@ -46,6 +46,8 @@ export default function RouteOrder() {
         setOrderIsTakeAway,
         orderTable,
         setOrderTable,
+        orderIsVoucher,
+        setOrderIsVoucher,
         orderProducts,
         setOrderProducts,
         orderMenus,
@@ -68,6 +70,7 @@ export default function RouteOrder() {
             guests: orderIsTakeAway ? null : orderGuests,
             isTakeAway: orderIsTakeAway,
             table: orderIsTakeAway ? null : orderTable,
+            isVoucher: orderIsVoucher,
             products: orderProducts,
             menus: orderMenus
         });
@@ -79,6 +82,7 @@ export default function RouteOrder() {
             setOrderGuests(1);
             setOrderIsTakeAway(false);
             setOrderTable(1);
+            setOrderIsVoucher(false);
             setOrderTotalPrice(0);
 
             setOrderProducts([]);
