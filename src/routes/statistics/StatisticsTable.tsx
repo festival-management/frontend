@@ -12,6 +12,7 @@ export default function StatisticsTable({statistic}: StatisticsTableProps) {
             <td>{v.name}</td>
             <td>{v.quantity}</td>
             <td>{v.price} €</td>
+            <td>{v.total_price} €</td>
         </tr>
     ));
 
@@ -31,6 +32,7 @@ export default function StatisticsTable({statistic}: StatisticsTableProps) {
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
                     <th scope="col">Total Price</th>
                 </tr>
                 </thead>
@@ -38,6 +40,12 @@ export default function StatisticsTable({statistic}: StatisticsTableProps) {
                 {tableBody}
                 </tbody>
             </table>
+            <div className="input-group mb-3">
+                <span className="input-group-text">Total price with cover</span>
+                <span className="form-control">{statistic.total_price_with_cover}</span>
+                <span className="input-group-text">Total price without cover</span>
+                <span className="form-control">{statistic.total_price_without_cover}</span>
+            </div>
         </>
     );
 }

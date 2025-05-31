@@ -1,23 +1,38 @@
 import {useEffect, useState} from "react";
 
+import useRolesApi from "../../api/roles.ts";
 import StatisticsTable from "./StatisticsTable.tsx";
+import {RoleName} from "../../models/roles.model.ts";
 import useStatisticsApi from "../../api/statistics.ts";
 import {Statistic} from "../../models/statistics.model.ts";
 import {useToastContext} from "../../contexts/ToastContext.tsx";
-import useStatisticsQueries from "../../hooks/queries/use-statistics-queries.ts";
+import useRoleQueries from "../../hooks/queries/use-role-queries.ts";
 import EditStatisticFiltersForm from "./EditStatisticFiltersForm.tsx";
+import useStatisticsQueries from "../../hooks/queries/use-statistics-queries.ts";
 
 export default function RouteStatistics() {
     const [startDate, setStartDate] = useState<Date>();
     const [endDate, setEndDate] = useState<Date>();
+    const [selectedRoleIds, setSelectedRoleIds] = useState<number[]>([]);
     const [statistic, setStatistic] = useState<Statistic>({} as Statistic);
+    const [rolesName, setRolesName] = useState<RoleName[]>([]);
 
+    const rolesApi = useRolesApi();
     const statisticsApi = useStatisticsApi();
 
     const {addToast} = useToastContext();
+    const {fetchRolesName} = useRoleQueries(rolesApi);
     const {fetchStatisticDetails} = useStatisticsQueries(statisticsApi);
 
-    const statisticData = fetchStatisticDetails(startDate, endDate);
+    const rolesNameData = fetchRolesName(true);
+    const statisticData = fetchStatisticDetails(startDate, endDate, selectedRoleIds.length > 0 ? selectedRoleIds : undefined);
+
+    useEffect(() => {
+        if (!rolesNameData) return;
+        if (rolesNameData.error) return addToast(rolesNameData.code, "error");
+
+        setRolesName(rolesNameData.roles!);
+    }, [rolesNameData]);
 
     useEffect(() => {
         if (!statisticData) return;
@@ -35,7 +50,8 @@ export default function RouteStatistics() {
             <div className="card">
                 <div className="card-body">
                     <EditStatisticFiltersForm startDate={startDate} setStartDate={setStartDate} endDate={endDate}
-                                              setEndDate={setEndDate}/>
+                                              setEndDate={setEndDate} selectedRoleIds={selectedRoleIds}
+                                              setSelectedRoleIds={setSelectedRoleIds} rolesName={rolesName}/>
                     <StatisticsTable statistic={statistic}/>
                 </div>
             </div>
