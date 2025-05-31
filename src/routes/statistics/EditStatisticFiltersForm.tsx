@@ -40,7 +40,15 @@ export default function EditStatisticFiltersForm({
     };
 
     const formatDateForInput = (date: Date | undefined): string => {
-        return date ? date.toISOString().split('T')[0] : '';
+        if (!date) return '';
+        const pad = (n: number) => n.toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const month = pad(date.getMonth() + 1);
+        const day = pad(date.getDate());
+        const hours = pad(date.getHours());
+        const minutes = pad(date.getMinutes());
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
     };
 
     return (
@@ -48,11 +56,11 @@ export default function EditStatisticFiltersForm({
             <h6>Statistic Filters:</h6>
             <div className="input-group mb-3">
                 <span className="input-group-text">Start Date</span>
-                <input type="date" id="startDateFilter" className="form-control" value={formatDateForInput(startDate)}
+                <input type="datetime-local" id="startDateFilter" className="form-control" value={formatDateForInput(startDate)}
                        onChange={handleStartDateChange}
                        required/>
                 <span className="input-group-text">End Date</span>
-                <input type="date" id="endDateFilter" className="form-control" value={formatDateForInput(endDate)}
+                <input type="datetime-local" id="endDateFilter" className="form-control" value={formatDateForInput(endDate)}
                        onChange={handleEndDateChange}
                        required/>
 

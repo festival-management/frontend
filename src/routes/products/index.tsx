@@ -39,6 +39,11 @@ export default function RouteProducts() {
         if (subcategoriesNameData.error) return addToast(subcategoriesNameData.code, "error");
 
         setSubcategoriesName(subcategoriesNameData.subcategories!);
+        setSelectedSubcategoryId(
+            subcategoriesNameData.subcategories && subcategoriesNameData.subcategories.length > 0
+                ? subcategoriesNameData.subcategories[0].id
+                : -1
+        );
     }, [subcategoriesNameData]);
 
     useEffect(() => {
