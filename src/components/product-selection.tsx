@@ -79,7 +79,7 @@ export default function ProductSelection({
             basePrice += ingredientsPrice;
         }
 
-        setCalculatedPrice(basePrice);
+        setCalculatedPrice(basePrice * selectedQuantity);
     }, [selectedVariantId, selectedIngredientIds, product]);
 
     useEffect(() => {
