@@ -80,16 +80,33 @@ export default function OrderProductsTable({products, menus}: OrderProductsTable
                 handleIsSelectedMenusChange={handleIsSelectedMenusChange}
             />
             <div className="row overflow-y-scroll remove-scrollbar">
-                {isSelectedMenus ? menus.map((menu) => (
-                        <OrderMenusTableElement
-                            key={menu.id}
-                            menu={menu}
-                        />
-                    )) : filteredProducts.map(product => (
-                    <div className="col-lg-6 col-12" key={product.id}>
-                        <OrderProductsTableElement product={product}/>
-                    </div>
-                ))}
+                <table className="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        {isSelectedMenus && <th scope="col">Field Name</th>}
+                        {isSelectedMenus && <th scope="col">Field Product Name</th>}
+                        <th scope="col">{isSelectedMenus && "Product "}Variant</th>
+                        <th scope="col">{isSelectedMenus && "Product "}Ingredients</th>
+                        {isSelectedMenus && <th scope="col">Product Quantity</th>}
+                        <th scope="col">Price</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        isSelectedMenus ? menus.map((menu) => (
+                                <OrderMenusTableElement
+                                    key={menu.id}
+                                    menu={menu}
+                                />
+                            )) :
+                            filteredProducts.map(product => (
+                                <OrderProductsTableElement product={product} key={product.id}/>
+                            ))
+                    }
+                    </tbody>
+                </table>
             </div>
         </>
     );

@@ -12,7 +12,7 @@ export default function IngredientsSelector({
                                                 handleIngredientChange
                                             }: IngredientsSelectorProps) {
     return (
-        <div className="mb-3 d-flex flex-wrap flex-column">
+        <div className="d-flex flex-wrap">
             {ingredients.map((ingredient) => {
                 return (
                     <div key={ingredient.id} className="d-flex align-items-center me-3 mb-2">

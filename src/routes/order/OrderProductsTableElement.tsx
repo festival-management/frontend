@@ -22,10 +22,8 @@ export default function OrderProductsTableElement({product}: OrderProductsTableE
     };
 
     return (
-        <div className="card mb-2">
-            <div className="card-body">
-                <ProductSelection product={product} isFromMenu={false} updateProductInState={handleSubmit}/>
-            </div>
-        </div>
+        <tr>
+            <ProductSelection product={product} isFromMenu={false} updateProductInState={handleSubmit}/>
+        </tr>
     );
 }

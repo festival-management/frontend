@@ -5,7 +5,6 @@ import {ErrorCodes} from "../../errors/ErrorCodes.ts";
 import {useToastContext} from "../../contexts/ToastContext.tsx";
 import {useOrderContext} from "../../contexts/OrderContext.tsx";
 import {selectedFieldsReducer} from "../../contexts/orderReducer.ts";
-import QuantitySelector from "../../components/quantity-selector.tsx";
 import OrderMenusFieldProductTableElement from "./OrderMenusFieldProductTableElement.tsx";
 
 type OrderMenusTableElementProps = {
@@ -14,16 +13,11 @@ type OrderMenusTableElementProps = {
 
 export default function OrderMenusTableElement({menu}: OrderMenusTableElementProps) {
     const [price, setPrice] = useState(menu.price);
-    const [selectedQuantity, setSelectedQuantity] = useState<number>(0);
     const [selectedFields, selectedFieldsDispatch] = useReducer(selectedFieldsReducer, []);
     const [resetTrigger, setResetTrigger] = useState(0);
 
     const {addMenu} = useOrderContext();
     const {addToast} = useToastContext();
-
-    const handleQuantityChange = (change: number) => {
-        setSelectedQuantity((prevState) => prevState + change);
-    };
 
     const getProductDetails = (fieldId: number, productId: number) => {
         return menu.fields
@@ -34,10 +28,6 @@ export default function OrderMenusTableElement({menu}: OrderMenusTableElementPro
     };
 
     const handleSubmit = async () => {
-        if (!selectedQuantity) {
-            return addToast(ErrorCodes.MENU_QUANTITY_CANNOT_BE_ZERO, "error");
-        }
-
         const requiredFields = menu.fields!.filter(field => !field.is_optional);
         const allRequiredFieldsSelected = requiredFields.every(field => {
             const selectedField = selectedFields.find(f => f.menu_field_id === field.id);
@@ -76,12 +66,11 @@ export default function OrderMenusTableElement({menu}: OrderMenusTableElementPro
         addMenu({
             menu_id: menu.id,
             fields: selectedFields,
-            quantity: selectedQuantity,
+            quantity: 1,
             price: price
         });
 
         setPrice(menu.price);
-        setSelectedQuantity(0);
         selectedFieldsDispatch({type: "RESET"});
         setResetTrigger(prev => prev + 1);
     };
@@ -103,56 +92,46 @@ export default function OrderMenusTableElement({menu}: OrderMenusTableElementPro
             }
         });
 
-        let newPrice = basePrice * selectedQuantity;
-        if (selectedQuantity === 0) {
-            newPrice = menu.price;
-        }
+        setPrice(basePrice);
+    }, [selectedFields, menu]);
 
-        setPrice(newPrice);
-    }, [selectedQuantity, selectedFields, menu]);
+    const totalProducts = menu.fields
+        ?.flatMap(field => field.products || [])
+        .length;
 
     return (
-        <div className="card mb-2">
-            <div className="card-body">
-                <div className="row">
-                    <div className="col-4">
-                        <h4 className="mb-0 text-break">{menu.name}</h4>
-                    </div>
-                    <div className="col-4 d-flex justify-content-center align-items-start">
-                        <QuantitySelector quantity={selectedQuantity} handleQuantityChange={handleQuantityChange}/>
-                    </div>
-                    <div className="col-4 d-flex justify-content-end">
-                        <h6><strong>Price:&nbsp;</strong>{price.toFixed(2)} €</h6>
-                    </div>
-                </div>
-                <div className="mt-2">
-                    <div className="row">
-                        {menu.fields && menu.fields.map(field => (
-                            <div key={field.id} className="col-lg-4 col-12 mb-2">
-                                <div className="mb-3">
-                                    <h5>
-                                        {field.name} {!field.is_optional && <span className="text-danger">*</span>}
-                                    </h5>
-                                    <div className="mb-2">
-                                        {field.products?.map(fp => {
-                                            return <OrderMenusFieldProductTableElement
-                                                key={`${field.id}-${fp.product.id}`}
-                                                fieldId={field.id}
-                                                product={fp.product}
-                                                dispatch={selectedFieldsDispatch}
-                                                resetTrigger={resetTrigger}
-                                            />
-                                        })}
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="text-center">
-                        <button type="button" className="btn btn-primary" onClick={handleSubmit}>Add</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <>
+            {menu.fields && menu.fields.map((field, i) =>
+                field.products?.map((fp, y) => {
+                    const isFirstProduct = i === 0 && y === 0;
+                    const isFirstInField = y === 0;
+                    return (
+                        <tr key={`${field.id}-${fp.product.id}`}>
+                            {isFirstProduct && (
+                                <td className="align-middle" rowSpan={totalProducts}>{menu.name}</td>
+                            )}
+                            {isFirstInField && (
+                                <td className="align-middle" rowSpan={field.products?.length || 1}>{field.name}</td>
+                            )}
+                            <OrderMenusFieldProductTableElement
+                                product={fp.product}
+                                fieldId={field.id}
+                                dispatch={selectedFieldsDispatch}
+                                resetTrigger={resetTrigger}
+                            />
+                            {isFirstProduct && (
+                                <>
+                                    <td className="align-middle" rowSpan={totalProducts}>{price.toFixed(2)} €</td>
+                                    <td className="align-middle" rowSpan={totalProducts}>
+                                        <button type="button" className="btn btn-primary" onClick={handleSubmit}>Add
+                                        </button>
+                                    </td>
+                                </>
+                            )}
+                        </tr>
+                    );
+                })
+            )}
+        </>
     );
 }

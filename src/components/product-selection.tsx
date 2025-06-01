@@ -2,9 +2,9 @@ import {useEffect, useState} from "react";
 
 import {Product} from "../models/products.model.ts";
 import VariantSelector from "./variant-selector.tsx";
-import QuantitySelector from "./quantity-selector.tsx";
 import {CreateOrderProduct} from "../models/order.model.ts";
 import IngredientsSelector from "./ingredients-selector.tsx";
+import QuantitySelector from "./quantity-selector.tsx";
 
 interface ProductSelectionProps {
     product: Product;
@@ -19,7 +19,7 @@ export default function ProductSelection({
                                              resetTrigger,
                                              updateProductInState
                                          }: ProductSelectionProps) {
-    const [selectedQuantity, setSelectedQuantity] = useState<number>(0);
+    const [selectedQuantity, setSelectedQuantity] = useState<number>(isFromMenu ? 0 : 1);
     const [selectedVariantId, setSelectedVariantId] = useState<number | null>(null);
     const [selectedIngredientIds, setSelectedIngredientIds] = useState<number[]>([]);
     const [calculatedPrice, setCalculatedPrice] = useState<number>(isFromMenu ? 0 : product.price);
@@ -53,7 +53,7 @@ export default function ProductSelection({
     };
 
     const resetState = () => {
-        setSelectedQuantity(0);
+        setSelectedQuantity(isFromMenu ? 0 : 1);
         setSelectedVariantId(null);
         setSelectedIngredientIds([]);
         setCalculatedPrice(isFromMenu ? 0 : product.price);
@@ -79,44 +79,17 @@ export default function ProductSelection({
             basePrice += ingredientsPrice;
         }
 
-        let newPrice = basePrice * selectedQuantity;
-        if (!isFromMenu && selectedQuantity === 0) {
-            newPrice = product.price;
-        }
-
-        setCalculatedPrice(newPrice);
-    }, [selectedQuantity, selectedVariantId, selectedIngredientIds, product]);
+        setCalculatedPrice(basePrice);
+    }, [selectedVariantId, selectedIngredientIds, product]);
 
     useEffect(() => {
         if (isFromMenu) updateProductInState(createProductInstance());
     }, [selectedQuantity, selectedVariantId, selectedIngredientIds, calculatedPrice]);
 
     return (
-        <div key={product.id} className="mb-3">
-            {isFromMenu ?
-                <div className="row align-items-center g-2">
-                    <div className="col-auto">
-                        <label className="form-check-label">
-                            {product.name}
-                        </label>
-                    </div>
-                    <div className="col-auto">
-                        <QuantitySelector quantity={selectedQuantity} handleQuantityChange={handleQuantityChange}/>
-                    </div>
-                </div> :
-                <div className="row">
-                    <div className="col-4">
-                        <h4 className="mb-0 text-break">{product.name}</h4>
-                    </div>
-                    <div className="col-4 d-flex justify-content-center align-items-start">
-                        <QuantitySelector quantity={selectedQuantity} handleQuantityChange={handleQuantityChange}/>
-                    </div>
-                    <div className="col-4 d-flex justify-content-end">
-                        <h6><strong>Price:&nbsp;</strong>{calculatedPrice.toFixed(2)} €</h6>
-                    </div>
-                </div>
-            }
-            <div className="ms-4 mt-2">
+        <>
+            <td className="align-middle">{product.name}</td>
+            <td className="align-middle">
                 {product.variants && product.variants.length > 0 && (
                     <VariantSelector
                         variants={product.variants}
@@ -124,6 +97,8 @@ export default function ProductSelection({
                         onVariantChange={handleSelectedVariantIdChange}
                     />
                 )}
+            </td>
+            <td className="align-middle">
                 {product.ingredients && product.ingredients.length > 0 && (
                     <IngredientsSelector
                         ingredients={product.ingredients}
@@ -131,16 +106,24 @@ export default function ProductSelection({
                         handleIngredientChange={handleIngredientChange}
                     />
                 )}
-                {!isFromMenu &&
-                    <div className="text-center">
-                        <button type="button" className="btn btn-primary" onClick={() => {
-                            updateProductInState(createProductInstance());
-                            resetState();
-                        }}>Add
-                        </button>
-                    </div>
-                }
-            </div>
-        </div>
+            </td>
+            {isFromMenu && (
+                <td className="align-middle">
+                    <QuantitySelector quantity={selectedQuantity} handleQuantityChange={handleQuantityChange}/>
+                </td>
+            )}
+            {!isFromMenu && (
+                <td className="align-middle">{calculatedPrice.toFixed(2)} €</td>
+            )}
+            {!isFromMenu && (
+                <td className="align-middle">
+                    <button type="button" className="btn btn-primary" onClick={() => {
+                        updateProductInState(createProductInstance());
+                        resetState();
+                    }}>Add
+                    </button>
+                </td>
+            )}
+        </>
     );
 }

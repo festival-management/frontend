@@ -8,7 +8,7 @@ type VariantSelectorProps = {
 
 export default function VariantSelector({variants, selectedVariantId, onVariantChange}: VariantSelectorProps) {
     return (
-        <div className="mb-3 row align-items-center">
+        <div className="row align-items-center">
             <div className="col">
                 <select
                     className="form-select"
