@@ -4,6 +4,7 @@ import {Menu} from "../../models/menus.model.ts";
 import {Product} from "../../models/products.model.ts";
 import {CreateOrderProduct} from "../../models/order.model.ts";
 import {useOrderContext} from "../../contexts/OrderContext.tsx";
+import QuantitySelector from "../../components/quantity-selector.tsx";
 
 type OrderDetailsProps = {
     products: Product[];
@@ -46,16 +47,36 @@ export default function OrderDetails({products, menus, coverCharge}: OrderDetail
         setOrderMenus(prev => prev.filter((_, i) => i !== index));
     }, [setOrderMenus]);
 
+    const handleProductMenuQuantityChange = useCallback((index: number, isProduct: boolean) => {
+        return (change: number) => {
+            if (isProduct) {
+                setOrderProducts(prev =>
+                    prev.map((product, i) =>
+                        i === index ? { ...product, quantity: product.quantity + change } : product
+                    )
+                );
+            } else {
+                setOrderMenus(prev =>
+                    prev.map((menu, i) =>
+                        i === index ? { ...menu, quantity: menu.quantity + change } : menu
+                    )
+                );
+            }
+        }
+    }, [setOrderProducts, setOrderMenus]);
+
     const renderOrderProduct = useMemo(() => orderProducts.map((value, index) => {
         const {name, variantName, ingredientNames, price} = getProductDetails(value, products);
         return (
             <div className="row mb-2" key={index}>
-                <div className="col-12 col-md-6 col-lg-7 d-flex flex-wrap align-items-center">
+                <div className="col-12 col-md-6 col-lg-5 d-flex flex-wrap align-items-center">
                     <strong>{name}</strong>
                     {variantName && <span className="text-muted fst-italic ms-2">{variantName}</span>}
                     {ingredientNames && <span className="text-secondary ms-2">{ingredientNames}</span>}
                 </div>
-                <div className="col-2 col-md-2 col-lg-1 d-flex align-items-center">{value.quantity}</div>
+                <div className="col-2 col-md-2 col-lg-3 d-flex align-items-center justify-content-center">
+                    <QuantitySelector quantity={value.quantity} handleQuantityChange={handleProductMenuQuantityChange(index, true)} minValue={1}/>
+                </div>
                 <div className="col-5 col-md-2 col-lg-2 d-flex align-items-center justify-content-end">{price} €</div>
                 <div className="col-5 col-md-2 col-lg-2 d-flex align-items-center justify-content-end">
                     <button type="button" className="btn btn-danger" onClick={() => handleSubmitRemoveProduct(index)}>
@@ -72,7 +93,7 @@ export default function OrderDetails({products, menus, coverCharge}: OrderDetail
 
         return (
             <div key={menuIndex} className="row mb-2">
-                <div className="col-12 col-md-6 col-lg-7 d-flex align-items-center">
+                <div className="col-12 col-md-5 col-lg-5 d-flex align-items-center">
                     <div className="d-flex flex-column flex-wrap">
                         <strong>{menuDetails.name}</strong>
                         {menu.fields.map((field, fieldIndex) => (
@@ -105,7 +126,9 @@ export default function OrderDetails({products, menus, coverCharge}: OrderDetail
                         ))}
                     </div>
                 </div>
-                <div className="col-2 col-md-2 col-lg-1 d-flex align-items-center">{menu.quantity}</div>
+                <div className="col-2 col-md-2 col-lg-3 d-flex align-items-center justify-content-center">
+                    <QuantitySelector quantity={menu.quantity} handleQuantityChange={handleProductMenuQuantityChange(menuIndex, false)} minValue={1}/>
+                </div>
                 <div
                     className="col-5 col-md-2 col-lg-2 d-flex align-items-center justify-content-end">{menu.price.toFixed(2)} €
                 </div>
@@ -122,10 +145,10 @@ export default function OrderDetails({products, menus, coverCharge}: OrderDetail
         <div className="container-fluid">
             {!orderIsTakeAway &&
                 <div className="row mb-2">
-                    <div className="col-12 col-md-6 col-lg-7 d-flex flex-wrap align-items-center">
+                    <div className="col-12 col-md-6 col-lg-5 d-flex flex-wrap align-items-center">
                         <strong>Coperti</strong>
                     </div>
-                    <div className="col-2 col-md-2 col-lg-1 d-flex align-items-center">
+                    <div className="col-2 col-md-2 col-lg-3 d-flex align-items-center justify-content-center">
                         {orderGuests}
                     </div>
                     <div className="col-5 col-md-2 col-lg-2 d-flex align-items-center justify-content-end">
