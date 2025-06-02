@@ -26,6 +26,7 @@ const useOrderQueries = (ordersApi: UseOrdersApiInterface) => {
         includeProductsProductVariants: boolean,
         includeProductsIngredients: boolean,
         includeUser: boolean,
+        includeConfirmerUser: boolean,
     ): GetOrderResponse | undefined => {
         const {data} = useQuery({
             queryKey: [
@@ -51,7 +52,8 @@ const useOrderQueries = (ordersApi: UseOrdersApiInterface) => {
                 includeProductsProductRoles,
                 includeProductsProductVariants,
                 includeProductsIngredients,
-                includeUser
+                includeUser,
+                includeConfirmerUser,
             ],
             queryFn: () => ordersApi.getOrderById(
                 id,
@@ -75,7 +77,8 @@ const useOrderQueries = (ordersApi: UseOrdersApiInterface) => {
                 includeProductsProductRoles,
                 includeProductsProductVariants,
                 includeProductsIngredients,
-                includeUser
+                includeUser,
+                includeConfirmerUser,
             ),
             enabled: !!id,
             staleTime: 0,
@@ -108,6 +111,7 @@ const useOrderQueries = (ordersApi: UseOrdersApiInterface) => {
         includeProductsProductVariants: boolean,
         includeProductsIngredients: boolean,
         includeUser: boolean,
+        includeConfirmerUser: boolean,
     ): GetOrdersResponse | undefined => {
         const {data} = useQuery({
             queryKey: [
@@ -134,7 +138,8 @@ const useOrderQueries = (ordersApi: UseOrdersApiInterface) => {
                 includeProductsProductRoles,
                 includeProductsProductVariants,
                 includeProductsIngredients,
-                includeUser
+                includeUser,
+                includeConfirmerUser,
             ],
             queryFn: () => ordersApi.getOrders(
                 page,
@@ -159,6 +164,7 @@ const useOrderQueries = (ordersApi: UseOrdersApiInterface) => {
                 includeProductsProductVariants,
                 includeProductsIngredients,
                 includeUser,
+                includeConfirmerUser,
                 orderBy
             ),
             enabled: true,

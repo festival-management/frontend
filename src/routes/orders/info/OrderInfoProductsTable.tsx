@@ -17,7 +17,7 @@ export default function OrderInfoProductsTable({orderProducts}: OrderInfoProduct
             <td>
                 {orderProduct.ingredients?.map((ingredient) => {
                     const ingredientDetails = orderProduct.product?.ingredients?.find(
-                        (ing) => ing.id === ingredient.id
+                        (ing) => ing.id === ingredient.product_ingredient_id
                     );
                     return ingredientDetails ? `${ingredientDetails.name}` : "";
                 }).join(", ") || "N/A"}

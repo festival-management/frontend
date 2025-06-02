@@ -19,7 +19,7 @@ export default function RouteOrders() {
 
     const data = fetchOrdersData(
         page, "id", false, false, false, false, false, false, false, false, false, false,
-        false, false, false, false, false, false, false, false, false, false, true
+        false, false, false, false, false, false, false, false, false, false, true, false
     );
 
     useEffect(() => {

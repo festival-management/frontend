@@ -31,6 +31,7 @@ export default function OrdersTable({ordersApi, orders, setOrders, setTotalCount
             <td>{v.guests}</td>
             <td>{v.is_take_away ? "Yes" : "No"}</td>
             <td>{v.table}</td>
+            <td>{v.price}</td>
             <td>{v.user?.username}</td>
             <td>
                 <Link className="btn btn-primary" to={`/orders/info/${v.id}`} role="button">
@@ -59,6 +60,7 @@ export default function OrdersTable({ordersApi, orders, setOrders, setTotalCount
                     <th scope="col">Guests</th>
                     <th scope="col">Is Take Away</th>
                     <th scope="col">Table</th>
+                    <th scope="col">Price</th>
                     <th scope="col">User</th>
                     <th scope="col">Actions</th>
                 </tr>

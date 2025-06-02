@@ -40,7 +40,12 @@ export interface Order {
     guests?: number;
     is_take_away: boolean;
     table?: number;
+    is_confirm: boolean;
+    is_done: boolean;
+    is_voucher: boolean;
+    price: number;
     user?: User;
+    confirmed_by?: User;
     menus?: OrderMenu[];
     products?: OrderProduct[];
     created_at: string;
@@ -87,7 +92,7 @@ export interface UseOrdersApiInterface {
     confirmOrder(orderId: number, table: number): Promise<BaseResponse>;
     addOrder(customer: string, guests: number | null, isTakeAway: boolean, table: number | null, isVoucher: boolean, products: CreateOrderProduct[], menus: CreateOrderMenu[]): Promise<CreateOrderResponse>;
     deleteOrder(id: number): Promise<BaseResponse>;
-    getOrderById(id: number, includeMenus: boolean, includeMenusMenu: boolean, includeMenusMenuDates: boolean, includeMenusMenuFields: boolean, includeMenusMenuFieldsProducts: boolean, includeMenusMenuFieldsProductsDates: boolean, includeMenusMenuFieldsProductsIngredients: boolean, includeMenusMenuFieldsProductsRoles: boolean, includeMenusMenuFieldsProductsVariants: boolean, includeMenusMenuRoles: boolean, includeMenusFields: boolean, includeMenusFieldsProducts: boolean, includeMenusFieldsProductsIngredients: boolean, includeProducts: boolean, includeProductsProduct: boolean, includeProductsProductDates: boolean, includeProductsProductIngredients: boolean, includeProductsProductRoles: boolean, includeProductsProductVariants: boolean, includeProductsIngredients: boolean, includeUser: boolean): Promise<GetOrderResponse>;
-    getOrders(page: number, includeMenus: boolean, includeMenusMenu: boolean, includeMenusMenuDates: boolean, includeMenusMenuFields: boolean, includeMenusMenuFieldsProducts: boolean, includeMenusMenuFieldsProductsDates: boolean, includeMenusMenuFieldsProductsIngredients: boolean, includeMenusMenuFieldsProductsRoles: boolean, includeMenusMenuFieldsProductsVariants: boolean, includeMenusMenuRoles: boolean, includeMenusFields: boolean, includeMenusFieldsProducts: boolean, includeMenusFieldsProductsIngredients: boolean, includeProducts: boolean, includeProductsProduct: boolean, includeProductsProductDates: boolean, includeProductsProductIngredients: boolean, includeProductsProductRoles: boolean, includeProductsProductVariants: boolean, includeProductsIngredients: boolean, includeUser: boolean, orderBy?: string): Promise<GetOrdersResponse>;
+    getOrderById(id: number, includeMenus: boolean, includeMenusMenu: boolean, includeMenusMenuDates: boolean, includeMenusMenuFields: boolean, includeMenusMenuFieldsProducts: boolean, includeMenusMenuFieldsProductsDates: boolean, includeMenusMenuFieldsProductsIngredients: boolean, includeMenusMenuFieldsProductsRoles: boolean, includeMenusMenuFieldsProductsVariants: boolean, includeMenusMenuRoles: boolean, includeMenusFields: boolean, includeMenusFieldsProducts: boolean, includeMenusFieldsProductsIngredients: boolean, includeProducts: boolean, includeProductsProduct: boolean, includeProductsProductDates: boolean, includeProductsProductIngredients: boolean, includeProductsProductRoles: boolean, includeProductsProductVariants: boolean, includeProductsIngredients: boolean, includeUser: boolean, includeConfirmerUser: boolean): Promise<GetOrderResponse>;
+    getOrders(page: number, includeMenus: boolean, includeMenusMenu: boolean, includeMenusMenuDates: boolean, includeMenusMenuFields: boolean, includeMenusMenuFieldsProducts: boolean, includeMenusMenuFieldsProductsDates: boolean, includeMenusMenuFieldsProductsIngredients: boolean, includeMenusMenuFieldsProductsRoles: boolean, includeMenusMenuFieldsProductsVariants: boolean, includeMenusMenuRoles: boolean, includeMenusFields: boolean, includeMenusFieldsProducts: boolean, includeMenusFieldsProductsIngredients: boolean, includeProducts: boolean, includeProductsProduct: boolean, includeProductsProductDates: boolean, includeProductsProductIngredients: boolean, includeProductsProductRoles: boolean, includeProductsProductVariants: boolean, includeProductsIngredients: boolean, includeUser: boolean, includeConfirmerUser: boolean, orderBy?: string): Promise<GetOrdersResponse>;
     printOrder(orderId: number, printerTypes?: PrinterType[]): Promise<BaseResponse>;
 }

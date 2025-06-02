@@ -73,6 +73,7 @@ const useOrdersApi = (): UseOrdersApiInterface => {
         includeProductsProductVariants: boolean,
         includeProductsIngredients: boolean,
         includeUser: boolean,
+        includeConfirmerUser: boolean,
     ) => {
         const response: AxiosResponse<GetOrderResponse> = await http.get(
             `/${id}`,
@@ -99,6 +100,7 @@ const useOrdersApi = (): UseOrdersApiInterface => {
                     include_products_product_variants: includeProductsProductVariants,
                     include_products_ingredients: includeProductsIngredients,
                     include_user: includeUser,
+                    include_confirmer_user: includeConfirmerUser,
                 }
             }
         );
@@ -129,6 +131,7 @@ const useOrdersApi = (): UseOrdersApiInterface => {
         includeProductsProductVariants: boolean,
         includeProductsIngredients: boolean,
         includeUser: boolean,
+        includeConfirmerUser: boolean,
         orderBy?: string
     ) => {
         const limit = import.meta.env.VITE_DEFAULT_LIMIT_VALUE;
@@ -160,6 +163,7 @@ const useOrdersApi = (): UseOrdersApiInterface => {
                     include_products_product_variants: includeProductsProductVariants,
                     include_products_ingredients: includeProductsIngredients,
                     include_user: includeUser,
+                    include_confirmer_user: includeConfirmerUser,
                 }
             }
         );

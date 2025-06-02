@@ -20,7 +20,7 @@ export default function RouteOrderInfo() {
 
     const data = fetchOrderDetails(
         parseInt(id || "-1"), true, true, true, true, true, true, true, true, true,
-        true, true, true, true, true, true, true, true, true, true, true, true
+        true, true, true, true, true, true, true, true, true, true, true, true, true
     );
 
     useEffect(() => {
@@ -39,7 +39,12 @@ export default function RouteOrderInfo() {
                     <p><b>Guests</b>: <span>{order?.guests}</span></p>
                     <p><b>Is Take Away</b>: <span>{order?.is_take_away ? "Yes" : "No"}</span></p>
                     <p><b>Table</b>: <span>{order?.table}</span></p>
+                    <p><b>Is Confirmer</b>: <span>{order?.is_confirm ? "Yes" : "No"}</span></p>
+                    <p><b>Is done</b>: <span>{order?.is_done ? "Yes" : "No"}</span></p>
+                    <p><b>Is voucher</b>: <span>{order?.is_voucher ? "Yes" : "No"}</span></p>
+                    <p><b>Price</b>: <span>{order?.price}</span></p>
                     <p><b>User</b>: <span>{order?.user?.username}</span></p>
+                    <p><b>Confirmer by</b>: <span>{order?.confirmed_by?.username}</span></p>
                     <p><b>Created At</b>: <span>
                         {
                             order?.created_at && new Date(order.created_at).toLocaleString('it-IT', {
