@@ -51,15 +51,31 @@ export default function OrderDetails({products, menus, coverCharge}: OrderDetail
         return (change: number) => {
             if (isProduct) {
                 setOrderProducts(prev =>
-                    prev.map((product, i) =>
-                        i === index ? { ...product, quantity: product.quantity + change } : product
-                    )
+                    prev.map((product, i) => {
+                        if (i !== index) return product;
+                        const newQuantity = product.quantity + change;
+                        if (newQuantity < 1) return product;
+                        const unitPrice = product.price / product.quantity;
+                        return {
+                            ...product,
+                            quantity: newQuantity,
+                            price: unitPrice * newQuantity,
+                        };
+                    })
                 );
             } else {
                 setOrderMenus(prev =>
-                    prev.map((menu, i) =>
-                        i === index ? { ...menu, quantity: menu.quantity + change } : menu
-                    )
+                    prev.map((menu, i) => {
+                        if (i !== index) return menu;
+                        const newQuantity = menu.quantity + change;
+                        if (newQuantity < 1) return menu;
+                        const unitPrice = menu.price / menu.quantity;
+                        return {
+                            ...menu,
+                            quantity: newQuantity,
+                            price: unitPrice * newQuantity,
+                        };
+                    })
                 );
             }
         }
