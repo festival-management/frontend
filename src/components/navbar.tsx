@@ -26,7 +26,7 @@ function NavBar() {
             <div className="container-fluid">
                 <Link to="/" className="navbar-brand text-white d-flex align-items-center">
                     <img
-                        src="favicon.ico"
+                        src={`${import.meta.env.VITE_PUBLIC_URL}/favicon.ico`}
                         alt="favicon"
                         width="24"
                         height="24"
