@@ -9,7 +9,7 @@ function NavLinkList() {
     const tokenService = useTokenJwtUtils();
 
     const links = [...LINKS];
-    links.push(new LinkModel(Link, "/", "nav-link", "Logout", (t) => t.isLoggedIn(), () => tokenService.reset()));
+    links.push(new LinkModel(Link, "/", "nav-link text-white", "Logout", (t) => t.isLoggedIn(), () => tokenService.reset()));
 
     const filteredLinks = links.filter((link) => link.check(tokenService));
 
@@ -22,9 +22,18 @@ function NavLinkList() {
 
 function NavBar() {
     return (
-        <nav className="navbar navbar-expand-lg bg-light" id="navbar">
+        <nav className="navbar navbar-expand-lg" id="navbar" style={{ backgroundColor: '#08313F' }}>
             <div className="container-fluid">
-                <Link to="/" className="navbar-brand">Festival</Link>
+                <Link to="/" className="navbar-brand text-white d-flex align-items-center">
+                    <img
+                        src="favicon.ico"
+                        alt="favicon"
+                        width="24"
+                        height="24"
+                        className="me-2"
+                    />
+                    Festival
+                </Link>
                 <button
                     className="navbar-toggler"
                     type="button"
