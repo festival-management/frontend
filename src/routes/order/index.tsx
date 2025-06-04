@@ -143,7 +143,7 @@ export default function RouteOrder() {
     }, [orderProducts, orderMenus, products, menus, settings, orderIsTakeAway, orderGuests]);
 
     return (
-        <div className="container-fluid p-2" style={{height: `calc(100vh - ${navbarHeight}px)`}}>
+        <div className="container-fluid p-4" style={{height: `calc(100vh - ${navbarHeight}px)`}}>
             <div className="row h-100">
                 <div className="col-sm-8 d-flex h-100">
                     <div className="card w-100 h-100">
