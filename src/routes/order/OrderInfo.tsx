@@ -42,8 +42,8 @@ export default function OrderInfo({settings}: OrderInfoProps) {
     };
 
     return (
-        <div className="mb-3">
-            <div className="input-group mb-3">
+        <div>
+            <div className="input-group input-group-sm mb-3">
                 <span className="input-group-text">Customer</span>
                 <input type="text" id="newOrderCustomer" className="form-control" value={orderCustomer}
                        onChange={handleOrderCustomerChange}

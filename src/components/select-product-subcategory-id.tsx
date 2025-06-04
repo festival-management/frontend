@@ -22,13 +22,13 @@ export default function SelectProductSubcategoryId({
                                                        handleIsSelectedMenusChange,
                                                    }: SelectProductSubcategoryIdProps) {
     return (
-        <div className="btn-group d-flex flex-wrap mb-3" role="group" aria-label="Select Subcategory Id">
+        <div className="btn-group d-flex flex-wrap mb-1" role="group" aria-label="Select Subcategory Id">
             {Object.values(subcategoriesName).map(subcategoryName => {
                 const isSelected = selectedSubcategoryId === subcategoryName.id;
                 const isDone = subcategoriesDone.includes(subcategoryName.id);
 
                 return <button key={subcategoryName.id} type="button"
-                        className={`btn ${isSelected ? 'btn-primary' : isDone ? 'btn-success' : 'btn-outline-primary'}`}
+                        className={`btn ${isSelected ? 'btn-primary' : isDone ? 'btn-success' : 'btn-outline-primary'} btn-sm`}
                         onClick={() => handleSelectedSubcategoryIdChange(subcategoryName.id)}>{subcategoryName.name}</button>;
             })}
             {isMenus &&

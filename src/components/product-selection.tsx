@@ -117,7 +117,7 @@ export default function ProductSelection({
             )}
             {!isFromMenu && (
                 <td className="align-middle">
-                    <button type="button" className="btn btn-primary" onClick={() => {
+                    <button type="button" className="btn btn-primary btn-sm" onClick={() => {
                         updateProductInState(createProductInstance());
                         resetState();
                     }}>Add

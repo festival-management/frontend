@@ -48,7 +48,7 @@ export default function ProductsTable({productsApi, products, setProducts, setTo
 
     return (
         <>
-            <h6>Products</h6>
+            <h6 className="mt-3">Products</h6>
             <table className="table table-bordered">
                 <thead>
                 <tr>

@@ -80,8 +80,8 @@ export default function OrderProductsTable({products, menus}: OrderProductsTable
                 handleIsSelectedMenusChange={handleIsSelectedMenusChange}
             />
             <div className="row overflow-y-scroll remove-scrollbar">
-                <table className="table">
-                    <thead>
+                <table className="table table-sm">
+                    <thead className="small">
                     <tr>
                         <th scope="col">Name</th>
                         {isSelectedMenus && <th scope="col">Field Name</th>}
@@ -93,7 +93,7 @@ export default function OrderProductsTable({products, menus}: OrderProductsTable
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="small">
                     {
                         isSelectedMenus ? menus.map((menu) => (
                                 <OrderMenusTableElement
