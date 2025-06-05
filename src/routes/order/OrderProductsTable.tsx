@@ -80,7 +80,7 @@ export default function OrderProductsTable({products, menus}: OrderProductsTable
                 handleIsSelectedMenusChange={handleIsSelectedMenusChange}
             />
             <div className="row overflow-y-scroll remove-scrollbar">
-                <table className="table table-sm">
+                <table className="table table-sm table-striped">
                     <thead className="small">
                     <tr>
                         <th scope="col">Name</th>

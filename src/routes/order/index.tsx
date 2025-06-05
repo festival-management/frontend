@@ -48,6 +48,8 @@ export default function RouteOrder() {
         setOrderTable,
         orderIsVoucher,
         setOrderIsVoucher,
+        orderParentOrder,
+        setOrderParentOrder,
         orderProducts,
         setOrderProducts,
         orderMenus,
@@ -67,10 +69,11 @@ export default function RouteOrder() {
 
         const response = await addOrderMutation.mutateAsync({
             customer: orderCustomer,
-            guests: orderIsTakeAway ? null : orderGuests,
+            guests: orderIsTakeAway || orderParentOrder ? null : orderGuests,
             isTakeAway: orderIsTakeAway,
-            table: orderIsTakeAway ? null : orderTable,
+            table: orderIsTakeAway || orderParentOrder ? null : orderTable,
             isVoucher: orderIsVoucher,
+            parentOrder: orderParentOrder,
             products: orderProducts,
             menus: orderMenus
         });
@@ -83,6 +86,7 @@ export default function RouteOrder() {
             setOrderIsTakeAway(false);
             setOrderTable(1);
             setOrderIsVoucher(false);
+            setOrderParentOrder(null);
             setOrderTotalPrice(0);
 
             setOrderProducts([]);

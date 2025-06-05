@@ -19,6 +19,8 @@ export default function OrderInfo({settings}: OrderInfoProps) {
         setOrderTable,
         orderIsVoucher,
         setOrderIsVoucher,
+        orderParentOrder,
+        setOrderParentOrder,
     } = useOrderContext();
 
     const handleOrderCustomerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,6 +41,10 @@ export default function OrderInfo({settings}: OrderInfoProps) {
 
     const handleOrderIsVoucherChange = () => {
         setOrderIsVoucher((prevState) => !prevState);
+    };
+
+    const handleOrderParentOrderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOrderParentOrder(parseInt(event.target.value));
     };
 
     return (
@@ -73,6 +79,9 @@ export default function OrderInfo({settings}: OrderInfoProps) {
                            onChange={handleOrderIsVoucherChange}
                            required/>
                 </div>
+                <span className="input-group-text">Parent Order</span>
+                <input type="number" id="newOrderParentOrder" min="1" className="form-control" value={orderParentOrder || ""}
+                       onChange={handleOrderParentOrderChange}/>
             </div>
         </div>
     );

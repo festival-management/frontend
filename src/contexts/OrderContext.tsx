@@ -14,6 +14,8 @@ interface OrderContextType {
     setOrderTable: React.Dispatch<React.SetStateAction<number>>;
     orderIsVoucher: boolean;
     setOrderIsVoucher: React.Dispatch<React.SetStateAction<boolean>>;
+    orderParentOrder: number | null;
+    setOrderParentOrder: React.Dispatch<React.SetStateAction<number | null>>;
     orderProducts: CreateOrderProduct[];
     setOrderProducts: React.Dispatch<React.SetStateAction<CreateOrderProduct[]>>;
     orderMenus: CreateOrderMenu[];
@@ -34,6 +36,7 @@ export const OrderProvider = ({children}: OrderProviderProps) => {
     const [orderIsTakeAway, setOrderIsTakeAway] = useState(false);
     const [orderTable, setOrderTable] = useState(1);
     const [orderIsVoucher, setOrderIsVoucher] = useState(false);
+    const [orderParentOrder, setOrderParentOrder] = useState<number | null>(null);
     const [orderProducts, setOrderProducts] = useState<CreateOrderProduct[]>([]);
     const [orderMenus, setOrderMenus] = useState<CreateOrderMenu[]>([]);
 
@@ -90,6 +93,7 @@ export const OrderProvider = ({children}: OrderProviderProps) => {
                 orderIsTakeAway, setOrderIsTakeAway,
                 orderTable, setOrderTable,
                 orderIsVoucher, setOrderIsVoucher,
+                orderParentOrder, setOrderParentOrder,
                 orderProducts, setOrderProducts,
                 orderMenus, setOrderMenus,
                 addProduct, addMenu

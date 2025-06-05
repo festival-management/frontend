@@ -31,12 +31,13 @@ const useOrdersApi = (): UseOrdersApiInterface => {
         isTakeAway: boolean,
         table: number | null,
         isVoucher: boolean,
+        parentOrder: number | null,
         products: CreateOrderProduct[],
         menus: CreateOrderMenu[]
     ) => {
         const response: AxiosResponse<CreateOrderResponse> = await http.post(
             "/",
-            {customer, guests, is_take_away: isTakeAway, table, is_voucher: isVoucher, products, menus},
+            {customer, guests, is_take_away: isTakeAway, table, is_voucher: isVoucher, parent_order_id: parentOrder, products, menus},
         );
 
         return response.data;
