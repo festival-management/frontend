@@ -3,10 +3,10 @@ import React from "react";
 import {RoleName} from "../../models/roles.model.ts";
 
 interface EditStatisticFiltersFormProps {
-    startDate: Date | undefined;
-    setStartDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
-    endDate: Date | undefined;
-    setEndDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+    startDate: Date;
+    setStartDate: React.Dispatch<React.SetStateAction<Date>>;
+    endDate: Date;
+    setEndDate: React.Dispatch<React.SetStateAction<Date>>;
     selectedRoleIds: number[];
     setSelectedRoleIds: React.Dispatch<React.SetStateAction<number[]>>;
     rolesName: RoleName[];

@@ -26,6 +26,8 @@ export default function StatisticsTable({statistic}: StatisticsTableProps) {
                 <span className="form-control">{statistic.total_seated}</span>
                 <span className="input-group-text">Total take away</span>
                 <span className="form-control">{statistic.total_take_away}</span>
+                <span className="input-group-text">Total voucher</span>
+                <span className="form-control">{statistic.total_voucher}</span>
             </div>
             <table className="table table-bordered">
                 <thead>

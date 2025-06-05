@@ -10,9 +10,16 @@ import useRoleQueries from "../../hooks/queries/use-role-queries.ts";
 import EditStatisticFiltersForm from "./EditStatisticFiltersForm.tsx";
 import useStatisticsQueries from "../../hooks/queries/use-statistics-queries.ts";
 
+const getDateWithTime = (daysToAdd: number, hours: number, minutes: number = 0) => {
+    const date = new Date();
+    date.setDate(date.getDate() + daysToAdd);
+    date.setHours(hours, minutes, 0, 0);
+    return date;
+};
+
 export default function RouteStatistics() {
-    const [startDate, setStartDate] = useState<Date>();
-    const [endDate, setEndDate] = useState<Date>();
+    const [startDate, setStartDate] = useState<Date>(() => getDateWithTime(0, 4));
+    const [endDate, setEndDate] = useState<Date>(() => getDateWithTime(1, 2));
     const [selectedRoleIds, setSelectedRoleIds] = useState<number[]>([]);
     const [statistic, setStatistic] = useState<Statistic>({} as Statistic);
     const [rolesName, setRolesName] = useState<RoleName[]>([]);

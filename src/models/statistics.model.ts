@@ -11,6 +11,7 @@ export interface Statistic {
     total_orders: number;
     total_seated: number;
     total_take_away: number;
+    total_voucher: number;
     total_price_with_cover: number;
     total_price_without_cover: number;
     products: StatisticProduct[];
