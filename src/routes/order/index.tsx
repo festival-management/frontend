@@ -162,7 +162,7 @@ export default function RouteOrder() {
                             </div>
                             <div className="mt-auto d-flex flex-column">
                                 <h5 className="align-self-center">LAST ORDER: {lastOrder}</h5>
-                                <h5 className="align-self-center">TOTAL: {orderTotalPrice.toFixed(2)} €</h5>
+                                <h5 className="align-self-center">TOTAL: {orderIsVoucher ? 0.00.toFixed(2) : orderTotalPrice.toFixed(2)} €</h5>
                                 <button type="button" className="align-self-center btn btn-block btn-primary"
                                         onClick={handleSubmit}>Submit
                                 </button>
