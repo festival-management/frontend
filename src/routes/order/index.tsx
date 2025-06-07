@@ -27,6 +27,7 @@ export default function RouteOrder() {
     const [orderTotalPrice, setOrderTotalPrice] = useState(0);
     const [settings, setSettings] = useState<SettingsUser>({} as SettingsUser);
     const [lastOrder, setLastOrder] = useState<number>(0);
+    const [resetSubcategoryTrigger, setResetSubcategoryTrigger] = useState(0);
 
     const productsApi = useProductsApi();
     const menusApi = useMenusApi();
@@ -88,6 +89,7 @@ export default function RouteOrder() {
             setOrderIsVoucher(false);
             setOrderParentOrder(null);
             setOrderTotalPrice(0);
+            setResetSubcategoryTrigger((prevState) => prevState + 1);
 
             setOrderProducts([]);
             setOrderMenus([]);
@@ -153,7 +155,7 @@ export default function RouteOrder() {
                     <div className="card w-100 h-100">
                         <div className="card-body d-flex flex-column h-100">
                             <OrderInfo settings={settings}/>
-                            <OrderProductsTable products={products} menus={menus}/>
+                            <OrderProductsTable products={products} menus={menus} resetSubcategoryTrigger={resetSubcategoryTrigger}/>
                         </div>
                     </div>
                 </div>

@@ -14,9 +14,10 @@ import SelectProductSubcategoryId from "../../components/select-product-subcateg
 type OrderProductsTableProps = {
     products: Product[];
     menus: Menu[];
+    resetSubcategoryTrigger?: number;
 }
 
-export default function OrderProductsTable({products, menus}: OrderProductsTableProps) {
+export default function OrderProductsTable({products, menus, resetSubcategoryTrigger}: OrderProductsTableProps) {
     const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(-1);
     const [subcategoriesWithProducts, setSubcategoriesWithProducts] = useState<SubcategoryName[]>([]);
     const [subcategoriesDone, setSubcategoriesDone] = useState<number[]>([]);
@@ -52,16 +53,23 @@ export default function OrderProductsTable({products, menus}: OrderProductsTable
         if (subcategoriesNameData.error) return addToast(subcategoriesNameData.code, "error");
 
         const subcategoriesSet = new Set(products.map(product => product.subcategory_id));
-        setSubcategoriesWithProducts(
-            subcategoriesNameData.subcategories!.filter(subcategory => subcategoriesSet.has(subcategory.id))
+
+        const filteredSubcategories = subcategoriesNameData.subcategories!.filter(
+            subcategory => subcategoriesSet.has(subcategory.id)
         );
 
+        setSubcategoriesWithProducts(filteredSubcategories);
+
         setSelectedSubcategoryId(
-            subcategoriesNameData.subcategories && subcategoriesNameData.subcategories.length > 0
-                ? subcategoriesNameData.subcategories[0].id
-                : -1
+            filteredSubcategories.length > 0 ? filteredSubcategories[0].id : -1
         );
     }, [subcategoriesNameData, products]);
+
+    useEffect(() => {
+        if (subcategoriesWithProducts.length > 0) {
+            setSelectedSubcategoryId(subcategoriesWithProducts[0].id);
+        }
+    }, [resetSubcategoryTrigger]);
 
     useEffect(() => {
         setSubcategoriesDone([...new Set(orderProducts.map((value) => products.find((p) => p.id === value.product_id)?.subcategory_id || -1))]);
