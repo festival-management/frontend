@@ -1,4 +1,4 @@
-import {useCallback, useMemo} from "react";
+import {useCallback, useEffect, useMemo, useRef} from "react";
 
 import {Menu} from "../../models/menus.model.ts";
 import {Product} from "../../models/products.model.ts";
@@ -37,6 +37,8 @@ const getProductDetails = (product: CreateOrderProduct, products: Product[]) => 
 };
 
 export default function OrderDetails({products, menus, coverCharge}: OrderDetailsProps) {
+    const bottomRef = useRef<HTMLDivElement | null>(null);
+
     const {orderGuests, orderIsTakeAway, orderProducts, setOrderProducts, orderMenus, setOrderMenus} = useOrderContext();
 
     const handleSubmitRemoveProduct = useCallback((index: number) => {
@@ -157,6 +159,10 @@ export default function OrderDetails({products, menus, coverCharge}: OrderDetail
         );
     }), [orderMenus, menus, products, handleSubmitRemoveMenu]);
 
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [orderProducts, orderMenus]);
+
     return (
         <div className="container-fluid">
             {!orderIsTakeAway &&
@@ -174,6 +180,7 @@ export default function OrderDetails({products, menus, coverCharge}: OrderDetail
             }
             {renderOrderProduct}
             {renderOrderMenu}
+            <div ref={bottomRef} />
         </div>
     );
 }
