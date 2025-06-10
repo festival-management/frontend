@@ -10,6 +10,7 @@ type OrderDetailsProps = {
     products: Product[];
     menus: Menu[];
     coverCharge: number;
+    showCoverCharge: boolean;
 }
 
 const getProductDetails = (product: CreateOrderProduct, products: Product[]) => {
@@ -36,10 +37,10 @@ const getProductDetails = (product: CreateOrderProduct, products: Product[]) => 
     };
 };
 
-export default function OrderDetails({products, menus, coverCharge}: OrderDetailsProps) {
+export default function OrderDetails({products, menus, coverCharge, showCoverCharge}: OrderDetailsProps) {
     const bottomRef = useRef<HTMLDivElement | null>(null);
 
-    const {orderGuests, orderIsTakeAway, orderProducts, setOrderProducts, orderMenus, setOrderMenus} = useOrderContext();
+    const {orderGuests, orderProducts, setOrderProducts, orderMenus, setOrderMenus} = useOrderContext();
 
     const handleSubmitRemoveProduct = useCallback((index: number) => {
         setOrderProducts(prev => prev.filter((_, i) => i !== index));
@@ -165,7 +166,7 @@ export default function OrderDetails({products, menus, coverCharge}: OrderDetail
 
     return (
         <div className="container-fluid">
-            {!orderIsTakeAway &&
+            {showCoverCharge &&
                 <div className="row mb-2">
                     <div className="col-12 col-md-6 col-lg-5 d-flex flex-wrap align-items-center">
                         <strong>Coperti</strong>

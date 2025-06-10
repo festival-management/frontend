@@ -4,11 +4,13 @@ export interface Subcategory {
     id: number;
     name: string;
     order: number;
+    include_cover_charge: boolean;
 }
 
 export interface SubcategoryName {
     id: number;
     name: string;
+    include_cover_charge: boolean;
 }
 
 export interface CreateSubcategoryResponse extends BaseResponse {
@@ -35,6 +37,7 @@ export interface UseSubcategoriesApiInterface {
     getSubcategories(page: number, orderBy?: string): Promise<GetSubcategoriesResponse>;
     getSubcategoriesName(orderBy?: string): Promise<GetSubcategoriesNameResponse>;
     getSubcategoryById(id: number): Promise<GetSubcategoryResponse>;
+    updateSubcategoryIncludeCoverCharge(id: number, includeCoverCharge: boolean): Promise<BaseResponse>;
     updateSubcategoryName(id: number, name: string): Promise<BaseResponse>;
     updateSubcategoryOrder(id: number, order: number): Promise<BaseResponse>;
 }

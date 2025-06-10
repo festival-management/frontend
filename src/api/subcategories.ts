@@ -58,6 +58,15 @@ const useSubcategoriesApi = (): UseSubcategoriesApiInterface => {
         return response.data;
     };
 
+    const updateSubcategoryIncludeCoverCharge = async (id: number, includeCoverCharge: boolean) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/include_cover_charge`,
+            {include_cover_charge: includeCoverCharge}
+        );
+
+        return response.data;
+    };
+
     const updateSubcategoryName = async (id: number, name: string) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/name`,
@@ -82,6 +91,7 @@ const useSubcategoriesApi = (): UseSubcategoriesApiInterface => {
         getSubcategories,
         getSubcategoriesName,
         getSubcategoryById,
+        updateSubcategoryIncludeCoverCharge,
         updateSubcategoryName,
         updateSubcategoryOrder
     };

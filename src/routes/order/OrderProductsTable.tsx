@@ -2,34 +2,26 @@ import {useEffect, useMemo, useState} from "react";
 
 import {Menu} from "../../models/menus.model.ts";
 import {Product} from "../../models/products.model.ts";
-import useSubcategoriesApi from "../../api/subcategories.ts";
-import {useToastContext} from "../../contexts/ToastContext.tsx";
 import {useOrderContext} from "../../contexts/OrderContext.tsx";
 import OrderMenusTableElement from "./OrderMenusTableElement.tsx";
 import {SubcategoryName} from "../../models/subcategories.model.ts";
 import OrderProductsTableElement from "./OrderProductsTableElement.tsx";
-import useSubcategoryQueries from "../../hooks/queries/use-subcategory-queries.ts";
 import SelectProductSubcategoryId from "../../components/select-product-subcategory-id.tsx";
 
 type OrderProductsTableProps = {
+    subcategoriesName: SubcategoryName[];
     products: Product[];
     menus: Menu[];
     resetSubcategoryTrigger?: number;
 }
 
-export default function OrderProductsTable({products, menus, resetSubcategoryTrigger}: OrderProductsTableProps) {
+export default function OrderProductsTable({subcategoriesName, products, menus, resetSubcategoryTrigger}: OrderProductsTableProps) {
     const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(-1);
     const [subcategoriesWithProducts, setSubcategoriesWithProducts] = useState<SubcategoryName[]>([]);
     const [subcategoriesDone, setSubcategoriesDone] = useState<number[]>([]);
     const [isSelectedMenus, setIsSelectedMenus] = useState(false);
 
-    const {addToast} = useToastContext();
     const {orderProducts, orderMenus} = useOrderContext();
-    const subcategoriesApi = useSubcategoriesApi();
-
-    const {fetchSubcategoriesName} = useSubcategoryQueries(subcategoriesApi);
-
-    const subcategoriesNameData = fetchSubcategoriesName("order");
 
     const handleSelectedSubcategoryIdChange = (subcategoryId: number) => {
         setSelectedSubcategoryId(subcategoryId);
@@ -48,13 +40,9 @@ export default function OrderProductsTable({products, menus, resetSubcategoryTri
     }, [selectedSubcategoryId, products]);
 
     useEffect(() => {
-        if (!subcategoriesNameData) return;
-
-        if (subcategoriesNameData.error) return addToast(subcategoriesNameData.code, "error");
-
         const subcategoriesSet = new Set(products.map(product => product.subcategory_id));
 
-        const filteredSubcategories = subcategoriesNameData.subcategories!.filter(
+        const filteredSubcategories = subcategoriesName.filter(
             subcategory => subcategoriesSet.has(subcategory.id)
         );
 
@@ -63,7 +51,7 @@ export default function OrderProductsTable({products, menus, resetSubcategoryTri
         setSelectedSubcategoryId(
             filteredSubcategories.length > 0 ? filteredSubcategories[0].id : -1
         );
-    }, [subcategoriesNameData, products]);
+    }, [subcategoriesName, products]);
 
     useEffect(() => {
         if (subcategoriesWithProducts.length > 0) {

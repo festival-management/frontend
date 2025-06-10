@@ -15,6 +15,13 @@ const useSubcategoryMutations = (subcategoriesApi: UseSubcategoriesApiInterface)
     });
 
     // Updates
+    const updateSubcategoryIncludeCoverChargeMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            includeCoverCharge: boolean
+        }) => subcategoriesApi.updateSubcategoryIncludeCoverCharge(variables.id, variables.includeCoverCharge),
+        onSuccess: onSuccessMutation
+    });
     const updateSubcategoryNameMutation = useMutation({
         mutationFn: (variables: {
             id: number,
@@ -38,6 +45,7 @@ const useSubcategoryMutations = (subcategoriesApi: UseSubcategoriesApiInterface)
 
     return {
         addSubcategoryMutation,
+        updateSubcategoryIncludeCoverChargeMutation,
         updateSubcategoryNameMutation,
         updateSubcategoryOrderMutation,
         deleteSubcategoryMutation

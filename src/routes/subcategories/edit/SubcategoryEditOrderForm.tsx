@@ -52,6 +52,7 @@ export default function SubcategoryEditOrderForm({
                     Change
                 </button>
             </form>
+            <hr/>
         </>
     );
 }

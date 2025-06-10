@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 import OrderInfo from "./OrderInfo.tsx";
 import useMenusApi from "../../api/menus.ts";
@@ -11,12 +11,15 @@ import {ErrorCodes} from "../../errors/ErrorCodes.ts";
 import {SettingsUser} from "../../models/settings.ts";
 import {Product} from "../../models/products.model.ts";
 import OrderProductsTable from "./OrderProductsTable.tsx";
+import useSubcategoriesApi from "../../api/subcategories.ts";
 import {useToastContext} from "../../contexts/ToastContext.tsx";
 import {useOrderContext} from "../../contexts/OrderContext.tsx";
+import {SubcategoryName} from "../../models/subcategories.model.ts";
 import useMenuQueries from "../../hooks/queries/use-menu-queries.ts";
 import useProductQueries from "../../hooks/queries/use-product-queries.ts";
 import useSettingQueries from "../../hooks/queries/use-setting-queries.ts";
 import useOrderMutations from "../../hooks/mutations/use-order-mutations.ts";
+import useSubcategoryQueries from "../../hooks/queries/use-subcategory-queries.ts";
 
 import "./style.css";
 
@@ -24,6 +27,7 @@ export default function RouteOrder() {
     const [navbarHeight, setNavbarHeight] = useState(0);
     const [products, setProducts] = useState<Product[]>([]);
     const [menus, setMenus] = useState<Menu[]>([]);
+    const [subcategories, setSubcategories] = useState<SubcategoryName[]>([]);
     const [orderTotalPrice, setOrderTotalPrice] = useState(0);
     const [settings, setSettings] = useState<SettingsUser>({} as SettingsUser);
     const [lastOrder, setLastOrder] = useState<number>(0);
@@ -32,11 +36,13 @@ export default function RouteOrder() {
     const productsApi = useProductsApi();
     const menusApi = useMenusApi();
     const ordersApi = useOrdersApi();
+    const subcategoriesApi = useSubcategoriesApi();
     const settingsApi = useSettingsApi();
 
     const {addToast} = useToastContext();
     const {fetchAllMenusUser} = useMenuQueries(menusApi);
     const {fetchAllProductsUser} = useProductQueries(productsApi);
+    const {fetchSubcategoriesName} = useSubcategoryQueries(subcategoriesApi);
     const {fetchSettingsData} = useSettingQueries(settingsApi);
     const {
         orderCustomer,
@@ -59,6 +65,7 @@ export default function RouteOrder() {
 
     const menusData = fetchAllMenusUser("name", true, true, true, true);
     const productsData = fetchAllProductsUser("order", true, true);
+    const subcategoriesNameData = fetchSubcategoriesName("order");
     const settingsData = fetchSettingsData();
 
     const {addOrderMutation} = useOrderMutations(ordersApi);
@@ -127,6 +134,14 @@ export default function RouteOrder() {
     }, [menusData]);
 
     useEffect(() => {
+        if (!subcategoriesNameData) return;
+
+        if (subcategoriesNameData.error) return addToast(subcategoriesNameData.code, "error");
+
+        setSubcategories(subcategoriesNameData.subcategories!);
+    }, [subcategoriesNameData]);
+
+    useEffect(() => {
         if (!settingsData) return;
 
         if (settingsData.error) return addToast(settingsData.code, "error");
@@ -134,19 +149,30 @@ export default function RouteOrder() {
         setSettings(settingsData.settings! as SettingsUser);
     }, [settingsData]);
 
+    const shouldApplyCoverCharge = useMemo(() => {
+        if (orderIsTakeAway) return false;
+
+        const hasCoverChargeProduct = orderProducts.some(orderProduct => {
+            const product = products.find(p => p.id === orderProduct.product_id);
+            const subcategory = subcategories.find(s => s.id === product?.subcategory_id);
+            return subcategory?.include_cover_charge === true;
+        });
+
+        const hasMenus = orderMenus.length > 0;
+
+        return hasCoverChargeProduct || hasMenus;
+    }, [orderIsTakeAway, orderProducts, orderMenus, products, subcategories]);
+
     useEffect(() => {
-        const productsTotal = orderProducts.reduce((acc, product) => {
-            return acc + product.price;
-        }, 0);
+        const productsTotal = orderProducts.reduce((acc, p) => acc + p.price, 0);
+        const menusTotal = orderMenus.reduce((acc, m) => acc + m.price, 0);
 
-        const menusTotal = orderMenus.reduce((acc, menu) => {
-            return acc + menu.price;
-        }, 0);
+        const coverCharge = !orderIsTakeAway && shouldApplyCoverCharge
+            ? orderGuests * settings.cover_charge
+            : 0;
 
-        const coverChargePrice = !orderIsTakeAway ? settings.cover_charge * orderGuests : 0;
-
-        setOrderTotalPrice(productsTotal + menusTotal + coverChargePrice);
-    }, [orderProducts, orderMenus, products, menus, settings, orderIsTakeAway, orderGuests]);
+        setOrderTotalPrice(productsTotal + menusTotal + coverCharge);
+    }, [orderProducts, orderMenus, settings, shouldApplyCoverCharge, orderGuests]);
 
     return (
         <div className="container-fluid p-4" style={{height: `calc(100vh - ${navbarHeight}px)`}}>
@@ -155,7 +181,7 @@ export default function RouteOrder() {
                     <div className="card w-100 h-100">
                         <div className="card-body d-flex flex-column h-100">
                             <OrderInfo settings={settings}/>
-                            <OrderProductsTable products={products} menus={menus} resetSubcategoryTrigger={resetSubcategoryTrigger}/>
+                            <OrderProductsTable subcategoriesName={subcategories} products={products} menus={menus} resetSubcategoryTrigger={resetSubcategoryTrigger}/>
                         </div>
                     </div>
                 </div>
@@ -164,7 +190,7 @@ export default function RouteOrder() {
                         <div className="card-body d-flex flex-column h-100">
                             <h6 className="pb-2">Details</h6>
                             <div className="overflow-y-scroll mb-3 remove-scrollbar">
-                                <OrderDetails products={products} menus={menus} coverCharge={settings.cover_charge}/>
+                                <OrderDetails products={products} menus={menus} coverCharge={settings.cover_charge} showCoverCharge={shouldApplyCoverCharge}/>
                             </div>
                             <div className="mt-auto d-flex flex-column">
                                 <h5 className="align-self-center">LAST ORDER: {lastOrder}</h5>

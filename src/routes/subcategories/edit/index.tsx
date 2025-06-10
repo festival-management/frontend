@@ -7,6 +7,7 @@ import SubcategoryEditOrderForm from "./SubcategoryEditOrderForm";
 import {useToastContext} from "../../../contexts/ToastContext.tsx";
 import {Subcategory} from "../../../models/subcategories.model.ts";
 import useSubcategoryQueries from "../../../hooks/queries/use-subcategory-queries.ts";
+import SubcategoryEditIncludeCoverChargeForm from "./SubcategoryEditIncludeCoverChargeForm.tsx";
 
 export default function RouteSubcategoryEdit() {
     const {id} = useParams();
@@ -38,6 +39,9 @@ export default function RouteSubcategoryEdit() {
                                              subcategoryName={subcategory.name}/>
                     <SubcategoryEditOrderForm subcategoriesApi={subcategoriesApi} subcategoryId={subcategory.id}
                                               subcategoryOrder={subcategory.order}/>
+                    <SubcategoryEditIncludeCoverChargeForm subcategoriesApi={subcategoriesApi}
+                                                           subcategoryId={subcategory.id}
+                                                           subcategoryIncludeCoverCharge={subcategory.include_cover_charge}/>
                 </div>
             </div>
         </div>
