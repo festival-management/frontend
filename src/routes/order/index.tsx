@@ -158,10 +158,27 @@ export default function RouteOrder() {
             return subcategory?.include_cover_charge === true;
         });
 
-        const hasMenus = orderMenus.length > 0;
+        const hasMenuProductWithCoverCharge = orderMenus.some(orderMenu => {
+            const fullMenu = menus.find(m => m.id === orderMenu.menu_id);
+            if (!fullMenu?.fields) return false;
 
-        return hasCoverChargeProduct || hasMenus;
-    }, [orderIsTakeAway, orderProducts, orderMenus, products, subcategories]);
+            return orderMenu.fields.some(orderedField => {
+                const fullField = fullMenu.fields!.find(f => f.id === orderedField.menu_field_id);
+                if (!fullField?.products) return false;
+
+                return orderedField.products.some(orderedProduct => {
+                    const menuFieldProduct = fullField.products!.find(p => p.product.id === orderedProduct.product_id);
+                    const product = menuFieldProduct?.product;
+                    if (!product) return false;
+
+                    const subcategory = subcategories.find(s => s.id === product.subcategory_id);
+                    return subcategory?.include_cover_charge === true;
+                });
+            });
+        });
+
+        return hasCoverChargeProduct || hasMenuProductWithCoverCharge;
+    }, [orderIsTakeAway, orderProducts, orderMenus, products, menus, subcategories]);
 
     useEffect(() => {
         const productsTotal = orderProducts.reduce((acc, p) => acc + p.price, 0);
