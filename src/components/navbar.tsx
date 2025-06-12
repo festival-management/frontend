@@ -22,7 +22,7 @@ function NavLinkList() {
 
 function NavBar() {
     return (
-        <nav className="navbar navbar-expand-lg" id="navbar" style={{ backgroundColor: '#08313F' }}>
+        <nav className="navbar navbar-expand-lg navbar-dark" id="navbar" style={{ backgroundColor: '#08313F' }}>
             <div className="container-fluid">
                 <Link to="/" className="navbar-brand text-white d-flex align-items-center">
                     <img

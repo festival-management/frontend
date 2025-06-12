@@ -27,7 +27,7 @@ function PaginationControls({page, setPage, totalCount}: PaginationControlsProps
 
     return (
         <div className="d-flex justify-content-end">
-            <div className="btn-group" role="group">
+            <div className="btn-group flex-wrap" role="group">
                 {pages}
             </div>
         </div>

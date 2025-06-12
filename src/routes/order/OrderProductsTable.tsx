@@ -87,13 +87,13 @@ export default function OrderProductsTable({subcategoriesName, products, menus, 
                     <thead className="small">
                     <tr>
                         <th scope="col">Name</th>
+                        <th scope="col">Actions</th>
                         {isSelectedMenus && <th scope="col">Field Name</th>}
                         {isSelectedMenus && <th scope="col">Field Product Name</th>}
                         <th scope="col">{isSelectedMenus && "Product "}Variant</th>
                         <th scope="col">{isSelectedMenus && "Product "}Ingredients</th>
                         {isSelectedMenus && <th scope="col">Product Quantity</th>}
                         <th scope="col">Price</th>
-                        <th scope="col">Actions</th>
                     </tr>
                     </thead>
                     <tbody className="small">

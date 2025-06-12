@@ -110,15 +110,6 @@ export default function OrderMenusTableElement({menu}: OrderMenusTableElementPro
                             {isFirstProduct && (
                                 <td className="align-middle" rowSpan={totalProducts}>{menu.name}</td>
                             )}
-                            {isFirstInField && (
-                                <td className="align-middle" rowSpan={field.products?.length || 1}>{field.name}</td>
-                            )}
-                            <OrderMenusFieldProductTableElement
-                                product={fp.product}
-                                fieldId={field.id}
-                                dispatch={selectedFieldsDispatch}
-                                resetTrigger={resetTrigger}
-                            />
                             {isFirstProduct && (
                                 <>
                                     <td className="align-middle" rowSpan={totalProducts}>{price.toFixed(2)} €</td>
@@ -128,6 +119,15 @@ export default function OrderMenusTableElement({menu}: OrderMenusTableElementPro
                                     </td>
                                 </>
                             )}
+                            {isFirstInField && (
+                                <td className="align-middle" rowSpan={field.products?.length || 1}>{field.name}</td>
+                            )}
+                            <OrderMenusFieldProductTableElement
+                                product={fp.product}
+                                fieldId={field.id}
+                                dispatch={selectedFieldsDispatch}
+                                resetTrigger={resetTrigger}
+                            />
                         </tr>
                     );
                 })

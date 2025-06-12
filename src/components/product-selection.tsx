@@ -89,6 +89,15 @@ export default function ProductSelection({
     return (
         <>
             <td className="align-middle">{product.name}</td>
+            {!isFromMenu && (
+                <td className="align-middle">
+                    <button type="button" className="btn btn-primary btn-sm" onClick={() => {
+                        updateProductInState(createProductInstance());
+                        resetState();
+                    }}>Add
+                    </button>
+                </td>
+            )}
             <td className="align-middle">
                 {product.variants && product.variants.length > 0 && (
                     <VariantSelector
@@ -114,15 +123,6 @@ export default function ProductSelection({
             )}
             {!isFromMenu && (
                 <td className="align-middle">{calculatedPrice.toFixed(2)} €</td>
-            )}
-            {!isFromMenu && (
-                <td className="align-middle">
-                    <button type="button" className="btn btn-primary btn-sm" onClick={() => {
-                        updateProductInState(createProductInstance());
-                        resetState();
-                    }}>Add
-                    </button>
-                </td>
             )}
         </>
     );

@@ -4,6 +4,7 @@ import OrderInfo from "./OrderInfo.tsx";
 import useMenusApi from "../../api/menus.ts";
 import OrderDetails from "./OrderDetails.tsx";
 import useOrdersApi from "../../api/orders.ts";
+import {Category} from "../../enums/category.ts";
 import {Menu} from "../../models/menus.model.ts";
 import useProductsApi from "../../api/products.ts";
 import useSettingsApi from "../../api/settings.ts";
@@ -190,6 +191,17 @@ export default function RouteOrder() {
 
         setOrderTotalPrice(productsTotal + menusTotal + coverCharge);
     }, [orderProducts, orderMenus, settings, shouldApplyCoverCharge, orderGuests]);
+
+    useEffect(() => {
+        if (orderIsTakeAway && orderProducts.length > 0) {
+            const filteredProducts = orderProducts.filter(orderProduct => {
+                const product = products.find(p => p.id === orderProduct.product_id);
+                return product?.category !== Category.DRINK;
+            });
+
+            setOrderProducts(filteredProducts);
+        }
+    }, [orderIsTakeAway]);
 
     return (
         <div className="container-fluid p-4" style={{height: `calc(100vh - ${navbarHeight}px)`}}>
