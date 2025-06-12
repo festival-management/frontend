@@ -1,5 +1,6 @@
 import {useEffect, useMemo, useState} from "react";
 
+import {Category} from "../../enums/category.ts";
 import {Menu} from "../../models/menus.model.ts";
 import {Product} from "../../models/products.model.ts";
 import {useOrderContext} from "../../contexts/OrderContext.tsx";
@@ -21,7 +22,7 @@ export default function OrderProductsTable({subcategoriesName, products, menus, 
     const [subcategoriesDone, setSubcategoriesDone] = useState<number[]>([]);
     const [isSelectedMenus, setIsSelectedMenus] = useState(false);
 
-    const {orderProducts, orderMenus} = useOrderContext();
+    const {orderProducts, orderMenus, orderIsTakeAway} = useOrderContext();
 
     const handleSelectedSubcategoryIdChange = (subcategoryId: number) => {
         setSelectedSubcategoryId(subcategoryId);
@@ -31,16 +32,22 @@ export default function OrderProductsTable({subcategoriesName, products, menus, 
     const handleIsSelectedMenusChange = () => {
         setIsSelectedMenus((prevState) => !prevState);
         setSelectedSubcategoryId(-1);
-    }
+    };
+
+    const effectiveProducts = useMemo(() => {
+        return orderIsTakeAway
+            ? products.filter(product => product.category !== Category.DRINK)
+            : products;
+    }, [products, orderIsTakeAway]);
 
     const filteredProducts = useMemo(() => {
         return selectedSubcategoryId === -1
             ? []
-            : products.filter(product => product.subcategory_id === selectedSubcategoryId);
-    }, [selectedSubcategoryId, products]);
+            : effectiveProducts.filter(product => product.subcategory_id === selectedSubcategoryId);
+    }, [selectedSubcategoryId, effectiveProducts]);
 
     useEffect(() => {
-        const subcategoriesSet = new Set(products.map(product => product.subcategory_id));
+        const subcategoriesSet = new Set(effectiveProducts.map(product => product.subcategory_id));
 
         const filteredSubcategories = subcategoriesName.filter(
             subcategory => subcategoriesSet.has(subcategory.id)
@@ -51,7 +58,7 @@ export default function OrderProductsTable({subcategoriesName, products, menus, 
         setSelectedSubcategoryId(
             filteredSubcategories.length > 0 ? filteredSubcategories[0].id : -1
         );
-    }, [subcategoriesName, products]);
+    }, [subcategoriesName, effectiveProducts]);
 
     useEffect(() => {
         if (subcategoriesWithProducts.length > 0) {
