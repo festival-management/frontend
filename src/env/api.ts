@@ -27,6 +27,9 @@ const API = {
     get SUBCATEGORIES() {
         return new URL("subcategories", this.BASE_URL);
     },
+    get TABLES() {
+        return new URL("tables", this.BASE_URL);
+    },
     get USERS() {
         return new URL("users", this.BASE_URL);
     },

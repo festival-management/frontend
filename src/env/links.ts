@@ -14,6 +14,7 @@ export const LINKS = [
     new LinkModel(NavLink, "/menus", "nav-link text-white", "Menu", (t) => t.canUserAdminister()),
     new LinkModel(NavLink, "/orders", "nav-link text-white", "Orders", (t) => t.canUserAdminister()),
     new LinkModel(NavLink, "/printers", "nav-link text-white", "Printers", (t) => t.canUserAdminister()),
+    new LinkModel(NavLink, "/tables", "nav-link text-white", "Tables", (t) => t.canUserAdminister()),
     new LinkModel(NavLink, "/settings", "nav-link text-white", "Settings", (t) => t.canUserAdminister()),
     new LinkModel(NavLink, "/profile", "nav-link text-white", "Profile", (t) => t.isLoggedIn()),
 ];

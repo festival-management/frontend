@@ -6,6 +6,7 @@ import RouteLogin from "./routes/login";
 import RouteRoles from "./routes/roles";
 import RouteUsers from "./routes/users";
 import RouteOrder from "./routes/order";
+import RouteTables from "./routes/tables";
 import RouteOrders from "./routes/orders";
 import RouteProfile from "./routes/profile";
 import RoutePrinters from "./routes/printers";
@@ -99,6 +100,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/subcategories/edit/:id",
                     element: <RouteSubcategoryEdit/>
+                },
+                {
+                    path: "/tables",
+                    element: <RouteTables/>
                 },
                 {
                     path: "/users",
