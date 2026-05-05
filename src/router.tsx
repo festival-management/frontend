@@ -17,6 +17,7 @@ import RouteRoleEdit from "./routes/roles/edit";
 import RouteUserEdit from "./routes/users/edit";
 import RouteStatistics from "./routes/statistics";
 import RouteOrderInfo from "./routes/orders/info";
+import RouteTableEdit from "./routes/tables/edit";
 import RouteProductEdit from "./routes/products/edit";
 import RouteOrderConfirm from "./routes/order/confirm";
 import RouteSubcategories from "./routes/subcategories";
@@ -25,6 +26,7 @@ import {OrderProvider} from "./contexts/OrderContext.tsx";
 import RouteSubcategoryEdit from "./routes/subcategories/edit";
 import {MenuEditProvider} from "./contexts/MenuEditContext.tsx";
 import {RoleEditProvider} from "./contexts/RoleEditContext.tsx";
+import {TableEditProvider} from "./contexts/TableEditContext.tsx";
 import {ProductEditProvider} from "./contexts/ProductEditContext.tsx";
 
 const routers = createBrowserRouter(
@@ -104,6 +106,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/tables",
                     element: <RouteTables/>
+                },
+                {
+                    path: "/tables/edit/:id",
+                    element: <TableEditProvider><RouteTableEdit/></TableEditProvider>
                 },
                 {
                     path: "/users",

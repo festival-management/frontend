@@ -32,8 +32,9 @@ export interface GetTablesNameResponse extends BaseResponse {
 // Interface for the useTablesApi hook
 export interface UseTablesApiInterface {
     addTable(name: string, seatStart: number, seatEnd: number): Promise<CreateTableResponse>;
-
     deleteTable(id: number): Promise<BaseResponse>;
-
     getTables(page: number): Promise<GetTablesResponse>;
+    getTablesById(id: number): Promise<GetTableResponse>;
+    updateTableName(id: number, name: string): Promise<BaseResponse>;
+    updateTableSeats(id: number, seatStart: number, seatEnd: number): Promise<BaseResponse>;
 }

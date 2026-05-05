@@ -55,12 +55,14 @@ export default function CreateTableForm({tablesApi, setTables, setTotalCount}: C
                 <input type="text" id="newTableName" className="form-control" value={newTableName}
                        onChange={handleNewTableNameChange}
                        required/>
+                <span className="input-group-text">Seat Start</span>
                 <input type="number" id="newTableSeatStart" className="form-control"
                        value={newTableSeatStart}
                        step='1'
                        min='1'
                        onChange={handleNewTableSeatStartChange}
                        required/>
+                <span className="input-group-text">Seat End</span>
                 <input type="number" id="newTableSeatEnd" className="form-control"
                        value={newTableSeatEnd}
                        step='1'

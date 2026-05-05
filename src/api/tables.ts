@@ -3,7 +3,12 @@ import {AxiosResponse} from "axios";
 import API from "../env/api";
 import useHttpClient from "./utils";
 import BaseResponse from "../models/base.model.ts";
-import {CreateTableResponse, GetTablesResponse, UseTablesApiInterface} from "../models/tables.model.ts";
+import {
+    CreateTableResponse,
+    GetTableResponse,
+    GetTablesResponse,
+    UseTablesApiInterface
+} from "../models/tables.model.ts";
 
 const useTablesApi = (): UseTablesApiInterface => {
     const {http} = useHttpClient(API.TABLES.toString());
@@ -35,7 +40,33 @@ const useTablesApi = (): UseTablesApiInterface => {
         return response.data;
     };
 
-    return {addTable, deleteTable, getTables};
+    const getTablesById = async (id: number) => {
+        const response: AxiosResponse<GetTableResponse> = await http.get(
+            `/${id}`
+        );
+
+        return response.data;
+    };
+
+    const updateTableName = async (id: number, name: string) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/name`,
+            {name}
+        );
+
+        return response.data;
+    };
+
+    const updateTableSeats = async (id: number, seatStart: number, seatEnd: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.put(
+            `/${id}/seats`,
+            {seat_start: seatStart, seat_end: seatEnd},
+        );
+
+        return response.data;
+    };
+
+    return {addTable, deleteTable, getTables, getTablesById, updateTableName, updateTableSeats};
 }
 
 export default useTablesApi;

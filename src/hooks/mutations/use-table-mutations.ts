@@ -18,13 +18,30 @@ const useTableMutations = (tablesApi: UseTablesApiInterface) => {
         onSuccess: onSuccessMutation
     });
 
+    // Updates
+    const updateTableNameMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            name: string
+        }) => tablesApi.updateTableName(variables.id, variables.name),
+        onSuccess: onSuccessMutation
+    });
+    const updateTableSeatsMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            seatStart: number,
+            seatEnd: number
+        }) => tablesApi.updateTableSeats(variables.id, variables.seatStart, variables.seatEnd),
+        onSuccess: onSuccessMutation
+    });
+
     // Delete
     const deleteTableMutation = useMutation({
         mutationFn: tablesApi.deleteTable,
         onSuccess: onSuccessMutation
     });
 
-    return {addTableMutation, deleteTableMutation};
+    return {addTableMutation, updateTableNameMutation, updateTableSeatsMutation, deleteTableMutation};
 };
 
 export default useTableMutations;
