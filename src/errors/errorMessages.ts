@@ -24,6 +24,7 @@ const errorMessagesEn: { [key in number]: string } = {
 
     // Orders
     [ErrorCodes.ORDER_NOT_FOUND]: "Order not found.",
+    [ErrorCodes.TABLE_NOT_ALLOWED_FOR_ROLE]: "Table not allowed for role.",
     [ErrorCodes.ORDER_ALREADY_CONFIRMED]: "Order already confirmed.",
     [ErrorCodes.DUPLICATE_MENU_FIELDS]: "Input duplicate menu fields.",
     [ErrorCodes.DUPLICATE_MENU_FIELDS_PRODUCT]: "Input duplicate menu field products.",
@@ -43,6 +44,9 @@ const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.MISSING_MENU_FIELD_PRODUCTS]: "Missing menu field products.",
     [ErrorCodes.MISSING_OBLIGATORY_MENU_FIELDS]: "Missing obligatory menu fields.",
     [ErrorCodes.NO_PRODUCTS_AND_MENUS]: "No products and menus.",
+    [ErrorCodes.PARENT_ORDER_ID_REQUIRED]: "Parent order id required.",
+    [ErrorCodes.PARENT_ORDER_ID_NOT_ALLOWED]: "Parent order id not allowed.",
+    [ErrorCodes.PARENT_ORDER_NOT_CONFIRMED]: "Parent order not confirmed.",
     [ErrorCodes.PRODUCT_DAILY_LIMIT_EXCEEDED]: "Product daily limit exceeded.",
     [ErrorCodes.PRODUCT_DATE_NOT_VALID]: "Product date is not valid.",
     [ErrorCodes.PRODUCT_INGREDIENT_NOT_EXIST]: "Product ingredient does not exist.",
@@ -50,6 +54,7 @@ const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.PRODUCT_ROLE_NOT_EXIST]: "Product role does not exist.",
     [ErrorCodes.PRODUCT_VARIANT_NOT_EXIST]: "Product variant does not exist.",
     [ErrorCodes.SET_GUESTS_NUMBER]: "Set guests number.",
+    [ErrorCodes.ORDER_ALREADY_SERVED]: "Order already served.",
 
     // Printers
     [ErrorCodes.PRINTER_NOT_FOUND]: "Printer not found.",
@@ -72,12 +77,18 @@ const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.ROLE_CANNOT_ORDER]: "Role cannot order.",
     [ErrorCodes.ROLE_NOT_FOUND]: "Role not found.",
     [ErrorCodes.ROLE_PRINTER_ALREADY_EXISTS]: "Role printer already exists.",
+    [ErrorCodes.ROLE_TABLE_ALREADY_EXISTS]: "Role table already exists.",
     [ErrorCodes.ROLE_ALREADY_EXISTS]: "Role already exists.",
     [ErrorCodes.ROLE_PRINTER_NOT_FOUND]: "Role printer not found.",
+    [ErrorCodes.ROLE_TABLE_NOT_FOUND]: "Role table not found.",
 
     // Subcategories
     [ErrorCodes.SUBCATEGORY_NOT_FOUND]: "Subcategory not found.",
     [ErrorCodes.SUBCATEGORY_ALREADY_EXISTS]: "Subcategory already exists.",
+
+    // Tables
+    [ErrorCodes.TABLE_NOT_FOUND]: "Table not found.",
+    [ErrorCodes.TABLE_ALREADY_EXISTS]: "Table already exists.",
 
     // Users
     [ErrorCodes.USER_NOT_FOUND]: "User not found.",
@@ -94,6 +105,7 @@ const errorMessagesEn: { [key in number]: string } = {
     [ErrorCodes.DATE_RANGE_INVALID]: "Date range is invalid.",
     [ErrorCodes.DUPLICATE_DATE]: "Duplicate date.",
     [ErrorCodes.ONLY_ONE_STATISTICS_CAN_BE_TRUE]: "Only one of `can_statistics` and `can_priority_statistics` can be true.",
+    [ErrorCodes.ORDER_AND_MODIFY_COMPLETED_ORDERS_MUTUALLY_EXCLUSIVE]: "Order and modify completed orders mutually exclusive.",
     [ErrorCodes.PAPER_SIZE_REQUIRED_IF_CAN_ORDER]: "If `can_order` is `True` then `paper_size` is required.",
     [ErrorCodes.UNKNOWN_ORDER_BY_PARAMETER]: "Unknown order_by parameter.",
     [ErrorCodes.INVALID_OFFSET_OR_LIMIT_NEGATIVE]: "Invalid offset or limit negative.",

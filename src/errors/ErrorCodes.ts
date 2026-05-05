@@ -34,6 +34,7 @@ export enum ErrorCodes {
 
     // Orders
     ORDER_NOT_FOUND,
+    TABLE_NOT_ALLOWED_FOR_ROLE,
     // Confirm
     ORDER_ALREADY_CONFIRMED,
     // Create
@@ -55,6 +56,9 @@ export enum ErrorCodes {
     MISSING_MENU_FIELD_PRODUCTS,
     MISSING_OBLIGATORY_MENU_FIELDS,
     NO_PRODUCTS_AND_MENUS,
+    PARENT_ORDER_ID_REQUIRED,
+    PARENT_ORDER_ID_NOT_ALLOWED,
+    PARENT_ORDER_NOT_CONFIRMED,
     PRODUCT_DAILY_LIMIT_EXCEEDED,
     PRODUCT_DATE_NOT_VALID,
     PRODUCT_INGREDIENT_NOT_EXIST,
@@ -62,6 +66,8 @@ export enum ErrorCodes {
     PRODUCT_ROLE_NOT_EXIST,
     PRODUCT_VARIANT_NOT_EXIST,
     SET_GUESTS_NUMBER,
+    // Serve order
+    ORDER_ALREADY_SERVED,
 
     // Printers
     PRINTER_NOT_FOUND,
@@ -94,15 +100,24 @@ export enum ErrorCodes {
     ROLE_NOT_FOUND,
     // Add role printer
     ROLE_PRINTER_ALREADY_EXISTS,
+    // Add role table
+    ROLE_TABLE_ALREADY_EXISTS,
     // Create
     ROLE_ALREADY_EXISTS,
     // Delete role printer
     ROLE_PRINTER_NOT_FOUND,
+    // Delete role table
+    ROLE_TABLE_NOT_FOUND,
 
     // Subcategories
     SUBCATEGORY_NOT_FOUND,
     // Create
     SUBCATEGORY_ALREADY_EXISTS,
+
+    // Tables
+    TABLE_NOT_FOUND,
+    // Create
+    TABLE_ALREADY_EXISTS,
 
     // Users
     USER_NOT_FOUND,
@@ -119,6 +134,7 @@ export enum ErrorCodes {
     DATE_RANGE_INVALID,
     DUPLICATE_DATE,
     ONLY_ONE_STATISTICS_CAN_BE_TRUE,
+    ORDER_AND_MODIFY_COMPLETED_ORDERS_MUTUALLY_EXCLUSIVE,
     PAPER_SIZE_REQUIRED_IF_CAN_ORDER,
     UNKNOWN_ORDER_BY_PARAMETER,
     INVALID_OFFSET_OR_LIMIT_NEGATIVE,
