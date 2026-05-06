@@ -2,7 +2,7 @@ import React, {createContext, ReactNode, useContext, useState} from 'react';
 
 import useRolesApi from "../api/roles.ts";
 import {Permission} from "../enums/permission.ts";
-import {RolePrinter, UseRolesApiInterface} from "../models/roles.model.ts";
+import {RolePrinter, RoleTable, UseRolesApiInterface} from "../models/roles.model.ts";
 
 interface RoleEditContextType {
     roleId: number;
@@ -13,6 +13,8 @@ interface RoleEditContextType {
     setRolePermissions: React.Dispatch<React.SetStateAction<Map<Permission, boolean>>>;
     rolePrinters: RolePrinter[];
     setRolePrinters: React.Dispatch<React.SetStateAction<RolePrinter[]>>;
+    roleTables: RoleTable[];
+    setRoleTables: React.Dispatch<React.SetStateAction<RoleTable[]>>;
     roleOrderConfirmerId: number;
     setRoleOrderConfirmerId: React.Dispatch<React.SetStateAction<number>>;
     rolesApi: UseRolesApiInterface;
@@ -34,6 +36,7 @@ export const RoleEditProvider = ({children}: RoleEditProviderProps) => {
             )
     );
     const [rolePrinters, setRolePrinters] = useState<RolePrinter[]>([]);
+    const [roleTables, setRoleTables] = useState<RoleTable[]>([]);
     const [roleOrderConfirmerId, setRoleOrderConfirmerId] = useState<number>(-1);
 
     const rolesApi = useRolesApi();
@@ -45,6 +48,7 @@ export const RoleEditProvider = ({children}: RoleEditProviderProps) => {
                 roleName, setRoleName,
                 rolePermissions, setRolePermissions,
                 rolePrinters, setRolePrinters,
+                roleTables, setRoleTables,
                 roleOrderConfirmerId, setRoleOrderConfirmerId,
                 rolesApi
             }}

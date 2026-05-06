@@ -35,6 +35,7 @@ export interface UseTablesApiInterface {
     deleteTable(id: number): Promise<BaseResponse>;
     getTables(page: number): Promise<GetTablesResponse>;
     getTablesById(id: number): Promise<GetTableResponse>;
+    getTablesName(orderBy?: string): Promise<GetTablesNameResponse>;
     updateTableName(id: number, name: string): Promise<BaseResponse>;
     updateTableSeats(id: number, seatStart: number, seatEnd: number): Promise<BaseResponse>;
 }

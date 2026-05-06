@@ -1,6 +1,11 @@
 import {useQuery} from "@tanstack/react-query";
 
-import {GetTableResponse, GetTablesResponse, UseTablesApiInterface} from "../../models/tables.model.ts";
+import {
+    GetTableResponse,
+    GetTablesNameResponse,
+    GetTablesResponse,
+    UseTablesApiInterface
+} from "../../models/tables.model.ts";
 
 const UseTableQueries = (tablesApi: UseTablesApiInterface) => {
     const fetchTableDetails = (id: number): GetTableResponse | undefined => {
@@ -8,6 +13,17 @@ const UseTableQueries = (tablesApi: UseTablesApiInterface) => {
             queryKey: ["tables-details", id],
             queryFn: () => tablesApi.getTablesById(id),
             enabled: !!id,
+            staleTime: 0,
+        });
+
+        return data;
+    };
+
+    const fetchTableName = (orderBy?: string): GetTablesNameResponse | undefined => {
+        const {data} = useQuery({
+            queryKey: ["tables-name"],
+            queryFn: () => tablesApi.getTablesName(orderBy),
+            enabled: true,
             staleTime: 0,
         });
 
@@ -25,7 +41,7 @@ const UseTableQueries = (tablesApi: UseTablesApiInterface) => {
         return data;
     };
 
-    return {fetchTableDetails, fetchTablesData};
+    return {fetchTableDetails, fetchTableName, fetchTablesData};
 }
 
 export default UseTableQueries;

@@ -58,6 +58,22 @@ const useRoleMutations = (rolesApi: UseRolesApiInterface) => {
         onSuccess: onSuccessMutation
     });
 
+    // Tables
+    const addRoleTableMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            tableId: number
+        }) => rolesApi.addRoleTable(variables.id, variables.tableId),
+        onSuccess: onSuccessMutation
+    });
+    const deleteRoleTableMutation = useMutation({
+        mutationFn: (variables: {
+            id: number,
+            roleTableId: number
+        }) => rolesApi.deleteRoleTable(variables.id, variables.roleTableId),
+        onSuccess: onSuccessMutation
+    });
+
     return {
         addRoleMutation,
         updateRoleNameMutation,
@@ -66,6 +82,8 @@ const useRoleMutations = (rolesApi: UseRolesApiInterface) => {
         deleteRoleMutation,
         addRolePrinterMutation,
         deleteRolePrinterMutation,
+        addRoleTableMutation,
+        deleteRoleTableMutation,
     };
 };
 

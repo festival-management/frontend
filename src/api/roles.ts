@@ -6,6 +6,7 @@ import {Permission} from "../enums/permission";
 import BaseResponse from "../models/base.model";
 import {
     AddRolePrinterResponse,
+    AddRoleTableResponse,
     CreateRoleResponse,
     GetRoleResponse,
     GetRolesNameResponse,
@@ -34,6 +35,15 @@ const useRolesApi = (): UseRolesApiInterface => {
         return response.data;
     };
 
+    const addRoleTable = async (id: number, tableId: number) => {
+        const response: AxiosResponse<AddRoleTableResponse> = await http.post(
+            `/${id}/table`,
+            {table_id: tableId},
+        );
+
+        return response.data;
+    };
+
     const deleteRole = async (id: number) => {
         const response: AxiosResponse<BaseResponse> = await http.delete(
             `/${id}`,
@@ -45,6 +55,14 @@ const useRolesApi = (): UseRolesApiInterface => {
     const deleteRolePrinter = async (id: number, rolePrinterId: number) => {
         const response: AxiosResponse<BaseResponse> = await http.delete(
             `/${id}/printer/${rolePrinterId}`,
+        );
+
+        return response.data;
+    };
+
+    const deleteRoleTable = async (id: number, roleTableId: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.delete(
+            `/${id}/table/${roleTableId}`,
         );
 
         return response.data;
@@ -108,8 +126,10 @@ const useRolesApi = (): UseRolesApiInterface => {
     return {
         addRole,
         addRolePrinter,
+        addRoleTable,
         deleteRole,
         deleteRolePrinter,
+        deleteRoleTable,
         getRoles,
         getRolesById,
         getRolesName,

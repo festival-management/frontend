@@ -6,6 +6,7 @@ import BaseResponse from "../models/base.model.ts";
 import {
     CreateTableResponse,
     GetTableResponse,
+    GetTablesNameResponse,
     GetTablesResponse,
     UseTablesApiInterface
 } from "../models/tables.model.ts";
@@ -48,6 +49,15 @@ const useTablesApi = (): UseTablesApiInterface => {
         return response.data;
     };
 
+    const getTablesName = async (orderBy?: string) => {
+        const response: AxiosResponse<GetTablesNameResponse> = await http.get(
+            "/",
+            {params: {only_name: true, order_by: orderBy}}
+        );
+
+        return response.data;
+    };
+
     const updateTableName = async (id: number, name: string) => {
         const response: AxiosResponse<BaseResponse> = await http.put(
             `/${id}/name`,
@@ -66,7 +76,15 @@ const useTablesApi = (): UseTablesApiInterface => {
         return response.data;
     };
 
-    return {addTable, deleteTable, getTables, getTablesById, updateTableName, updateTableSeats};
+    return {
+        addTable,
+        deleteTable,
+        getTables,
+        getTablesById,
+        getTablesName,
+        updateTableName,
+        updateTableSeats
+    };
 }
 
 export default useTablesApi;

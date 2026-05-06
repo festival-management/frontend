@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import {useParams} from "react-router-dom";
 
+import RoleEditTables from "./tables";
 import RoleEditPrinters from "./printers";
 import RoleEditNameForm from "./RoleEditNameForm";
 import {Permission} from "../../../enums/permission.ts";
@@ -52,6 +53,7 @@ export default function RouteRoleEdit() {
                     <RoleEditNameForm/>
                     <RoleEditPermissionsForm/>
                     <RoleEditPrinters/>
+                    <RoleEditTables/>
                     <RoleEditOrderConfirmerForm/>
                 </div>
             </div>
