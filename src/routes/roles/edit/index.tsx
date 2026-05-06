@@ -20,12 +20,13 @@ export default function RouteRoleEdit() {
         setRoleName,
         setRolePermissions,
         setRolePrinters,
+        setRoleTables,
         setRoleOrderConfirmerId,
         rolesApi
     } = useRoleEditContext();
     const {fetchRoleDetails} = useRoleQueries(rolesApi);
 
-    const roleData = fetchRoleDetails(parseInt(id || "-1"), true, true);
+    const roleData = fetchRoleDetails(parseInt(id || "-1"), true, true, true);
 
     useEffect(() => {
         if (!roleData) return;
@@ -43,6 +44,7 @@ export default function RouteRoleEdit() {
             )
         );
         setRolePrinters(roleData.printers || []);
+        setRoleTables(roleData.tables || []);
         setRoleOrderConfirmerId(roleData.order_confirmer?.id || -1);
     }, [roleData]);
 

@@ -19,6 +19,7 @@ export interface Role {
     permissions: Map<Permission, boolean>;
     order_confirmer: Role;
     printers?: RolePrinter[];
+    tables?: RoleTable[];
 }
 
 export interface RoleName {
@@ -59,8 +60,8 @@ export interface UseRolesApiInterface {
     deleteRole(id: number): Promise<BaseResponse>;
     deleteRolePrinter(id: number, rolePrinterId: number): Promise<BaseResponse>;
     deleteRoleTable(id: number, roleTableId: number): Promise<BaseResponse>;
-    getRoles(page: number, includePrinters?: boolean): Promise<GetRolesResponse>;
-    getRolesById(id: number, includeOrderConfirmer?: boolean, includePrinters?: boolean): Promise<GetRoleResponse>;
+    getRoles(page: number, includePrinters?: boolean, includeTables?: boolean): Promise<GetRolesResponse>;
+    getRolesById(id: number, includeOrderConfirmer?: boolean, includePrinters?: boolean, includeTables?: boolean): Promise<GetRoleResponse>;
     getRolesName(can_order?: boolean, canConfirmOrders?: boolean): Promise<GetRolesNameResponse>;
     updateRoleName(id: number, name: string): Promise<BaseResponse>;
     updateRolePermissions(id: number, permissions: Map<Permission, boolean>): Promise<BaseResponse>;

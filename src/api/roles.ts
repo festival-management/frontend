@@ -68,20 +68,33 @@ const useRolesApi = (): UseRolesApiInterface => {
         return response.data;
     };
 
-    const getRoles = async (page: number, includePrinters: boolean = false) => {
+    const getRoles = async (page: number, includePrinters: boolean = false, includeTables: boolean = false) => {
         const limit = import.meta.env.VITE_DEFAULT_LIMIT_VALUE;
         const response: AxiosResponse<GetRolesResponse> = await http.get(
             "/",
-            {params: {offset: limit * (page - 1), limit: limit, include_printers: includePrinters}}
+            {
+                params: {
+                    offset: limit * (page - 1),
+                    limit: limit,
+                    include_printers: includePrinters,
+                    include_tables: includeTables
+                }
+            }
         );
 
         return response.data;
     };
 
-    const getRolesById = async (id: number, includeOrderConfirmer: boolean = false, includePrinters: boolean = false) => {
+    const getRolesById = async (id: number, includeOrderConfirmer: boolean = false, includePrinters: boolean = false, includeTables: boolean = false) => {
         const response: AxiosResponse<GetRoleResponse> = await http.get(
             `/${id}`,
-            {params: {include_order_confirmer: includeOrderConfirmer, include_printers: includePrinters}}
+            {
+                params: {
+                    include_order_confirmer: includeOrderConfirmer,
+                    include_printers: includePrinters,
+                    include_tables: includeTables
+                }
+            }
         );
 
         return response.data;
