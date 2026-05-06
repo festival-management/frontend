@@ -18,6 +18,7 @@ import RouteUserEdit from "./routes/users/edit";
 import RouteStatistics from "./routes/statistics";
 import RouteOrderInfo from "./routes/orders/info";
 import RouteTableEdit from "./routes/tables/edit";
+import RouteOrderServe from "./routes/order/serve";
 import RouteProductEdit from "./routes/products/edit";
 import RouteOrderConfirm from "./routes/order/confirm";
 import RouteSubcategories from "./routes/subcategories";
@@ -54,6 +55,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/order/confirm",
                     element: <RouteOrderConfirm/>
+                },
+                {
+                    path: "/order/serve",
+                    element: <RouteOrderServe/>
                 },
                 {
                     path: "/orders",

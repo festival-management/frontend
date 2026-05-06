@@ -181,7 +181,23 @@ const useOrdersApi = (): UseOrdersApiInterface => {
         return response.data;
     };
 
-    return {confirmOrder, addOrder, deleteOrder, getOrderById, getOrders, printOrder};
+    const serveOrder = async (orderId: number) => {
+        const response: AxiosResponse<BaseResponse> = await http.patch(
+            `/${orderId}/serve`,
+        );
+
+        return response.data;
+    };
+
+    return {
+        confirmOrder,
+        addOrder,
+        deleteOrder,
+        getOrderById,
+        getOrders,
+        printOrder,
+        serveOrder
+    };
 }
 
 export default useOrdersApi;

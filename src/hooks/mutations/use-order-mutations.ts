@@ -48,7 +48,19 @@ const useOrderMutations = (ordersApi: UseOrdersApiInterface) => {
         onSuccess: onSuccessMutation
     });
 
-    return {confirmOrderMutation, addOrderMutation, deleteOrderMutation, printOrderMutation};
+    // Serve
+    const serveOrderMutation = useMutation({
+        mutationFn: ordersApi.serveOrder,
+        onSuccess: onSuccessMutation
+    });
+
+    return {
+        confirmOrderMutation,
+        addOrderMutation,
+        deleteOrderMutation,
+        printOrderMutation,
+        serveOrderMutation
+    };
 };
 
 export default useOrderMutations;

@@ -8,6 +8,8 @@ export interface TokenJwtUtils {
     canUserConfirmOrder: () => boolean;
     canUserStatistics: () => boolean;
     canUserPriorityStatistics: () => boolean;
+    canUserServeOrder: () => boolean;
+    canUserModifyCompletedOrders: () => boolean;
     getToken: () => Token | null;
     getTokenString: () => string | null;
     reset: () => void;
