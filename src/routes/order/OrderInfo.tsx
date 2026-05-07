@@ -2,12 +2,14 @@ import React from "react";
 
 import {SettingsUser} from "../../models/settings.ts";
 import {useOrderContext} from "../../contexts/OrderContext.tsx";
+import useTokenJwtUtils from "../../hooks/use-token-jwt-utils.tsx";
 
 interface OrderInfoProps {
     settings: SettingsUser;
 }
 
 export default function OrderInfo({settings}: OrderInfoProps) {
+    const tokenService = useTokenJwtUtils();
     const {
         orderCustomer,
         setOrderCustomer,
@@ -54,22 +56,32 @@ export default function OrderInfo({settings}: OrderInfoProps) {
                 <input type="text" id="newOrderCustomer" className="form-control" value={orderCustomer}
                        onChange={handleOrderCustomerChange}
                        required/>
-                <span className="input-group-text">Is take away?</span>
-                <div className="form-control form-switch d-flex justify-content-center">
-                    <input type="checkbox" id="newOrderIsTakeAway" className="form-check-input"
-                           checked={orderIsTakeAway}
-                           onChange={handleOrderIsTakeAwayChange}
-                           required/>
-                </div>
-                <span className="input-group-text">Guests</span>
-                <input type="number" id="newOrderGuests" min="1" className="form-control" value={orderGuests}
-                       onChange={handleOrderGuestsChange} disabled={orderIsTakeAway}/>
                 {
-                    settings.order_requires_confirmation ? null :
+                    tokenService.canUserModifyCompletedOrders() ? null :
+                        <>
+                            <span className="input-group-text">Is take away?</span>
+                            <div className="form-control form-switch d-flex justify-content-center">
+                                <input type="checkbox" id="newOrderIsTakeAway" className="form-check-input"
+                                       checked={orderIsTakeAway}
+                                       onChange={handleOrderIsTakeAwayChange}
+                                       required/>
+                            </div>
+                        </>
+                }
+                {
+                    tokenService.canUserModifyCompletedOrders() ? null :
+                        <>
+                            <span className="input-group-text">Guests</span>
+                            <input type="number" id="newOrderGuests" min="1" className="form-control" value={orderGuests}
+                                   onChange={handleOrderGuestsChange} disabled={orderIsTakeAway} required={!orderIsTakeAway}/>
+                        </>
+                }
+                {
+                    settings.order_requires_confirmation || tokenService.canUserModifyCompletedOrders() ? null :
                         <>
                             <span className="input-group-text">Table</span>
                             <input type="number" id="newOrderTable" min="1" className="form-control" value={orderTable}
-                                   onChange={handleOrderTableChange} disabled={orderIsTakeAway}/>
+                                   onChange={handleOrderTableChange} disabled={orderIsTakeAway} required={!orderIsTakeAway}/>
                         </>
                 }
                 <span className="input-group-text">Is voucher?</span>
@@ -79,9 +91,14 @@ export default function OrderInfo({settings}: OrderInfoProps) {
                            onChange={handleOrderIsVoucherChange}
                            required/>
                 </div>
-                <span className="input-group-text">Parent Order</span>
-                <input type="number" id="newOrderParentOrder" min="1" className="form-control" value={orderParentOrder || ""}
-                       onChange={handleOrderParentOrderChange}/>
+                {
+                    !tokenService.canUserModifyCompletedOrders() ? null :
+                        <>
+                            <span className="input-group-text">Parent Order</span>
+                            <input type="number" id="newOrderParentOrder" min="1" className="form-control" value={orderParentOrder || ""}
+                                   onChange={handleOrderParentOrderChange} required/>
+                        </>
+                }
             </div>
         </div>
     );

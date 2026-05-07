@@ -74,7 +74,6 @@ export default function RouteOrder() {
     const handleSubmit = async () => {
         if (!orderCustomer) return addToast(ErrorCodes.MISSING_ORDER_CUSTOMER, "error");
         if (orderProducts.length === 0 && orderMenus.length === 0) return addToast(ErrorCodes.NO_PRODUCTS_AND_MENUS, "error");
-        if (!orderIsTakeAway && !orderGuests) return addToast(ErrorCodes.SET_GUESTS_NUMBER, "error");
 
         const response = await addOrderMutation.mutateAsync({
             customer: orderCustomer,
