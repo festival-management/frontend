@@ -11,6 +11,7 @@ export default function StatisticsTable({statistic}: StatisticsTableProps) {
         <tr key={index}>
             <td>{v.name}</td>
             <td>{v.quantity}</td>
+            <td>{v.pending_quantity}</td>
             <td>{v.price} €</td>
             <td>{v.total_price} €</td>
         </tr>
@@ -34,6 +35,7 @@ export default function StatisticsTable({statistic}: StatisticsTableProps) {
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Quantity</th>
+                    <th scope="col">Pending Quantity</th>
                     <th scope="col">Price</th>
                     <th scope="col">Total Price</th>
                 </tr>

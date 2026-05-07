@@ -3,6 +3,7 @@ import BaseResponse from "./base.model";
 export interface StatisticProduct {
     name: string;
     quantity: number;
+    pending_quantity: number;
     price: number;
     total_price: number;
 }
