@@ -13,8 +13,9 @@ const useOrderMutations = (ordersApi: UseOrdersApiInterface) => {
     const confirmOrderMutation = useMutation({
         mutationFn: (variables: {
             orderId: number,
-            table: number
-        })=> ordersApi.confirmOrder(variables.orderId, variables.table),
+            table: number | null,
+            isTakeawayOrKiosk: boolean,
+        })=> ordersApi.confirmOrder(variables.orderId, variables.table, variables.isTakeawayOrKiosk),
         onSuccess: onSuccessMutation
     });
 

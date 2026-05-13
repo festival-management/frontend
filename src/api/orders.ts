@@ -16,10 +16,10 @@ import {
 const useOrdersApi = (): UseOrdersApiInterface => {
     const {http} = useHttpClient(API.ORDERS.toString());
 
-    const confirmOrder = async (orderId: number, table: number) => {
+    const confirmOrder = async (orderId: number, table: number | null, isTakeawayOrKiosk: boolean) => {
         const response: AxiosResponse<BaseResponse> = await http.patch(
             `/${orderId}/confirm`,
-            {table}
+            {table, is_takeaway_or_kiosk: isTakeawayOrKiosk},
         );
 
         return response.data;
