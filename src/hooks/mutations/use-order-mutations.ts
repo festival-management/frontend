@@ -24,12 +24,13 @@ const useOrderMutations = (ordersApi: UseOrdersApiInterface) => {
             customer: string,
             guests: number | null,
             isTakeAway: boolean,
+            isTakeAwayKiosk: boolean,
             table: number | null,
             isVoucher: boolean,
             parentOrder: number | null,
             products: CreateOrderProduct[],
             menus: CreateOrderMenu[]
-        }) => ordersApi.addOrder(variables.customer, variables.guests, variables.isTakeAway, variables.table, variables.isVoucher, variables.parentOrder, variables.products, variables.menus),
+        }) => ordersApi.addOrder(variables.customer, variables.guests, variables.isTakeAway, variables.isTakeAwayKiosk, variables.table, variables.isVoucher, variables.parentOrder, variables.products, variables.menus),
         onSuccess: onSuccessMutation
     });
 

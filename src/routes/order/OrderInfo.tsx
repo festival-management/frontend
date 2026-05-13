@@ -15,6 +15,8 @@ export default function OrderInfo({settings}: OrderInfoProps) {
         setOrderCustomer,
         orderIsTakeAway,
         setOrderIsTakeAway,
+        orderIsTakeAwayKiosk,
+        setOrderIsTakeAwayKiosk,
         orderGuests,
         setOrderGuests,
         orderTable,
@@ -31,6 +33,11 @@ export default function OrderInfo({settings}: OrderInfoProps) {
 
     const handleOrderIsTakeAwayChange = () => {
         setOrderIsTakeAway((prevState) => !prevState);
+    };
+
+    const handleOrderIsTakeAwayKioskChange = () => {
+        setOrderIsTakeAwayKiosk((prevState) => !prevState);
+        setOrderIsTakeAway(false);
     };
 
     const handleOrderGuestsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,6 +96,13 @@ export default function OrderInfo({settings}: OrderInfoProps) {
                     <input type="checkbox" id="newOrderIsVoucher" className="form-check-input"
                            checked={orderIsVoucher}
                            onChange={handleOrderIsVoucherChange}
+                           required/>
+                </div>
+                <span className="input-group-text">Is take away KIOSK?</span>
+                <div className="form-control form-switch d-flex justify-content-center">
+                    <input type="checkbox" id="newOrderIsTakeAwayKiosk" className="form-check-input"
+                           checked={orderIsTakeAwayKiosk}
+                           onChange={handleOrderIsTakeAwayKioskChange}
                            required/>
                 </div>
                 {

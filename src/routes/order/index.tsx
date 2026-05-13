@@ -52,6 +52,8 @@ export default function RouteOrder() {
         setOrderGuests,
         orderIsTakeAway,
         setOrderIsTakeAway,
+        orderIsTakeAwayKiosk,
+        setOrderIsTakeAwayKiosk,
         orderTable,
         setOrderTable,
         orderIsVoucher,
@@ -79,6 +81,7 @@ export default function RouteOrder() {
             customer: orderCustomer,
             guests: orderIsTakeAway || orderParentOrder ? null : orderGuests,
             isTakeAway: orderIsTakeAway,
+            isTakeAwayKiosk: orderIsTakeAwayKiosk,
             table: orderIsTakeAway || orderParentOrder ? null : orderTable,
             isVoucher: orderIsVoucher,
             parentOrder: orderParentOrder,
@@ -92,6 +95,7 @@ export default function RouteOrder() {
             setOrderCustomer("");
             setOrderGuests(1);
             setOrderIsTakeAway(false);
+            setOrderIsTakeAwayKiosk(false);
             setOrderTable(1);
             setOrderIsVoucher(false);
             setOrderParentOrder(null);
@@ -184,7 +188,7 @@ export default function RouteOrder() {
         const productsTotal = orderProducts.reduce((acc, p) => acc + p.price, 0);
         const menusTotal = orderMenus.reduce((acc, m) => acc + m.price, 0);
 
-        const coverCharge = !orderIsTakeAway && shouldApplyCoverCharge
+        const coverCharge = !orderIsTakeAway && !orderParentOrder && shouldApplyCoverCharge
             ? orderGuests * settings.cover_charge
             : 0;
 
