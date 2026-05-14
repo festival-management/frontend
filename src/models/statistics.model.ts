@@ -8,6 +8,11 @@ export interface StatisticProduct {
     total_price: number;
 }
 
+export interface PendingStatisticProduct {
+    name: string;
+    pending_quantity: number;
+}
+
 export interface Statistic {
     total_orders: number;
     total_seated: number;
@@ -18,9 +23,20 @@ export interface Statistic {
     products: StatisticProduct[];
 }
 
+export interface PendingStatistic {
+    total_orders: number;
+    total_seated: number;
+    total_take_away: number;
+    products: PendingStatisticProduct[];
+}
+
 export interface GetStatisticResponse extends BaseResponse, Partial<Statistic> {
+}
+
+export interface GetPendingStatisticResponse extends BaseResponse, Partial<PendingStatistic> {
 }
 
 export interface UseStatisticsApiInterface {
     getStatistic(startDate?: Date, endDate?: Date, roleIds?: number[]): Promise<GetStatisticResponse>;
+    getPendingStatistic(onlyConfirmedOrder: boolean, roleIds?: number[]): Promise<GetPendingStatisticResponse>;
 }

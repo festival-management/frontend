@@ -27,6 +27,7 @@ import {OrderProvider} from "./contexts/OrderContext.tsx";
 import RouteSubcategoryEdit from "./routes/subcategories/edit";
 import {MenuEditProvider} from "./contexts/MenuEditContext.tsx";
 import {RoleEditProvider} from "./contexts/RoleEditContext.tsx";
+import RoutePendingStatistics from "./routes/statistics/pending";
 import {TableEditProvider} from "./contexts/TableEditContext.tsx";
 import {ProductEditProvider} from "./contexts/ProductEditContext.tsx";
 
@@ -99,6 +100,10 @@ const routers = createBrowserRouter(
                 {
                     path: "/statistics",
                     element: <RouteStatistics/>
+                },
+                {
+                    path: "/statistics/pending",
+                    element: <RoutePendingStatistics/>
                 },
                 {
                     path: "/subcategories",
