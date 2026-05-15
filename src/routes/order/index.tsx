@@ -155,6 +155,7 @@ export default function RouteOrder() {
 
     const shouldApplyCoverCharge = useMemo(() => {
         if (orderIsTakeAway) return false;
+        if (orderParentOrder !== null) return false;
 
         const hasCoverChargeProduct = orderProducts.some(orderProduct => {
             const product = products.find(p => p.id === orderProduct.product_id);
@@ -182,7 +183,7 @@ export default function RouteOrder() {
         });
 
         return hasCoverChargeProduct || hasMenuProductWithCoverCharge;
-    }, [orderIsTakeAway, orderProducts, orderMenus, products, menus, subcategories]);
+    }, [orderIsTakeAway, orderParentOrder, orderProducts, orderMenus, products, menus, subcategories]);
 
     useEffect(() => {
         const productsTotal = orderProducts.reduce((acc, p) => acc + p.price, 0);

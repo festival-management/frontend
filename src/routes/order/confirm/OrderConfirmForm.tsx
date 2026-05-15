@@ -57,8 +57,10 @@ export default function OrderConfirmForm() {
             </div>
             <div className="mb-3">
                 <label htmlFor="confirmOrderIsTakeAwayOrKiosk" className="form-label">Is takeaway or kiosk:</label>
-                <input type="checkbox" className="form-check-input" id="confirmOrderIsTakeAwayOrKiosk"
-                       checked={isTakeAwayOrKiosk} onChange={handleIsTakeAwayOrKioskChange} required/>
+                <div className="form-control form-switch d-flex justify-content-center">
+                    <input type="checkbox" className="form-check-input" id="confirmOrderIsTakeAwayOrKiosk"
+                           checked={isTakeAwayOrKiosk} onChange={handleIsTakeAwayOrKioskChange}/>
+                </div>
             </div>
             <div className="mb-3">
                 <label htmlFor="confirmOrderTable" className="form-label">Table:</label>
